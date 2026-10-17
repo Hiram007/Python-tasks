@@ -1,0 +1,44 @@
+# Base44 development environment for this repository.
+#
+# The repo is a set of interactive Python CLI scripts with no web entry point.
+# `app/main.py` is a small ASGI runner that lists and executes them so the work
+# is visible in the sandbox preview on port 3000.
+#
+# The source is bind-mounted (never baked into an image), dependencies are
+# installed on startup from requirements.txt, and uvicorn runs with --reload so
+# edits to the scripts or the runner apply without a rebuild.
+
+services:
+  web:
+    image: python:3.12-slim
+    working_dir: /app
+    command:
+      - sh
+      - -ec
+      - >
+        pip install --no-cache-dir -q -r requirements.txt &&
+        exec uvicorn app.main:app --host 0.0.0.0 --port 3000 --reload --reload-dir /app
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./:/app
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - |
+          import sys, urllib.request
+          try:
+              code = urllib.request.urlopen("http://127.0.0.1:3000/", timeout=3).status
+          except Exception as exc:
+              print("web: request failed:", exc)
+              sys.exit(1)
+          sys.exit(0 if code == 200 else 1)
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    restart: on-failure

@@ -1,0 +1,2 @@
+uvicorn>=0.30
+watchfiles>=0.22
