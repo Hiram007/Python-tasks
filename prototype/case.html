@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Amara Okafor · Onboarding case · Casidra</title>
+<meta name="description" content="Employee onboarding case file: progress timeline and HR, IT, Facilities and Communications checklists.">
+<!-- @include partials/head-assets.html -->
+</head>
+<body class="app" data-page="cases">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- @include partials/icons.html -->
+<!-- @include partials/sidebar.html -->
+
+<div class="app__body">
+  <!-- @include partials/topbar.html -->
+
+  <main class="content" id="main">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Dashboard</a>
+      <span class="breadcrumb__sep" aria-hidden="true">/</span>
+      <a href="cases.html">Onboarding cases</a>
+      <span class="breadcrumb__sep" aria-hidden="true">/</span>
+      <span aria-current="page">Amara Okafor</span>
+    </nav>
+
+    <div class="page-head">
+      <div>
+        <div class="row row--wrap">
+          <span class="avatar avatar--xl" aria-hidden="true">AO</span>
+          <div>
+            <h1 class="page-head__title">Amara Okafor</h1>
+            <p class="page-head__sub">Product Designer · Design · Case ONB-2026-0148</p>
+          </div>
+        </div>
+        <div class="chip-row mt-4">
+          <span class="badge badge--ok"><span class="badge__dot"></span>On track</span>
+          <span class="tag tag--quiet">Starts Tue 3 Nov 2026</span>
+          <span class="tag tag--quiet">Coordinator: Priya Raman</span>
+          <span class="tag tag--quiet">London — hybrid</span>
+        </div>
+      </div>
+      <div class="page-head__actions">
+        <button class="btn btn--secondary" type="button"
+                data-toast="Welcome pack prepared"
+                data-toast-message="Email delivery is not implemented in this prototype — no message was sent.">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-mail"/></svg>
+          Email welcome pack
+        </button>
+        <button class="btn btn--primary" type="button" data-mark-ready>
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-check-circle"/></svg>
+          Mark ready for day one
+        </button>
+      </div>
+    </div>
+
+    <!-- Stage strip: the case-level progress indicator, given the full content width -->
+    <section class="card" aria-labelledby="stages-title">
+      <div class="card__body card__body--pad">
+        <div class="row row--between row--wrap">
+          <div>
+            <h2 class="card__title" id="stages-title">Onboarding stage</h2>
+            <p class="card__sub">Stage 4 of 6 — access and accounts are in progress, one step is blocked.</p>
+          </div>
+          <span class="badge badge--ok"><span class="badge__dot"></span>On track for 3 Nov 2026</span>
+        </div>
+        <ol class="steps mt-6" aria-label="Onboarding stages">
+          <li class="step step--done">
+            <span class="step__marker"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg></span>
+            <span class="step__label">Offer</span>
+          </li>
+          <li class="step step--done">
+            <span class="step__marker"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg></span>
+            <span class="step__label">Documents</span>
+          </li>
+          <li class="step step--done">
+            <span class="step__marker"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg></span>
+            <span class="step__label">Equipment</span>
+          </li>
+          <li class="step step--active" aria-current="step">
+            <span class="step__marker">4</span>
+            <span class="step__label">Access &amp; accounts</span>
+          </li>
+          <li class="step">
+            <span class="step__marker">5</span>
+            <span class="step__label">Facilities &amp; induction</span>
+          </li>
+          <li class="step">
+            <span class="step__marker">6</span>
+            <span class="step__label">Ready for day one</span>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <div class="grid grid--detail mt-6">
+      <div class="stack-lg">
+        <!-- Case summary -->
+        <section class="card" aria-labelledby="summary-title">
+          <div class="card__head">
+            <div>
+              <h2 class="card__title" id="summary-title">Case summary</h2>
+              <p class="card__sub">Opened 6 Oct 2026 by Rosa Bell · People Operations</p>
+            </div>
+            <span class="tag">Onboarding</span>
+          </div>
+
+          <div class="card__body">
+            <div class="meta-grid">
+              <div>
+                <p class="meta__label">Start date</p>
+                <p class="meta__value">Tue 3 Nov 2026</p>
+              </div>
+              <div>
+                <p class="meta__label">Department</p>
+                <p class="meta__value">Design</p>
+              </div>
+              <div>
+                <p class="meta__label">Hiring manager</p>
+                <p class="meta__value">Nadia Haddad</p>
+              </div>
+              <div>
+                <p class="meta__label">Coordinator</p>
+                <p class="meta__value">Priya Raman</p>
+              </div>
+              <div>
+                <p class="meta__label">Contract</p>
+                <p class="meta__value">Permanent</p>
+              </div>
+              <div>
+                <p class="meta__label">Equipment profile</p>
+                <p class="meta__value">Laptop + design peripherals</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Progress timeline -->
+        <section class="card" aria-labelledby="timeline-title">
+          <div class="card__head">
+            <div>
+              <h2 class="card__title" id="timeline-title">Progress timeline</h2>
+              <p class="card__sub">Milestones from offer to day one, with the department responsible for each.</p>
+            </div>
+            <span class="badge badge--outline">4 of 8 done</span>
+          </div>
+          <div class="card__body">
+            <ol class="timeline">
+              <li class="timeline__item timeline__item--done">
+                <div class="timeline__rail">
+                  <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
+                  <span class="timeline__line"></span>
+                </div>
+                <div class="timeline__body">
+                  <p class="timeline__title">Offer accepted</p>
+                  <p class="timeline__meta">
+                    <span>6 Oct 2026</span>
+                    <span class="dept dept--hr"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-briefcase"/></svg></span> HR</span>
+                  </p>
+                </div>
+              </li>
+              <li class="timeline__item timeline__item--done">
+                <div class="timeline__rail">
+                  <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
+                  <span class="timeline__line"></span>
+                </div>
+                <div class="timeline__body">
+                  <p class="timeline__title">Contract signed</p>
+                  <p class="timeline__meta">
+                    <span>9 Oct 2026</span>
+                    <span class="dept dept--hr"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-briefcase"/></svg></span> HR</span>
+                  </p>
+                </div>
+              </li>
+              <li class="timeline__item timeline__item--done">
+                <div class="timeline__rail">
+                  <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
+                  <span class="timeline__line"></span>
+                </div>
+                <div class="timeline__body">
+                  <p class="timeline__title">Right to work verified</p>
+                  <p class="timeline__meta">
+                    <span>14 Oct 2026</span>
+                    <span class="dept dept--hr"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-briefcase"/></svg></span> HR</span>
+                  </p>
+                </div>
+              </li>
+              <li class="timeline__item timeline__item--done">
+                <div class="timeline__rail">
+                  <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
+                  <span class="timeline__line"></span>
+                </div>
+                <div class="timeline__body">
+                  <p class="timeline__title">Equipment ordered</p>
+                  <p class="timeline__meta">
+                    <span>16 Oct 2026</span>
+                    <span class="dept dept--it"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-monitor"/></svg></span> IT</span>
+                  </p>
+                </div>
+              </li>
+              <li class="timeline__item timeline__item--active">
+                <div class="timeline__rail">
+                  <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-clock"/></svg></span>
+                  <span class="timeline__line"></span>
+                </div>
+                <div class="timeline__body">
+                  <p class="timeline__title">Accounts &amp; access</p>
+                  <p class="timeline__meta">
+                    <span>Due 24 Oct 2026</span>
+                    <span class="badge badge--warn"><span class="badge__dot"></span>1 blocked</span>
+                    <span class="dept dept--it"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-monitor"/></svg></span> IT</span>
+                  </p>
+                </div>
+              </li>
+              <li class="timeline__item timeline__item--active">
+                <div class="timeline__rail">
+                  <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-clock"/></svg></span>
+                  <span class="timeline__line"></span>
+                </div>
+                <div class="timeline__body">
+                  <p class="timeline__title">Facilities &amp; desk setup</p>
+                  <p class="timeline__meta">
+                    <span>Due 28 Oct 2026</span>
+                    <span class="dept dept--facilities"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-building"/></svg></span> Facilities</span>
+                  </p>
+                </div>
+              </li>
+              <li class="timeline__item">
+                <div class="timeline__rail">
+                  <span class="timeline__dot" aria-hidden="true"></span>
+                  <span class="timeline__line"></span>
+                </div>
+                <div class="timeline__body">
+                  <p class="timeline__title">Induction &amp; communications</p>
+                  <p class="timeline__meta">
+                    <span>Due 30 Oct 2026</span>
+                    <span class="dept dept--comms"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-megaphone"/></svg></span> Communications</span>
+                  </p>
+                </div>
+              </li>
+              <li class="timeline__item">
+                <div class="timeline__rail">
+                  <span class="timeline__dot" aria-hidden="true"></span>
+                  <span class="timeline__line"></span>
+                </div>
+                <div class="timeline__body">
+                  <p class="timeline__title">Ready for day one</p>
+                  <p class="timeline__meta">
+                    <span>Due 3 Nov 2026</span>
+                    <span class="dept"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-user"/></svg></span> Coordinator sign-off</span>
+                  </p>
+                </div>
+              </li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- Recent activity -->
+        <section class="card" aria-labelledby="activity-title">
+          <div class="card__head">
+            <div>
+              <h2 class="card__title" id="activity-title">Recent activity</h2>
+              <p class="card__sub">Audit trail shown for design review — no events are recorded here.</p>
+            </div>
+          </div>
+          <div class="list">
+            <article class="list__item">
+              <span class="avatar avatar--sm avatar--slate" aria-hidden="true">AK</span>
+              <div class="list__main">
+                <p class="list__title">Aisha Khan approved “Right to work verification”</p>
+                <p class="list__meta">HR · 14 Oct 2026, 11:02</p>
+              </div>
+            </article>
+            <article class="list__item">
+              <span class="avatar avatar--sm avatar--amber" aria-hidden="true">TF</span>
+              <div class="list__main">
+                <p class="list__title">Tomás Ferreira added a blocker note to “Access groups &amp; VPN”</p>
+                <p class="list__meta">IT · 17 Oct 2026, 08:41</p>
+              </div>
+            </article>
+            <article class="list__item">
+              <span class="avatar avatar--sm avatar--teal" aria-hidden="true">HC</span>
+              <div class="list__main">
+                <p class="list__title">Hannah Cole attached the welcome announcement draft</p>
+                <p class="list__meta">Communications · 15 Oct 2026, 16:20</p>
+              </div>
+            </article>
+          </div>
+        </section>
+      </div>
+
+      <aside class="stack-lg" aria-label="Case readiness and documents">
+        <!-- Day-one readiness -->
+        <section class="card" aria-labelledby="readiness-title">
+          <div class="card__head">
+            <div>
+              <h2 class="card__title" id="readiness-title">Day-one readiness</h2>
+              <p class="card__sub">Derived from the four departmental checklists.</p>
+            </div>
+          </div>
+          <div class="card__body">
+            <div class="row">
+              <span class="donut-wrap">
+                <svg class="donut" viewBox="0 0 44 44" role="img" aria-label="47% of onboarding tasks complete"
+                     data-overall-donut-svg>
+                  <circle class="donut__track" cx="22" cy="22" r="18"></circle>
+                  <circle class="donut__value" cx="22" cy="22" r="18" data-overall-donut
+                          stroke-dasharray="113.1" stroke-dashoffset="59.9"></circle>
+                </svg>
+                <span class="donut-wrap__label" aria-hidden="true" data-overall-value>47%</span>
+              </span>
+              <div>
+                <p class="strong" data-overall-count>9 of 19 tasks complete</p>
+                <p class="text-xs muted mt-2">10 tasks remain before day one. 1 is blocked on an access approval.</p>
+              </div>
+            </div>
+
+            <div class="progress mt-6">
+              <span class="progress__track"><span class="progress__fill" style="width:47%" data-overall-fill></span></span>
+            </div>
+
+            <ul class="stack-sm mt-6">
+              <li class="row row--between">
+                <span class="dept dept--hr"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-briefcase"/></svg></span> HR</span>
+                <span class="pill-count">3 / 6</span>
+              </li>
+              <li class="row row--between">
+                <span class="dept dept--it"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-monitor"/></svg></span> IT</span>
+                <span class="pill-count">2 / 5</span>
+              </li>
+              <li class="row row--between">
+                <span class="dept dept--facilities"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-building"/></svg></span> Facilities</span>
+                <span class="pill-count">2 / 4</span>
+              </li>
+              <li class="row row--between">
+                <span class="dept dept--comms"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-megaphone"/></svg></span> Communications</span>
+                <span class="pill-count">2 / 4</span>
+              </li>
+            </ul>
+          </div>
+          <div class="card__foot">
+            <p>Progress follows the checklists below</p>
+            <a class="btn btn--link text-sm" href="#checklists">
+              Jump to checklists
+              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+            </a>
+          </div>
+        </section>
+
+        <!-- Documents -->
+        <section class="card" aria-labelledby="documents-title">
+          <div class="card__head">
+            <div>
+              <h2 class="card__title" id="documents-title">Documents</h2>
+              <p class="card__sub">Contracts, right-to-work evidence and signed policies.</p>
+            </div>
+            <span class="badge badge--outline">0 files</span>
+          </div>
+          <div class="empty">
+            <span class="empty__art" aria-hidden="true"><svg class="icon icon--lg"><use href="#i-file"/></svg></span>
+            <h3 class="empty__title">No documents uploaded yet</h3>
+            <p class="empty__text">
+              Signed contracts, right-to-work evidence and policy acknowledgements appear here once they are
+              attached to the case.
+            </p>
+            <div class="empty__actions">
+              <button class="btn btn--secondary" type="button"
+                      data-toast="Upload unavailable"
+                      data-toast-message="File storage and uploads are not part of this prototype.">
+                <svg class="icon icon--sm" aria-hidden="true"><use href="#i-upload"/></svg>
+                Upload document
+              </button>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </div>
+
+    <!-- Departmental checklists -->
+    <section id="checklists" class="mt-6" aria-labelledby="checklists-title">
+      <div class="section-head">
+        <div>
+          <h2 class="section-head__title" id="checklists-title">Departmental checklists</h2>
+          <p class="text-sm muted mt-2">
+            Each department owns its own tasks, due dates and approvals. Progress rolls up to day-one readiness.
+          </p>
+        </div>
+        <div class="legend" role="list">
+          <span class="legend__item"><span class="legend__swatch" style="background:var(--ok-600)"></span> Complete</span>
+          <span class="legend__item"><span class="legend__swatch" style="background:var(--info-600)"></span> In progress</span>
+          <span class="legend__item"><span class="legend__swatch" style="background:var(--danger-600)"></span> Blocked</span>
+          <span class="legend__item"><span class="legend__swatch" style="background:var(--border-strong)"></span> Not started</span>
+        </div>
+      </div>
+
+      <div class="stack-lg">
+        <!-- HR -->
+        <section class="card" data-checklist data-department="hr" aria-labelledby="hr-title">
+          <div class="section-head" style="border-bottom:1px solid var(--border); background:var(--surface-2);">
+            <span class="section-head__icon section-head__icon--hr" aria-hidden="true"><svg class="icon"><use href="#i-briefcase"/></svg></span>
+            <div class="section-head__text">
+              <h3 class="card__title" id="hr-title">Human Resources</h3>
+              <p class="section-head__sub">Owner Aisha Khan · <span data-section-count>3 of 6 complete</span></p>
+            </div>
+            <div class="section-head__progress">
+              <span class="progress">
+                <span class="progress__track"><span class="progress__fill" style="width:50%" data-section-fill></span></span>
+                <span class="progress__value" data-section-value>50%</span>
+              </span>
+              <button class="btn btn--secondary btn--sm" type="button" data-sheet-open="sheet-add-task"
+                      data-department="hr" aria-haspopup="dialog">
+                <svg class="icon icon--sm" aria-hidden="true"><use href="#i-plus"/></svg>
+                Add task
+              </button>
+            </div>
+          </div>
+          <ul class="checklist">
+            <li class="task is-done" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="hr-contract" data-task checked>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="hr-contract">Offer letter &amp; contract</label></p>
+                <p class="task__desc">Countersigned contract filed with the People team.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Aisha Khan</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Completed 9 Oct 2026</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge badge--ok" data-task-status><span class="badge__dot"></span>Complete</span>
+              </div>
+            </li>
+            <li class="task is-done" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="hr-right-to-work" data-task checked>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="hr-right-to-work">Right to work verification</label></p>
+                <p class="task__desc">Passport and visa evidence checked against Home Office guidance.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Aisha Khan</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check-circle"/></svg> Approved 14 Oct 2026</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge badge--ok" data-task-status><span class="badge__dot"></span>Complete</span>
+              </div>
+            </li>
+            <li class="task is-done" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="hr-payroll" data-task checked>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="hr-payroll">Payroll &amp; benefits enrolment</label></p>
+                <p class="task__desc">Added to the November payroll run with pension and private health cover.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Aisha Khan</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Completed 16 Oct 2026</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge badge--ok" data-task-status><span class="badge__dot"></span>Complete</span>
+              </div>
+            </li>
+            <li class="task" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="hr-policies" data-task>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="hr-policies">Policy acknowledgements</label></p>
+                <p class="task__desc">Handbook, code of conduct and information security policy signed.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Aisha Khan</span>
+                  <span class="task__meta-item due"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Due 22 Oct 2026</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge badge--info" data-task-status><span class="badge__dot"></span>In progress</span>
+              </div>
+            </li>
+            <li class="task" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="hr-emergency" data-task>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="hr-emergency">Emergency contact &amp; personal details</label></p>
+                <p class="task__desc">Captured in the HR system for the day-one welfare check.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Priya Raman</span>
+                  <span class="task__meta-item due due--soon"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Due 24 Oct 2026</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge badge--info" data-task-status><span class="badge__dot"></span>In progress</span>
+              </div>
+            </li>
+            <li class="task" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="hr-probation" data-task>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="hr-probation">Probation review scheduled</label></p>
+                <p class="task__desc">Three-month review booked with the hiring manager.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Nadia Haddad</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Due 3 Nov 2026</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge" data-task-status><span class="badge__dot"></span>Not started</span>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <!-- IT -->
+        <section class="card" data-checklist data-department="it" aria-labelledby="it-title">
+          <div class="section-head" style="border-bottom:1px solid var(--border); background:var(--surface-2);">
+            <span class="section-head__icon section-head__icon--it" aria-hidden="true"><svg class="icon"><use href="#i-monitor"/></svg></span>
+            <div class="section-head__text">
+              <h3 class="card__title" id="it-title">IT &amp; Technology</h3>
+              <p class="section-head__sub">Owner Tomás Ferreira · <span data-section-count>2 of 5 complete</span></p>
+            </div>
+            <div class="section-head__progress">
+              <span class="progress">
+                <span class="progress__track"><span class="progress__fill" style="width:40%" data-section-fill></span></span>
+                <span class="progress__value" data-section-value>40%</span>
+              </span>
+              <button class="btn btn--secondary btn--sm" type="button" data-sheet-open="sheet-add-task"
+                      data-department="it" aria-haspopup="dialog">
+                <svg class="icon icon--sm" aria-hidden="true"><use href="#i-plus"/></svg>
+                Add task
+              </button>
+            </div>
+          </div>
+          <ul class="checklist">
+            <li class="task is-done" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="it-laptop" data-task checked>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="it-laptop">Laptop build</label></p>
+                <p class="task__desc">14" MacBook Pro imaged, encrypted and asset-tagged.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Tomás Ferreira</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Completed 15 Oct 2026</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge badge--ok" data-task-status><span class="badge__dot"></span>Complete</span>
+              </div>
+            </li>
+            <li class="task is-done" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="it-licences" data-task checked>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="it-licences">Software licences &amp; design tooling</label></p>
+                <p class="task__desc">Figma, Adobe CC and the design system package assigned to Amara's seat.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Tomás Ferreira</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Completed 16 Oct 2026</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge badge--ok" data-task-status><span class="badge__dot"></span>Complete</span>
+              </div>
+            </li>
+            <li class="task" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="it-account" data-task>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="it-account">Entra ID account &amp; work email</label></p>
+                <p class="task__desc">Primary account, mailbox and calendar ready before day one.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Tomás Ferreira</span>
+                  <span class="task__meta-item due due--soon"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Due 24 Oct 2026</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg> Awaiting approval</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge badge--info" data-task-status><span class="badge__dot"></span>In progress</span>
+                <button class="btn btn--primary btn--sm" type="button" data-task-approve>Approve</button>
+                <button class="btn btn--ghost btn--sm" type="button" data-task-request-changes>Request changes</button>
+              </div>
+            </li>
+            <li class="task" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="it-access" data-task>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="it-access">Access groups &amp; VPN</label></p>
+                <p class="task__desc">Design repository, staging environment and remote access profile.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Tomás Ferreira</span>
+                  <span class="task__meta-item due due--overdue"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Due 24 Oct 2026</span>
+                </p>
+                <p class="blocker">
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg>
+                  Blocked: elevated repository access needs manager approval from Nadia Haddad.
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge badge--danger" data-task-status><span class="badge__dot"></span>Blocked</span>
+                <button class="btn btn--primary btn--sm" type="button" data-task-approve>Approve</button>
+              </div>
+            </li>
+            <li class="task" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="it-mfa" data-task>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="it-mfa">MFA device enrolment</label></p>
+                <p class="task__desc">Authenticator app and hardware key registered during the IT induction.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Tomás Ferreira</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Due 31 Oct 2026</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge" data-task-status><span class="badge__dot"></span>Not started</span>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <!-- Facilities -->
+        <section class="card" data-checklist data-department="facilities" aria-labelledby="facilities-title">
+          <div class="section-head" style="border-bottom:1px solid var(--border); background:var(--surface-2);">
+            <span class="section-head__icon section-head__icon--facilities" aria-hidden="true"><svg class="icon"><use href="#i-building"/></svg></span>
+            <div class="section-head__text">
+              <h3 class="card__title" id="facilities-title">Facilities</h3>
+              <p class="section-head__sub">Owner Priya Raman · <span data-section-count>2 of 4 complete</span></p>
+            </div>
+            <div class="section-head__progress">
+              <span class="progress">
+                <span class="progress__track"><span class="progress__fill" style="width:50%" data-section-fill></span></span>
+                <span class="progress__value" data-section-value>50%</span>
+              </span>
+              <button class="btn btn--secondary btn--sm" type="button" data-sheet-open="sheet-add-task"
+                      data-department="facilities" aria-haspopup="dialog">
+                <svg class="icon icon--sm" aria-hidden="true"><use href="#i-plus"/></svg>
+                Add task
+              </button>
+            </div>
+          </div>
+          <ul class="checklist">
+            <li class="task is-done" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="fac-desk" data-task checked>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="fac-desk">Desk allocation</label></p>
+                <p class="task__desc">Floor 3, Zone B — design studio, monitor and dock reserved.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Priya Raman</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Completed 12 Oct 2026</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge badge--ok" data-task-status><span class="badge__dot"></span>Complete</span>
+              </div>
+            </li>
+            <li class="task is-done" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="fac-pass" data-task checked>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="fac-pass">Building access card</label></p>
+                <p class="task__desc">Printed and activated for the ground floor, studio and car park.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Priya Raman</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Completed 16 Oct 2026</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge badge--ok" data-task-status><span class="badge__dot"></span>Complete</span>
+              </div>
+            </li>
+            <li class="task" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="fac-hs" data-task>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="fac-hs">Health &amp; safety briefing</label></p>
+                <p class="task__desc">Ten-minute studio walkthrough with the floor warden.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Priya Raman</span>
+                  <span class="task__meta-item due"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Due 30 Oct 2026</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge badge--info" data-task-status><span class="badge__dot"></span>In progress</span>
+              </div>
+            </li>
+            <li class="task" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="fac-parking" data-task>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="fac-parking">Parking &amp; travel pass</label></p>
+                <p class="task__desc">Cycle-to-work and season ticket options confirmed with the new starter.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Priya Raman</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Due 30 Oct 2026</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge" data-task-status><span class="badge__dot"></span>Not started</span>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <!-- Communications -->
+        <section class="card" data-checklist data-department="comms" aria-labelledby="comms-title">
+          <div class="section-head" style="border-bottom:1px solid var(--border); background:var(--surface-2);">
+            <span class="section-head__icon section-head__icon--comms" aria-hidden="true"><svg class="icon"><use href="#i-megaphone"/></svg></span>
+            <div class="section-head__text">
+              <h3 class="card__title" id="comms-title">Communications</h3>
+              <p class="section-head__sub">Owner Hannah Cole · <span data-section-count>2 of 4 complete</span></p>
+            </div>
+            <div class="section-head__progress">
+              <span class="progress">
+                <span class="progress__track"><span class="progress__fill" style="width:50%" data-section-fill></span></span>
+                <span class="progress__value" data-section-value>50%</span>
+              </span>
+              <button class="btn btn--secondary btn--sm" type="button" data-sheet-open="sheet-add-task"
+                      data-department="comms" aria-haspopup="dialog">
+                <svg class="icon icon--sm" aria-hidden="true"><use href="#i-plus"/></svg>
+                Add task
+              </button>
+            </div>
+          </div>
+          <ul class="checklist">
+            <li class="task is-done" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="com-announce" data-task checked>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="com-announce">Welcome announcement draft</label></p>
+                <p class="task__desc">Studio-wide announcement drafted for the Monday morning post.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Hannah Cole</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Completed 15 Oct 2026</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge badge--ok" data-task-status><span class="badge__dot"></span>Complete</span>
+              </div>
+            </li>
+            <li class="task is-done" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="com-intranet" data-task checked>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="com-intranet">Intranet profile &amp; org chart</label></p>
+                <p class="task__desc">Profile, photo and reporting line published to the staff directory.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Hannah Cole</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Completed 16 Oct 2026</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge badge--ok" data-task-status><span class="badge__dot"></span>Complete</span>
+              </div>
+            </li>
+            <li class="task" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="com-team-meeting" data-task>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="com-team-meeting">Team introduction meeting</label></p>
+                <p class="task__desc">Studio coffee and team intro booked for the first morning.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Nadia Haddad</span>
+                  <span class="task__meta-item due"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Due 29 Oct 2026</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg> Awaiting approval</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge badge--info" data-task-status><span class="badge__dot"></span>In progress</span>
+                <button class="btn btn--primary btn--sm" type="button" data-task-approve>Approve</button>
+                <button class="btn btn--ghost btn--sm" type="button" data-task-request-changes>Request changes</button>
+              </div>
+            </li>
+            <li class="task" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="com-newsletter" data-task>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="com-newsletter">First-week newsletter feature</label></p>
+                <p class="task__desc">Short profile for the company newsletter, scheduled for week one.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Hannah Cole</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Due 31 Oct 2026</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge" data-task-status><span class="badge__dot"></span>Not started</span>
+              </div>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-foot">
+    <p>Casidra Arrivals &amp; Departures · onboarding case ONB-2026-0148</p>
+    <p>Fictional sample data · UI only · approvals and email delivery are not implemented</p>
+  </footer>
+</div>
+
+<!-- Add-task sheet: prefilled with the department whose button was used -->
+<dialog class="sheet" id="sheet-add-task" aria-labelledby="sheet-add-task-title">
+  <form class="sheet__form" data-sheet-form="add-task" novalidate>
+    <div class="sheet__head">
+      <div>
+        <h2 class="sheet__title" id="sheet-add-task-title">Add a checklist task</h2>
+        <p class="sheet__sub">Tasks roll up into the department's progress and the case readiness score.</p>
+      </div>
+      <button class="icon-btn" type="button" data-sheet-close aria-label="Close">
+        <svg class="icon" aria-hidden="true"><use href="#i-close"/></svg>
+      </button>
+    </div>
+
+    <div class="sheet__body">
+      <div class="alert alert--danger" data-form-summary hidden role="alert">
+        <svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg>
+        <div>
+          <p class="alert__title">Check the highlighted fields</p>
+          <p data-form-summary-text>Some fields need attention before you can continue.</p>
+        </div>
+      </div>
+
+      <div class="form-grid mt-4">
+        <div class="field">
+          <label class="field__label" for="task-department">Department<span class="field__req" aria-hidden="true">*</span></label>
+          <select class="select" id="task-department" name="department" required data-validate
+                  data-required-message="Choose the department that owns this task.">
+            <option value="">Select a department</option>
+            <option value="hr">HR</option>
+            <option value="it">IT</option>
+            <option value="facilities">Facilities</option>
+            <option value="comms">Communications</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="task-owner">Task owner<span class="field__req" aria-hidden="true">*</span></label>
+          <select class="select" id="task-owner" name="owner" required data-validate
+                  data-required-message="Assign an owner so the task has accountability.">
+            <option value="">Select an owner</option>
+            <option>Aisha Khan</option>
+            <option>Tomás Ferreira</option>
+            <option>Priya Raman</option>
+            <option>Hannah Cole</option>
+            <option>Nadia Haddad</option>
+          </select>
+        </div>
+
+        <div class="field field--full">
+          <label class="field__label" for="task-title">Task title<span class="field__req" aria-hidden="true">*</span></label>
+          <input class="input" id="task-title" name="title" type="text" placeholder="e.g. Studio tour booked"
+                 autocomplete="off" required data-validate
+                 data-required-message="Give the task a short, action-focused title.">
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="task-due">Due date<span class="field__req" aria-hidden="true">*</span></label>
+          <input class="input" id="task-due" name="due" type="date" min="2026-10-17"
+                 data-validate data-min-date="2026-10-17" required
+                 data-required-message="Choose a due date so overdue work is visible.">
+          <p class="field__hint">Must fall before the start date of 3 Nov 2026.</p>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="task-status">Starting status</label>
+          <select class="select" id="task-status" name="status">
+            <option>Not started</option>
+            <option>In progress</option>
+            <option>Blocked</option>
+          </select>
+        </div>
+
+        <div class="field field--full">
+          <label class="field__label" for="task-notes">Description</label>
+          <textarea class="textarea" id="task-notes" name="notes" rows="3"
+                    placeholder="What does done look like for this task?"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="sheet__foot">
+      <p class="text-xs muted">Nothing is saved in this prototype.</p>
+      <div class="sheet__foot-actions">
+        <button class="btn btn--secondary" type="button" data-sheet-close>Cancel</button>
+        <button class="btn btn--primary" type="submit">Add task</button>
+      </div>
+    </div>
+  </form>
+</dialog>
+
+<!-- Template cloned when a task is added, so the checklist component stays in one place -->
+<template id="task-template">
+  <li class="task" data-task-row>
+    <span class="task__check">
+      <input class="task__box" type="checkbox" id="__ID__" data-task>
+    </span>
+    <div class="task__main">
+      <p class="task__title"><label for="__ID__">__TITLE__</label></p>
+      <p class="task__desc">__DESC__</p>
+      <p class="task__meta">
+        <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> __OWNER__</span>
+        <span class="task__meta-item due"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Due __DUE__</span>
+        <span class="task__meta-item dept __DEPT_CLASS__">
+          <span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#__DEPT_ICON__"/></svg></span>
+          __DEPT_LABEL__
+        </span>
+      </p>
+    </div>
+    <div class="task__aside">
+      <span class="badge" data-task-status><span class="badge__dot"></span>Not started</span>
+    </div>
+  </li>
+</template>
+
+<!-- @include partials/shell-end.html -->
+<!-- @include partials/scripts.html -->
+</body>
+</html>

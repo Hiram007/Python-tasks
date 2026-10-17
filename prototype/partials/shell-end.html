@@ -1,0 +1,30 @@
+<!-- Shell furniture shared by every page: the mobile drawer scrim, the toast
+     region and the single generic confirmation dialog that contextual actions
+     reuse. -->
+<button class="scrim" type="button" data-nav-close aria-label="Close navigation" hidden></button>
+
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+<dialog class="dialog" id="confirm-dialog" aria-labelledby="confirm-title" aria-describedby="confirm-body">
+  <div class="dialog__head">
+    <span class="dialog__icon" data-confirm-icon>
+      <svg class="icon icon--lg" aria-hidden="true"><use href="#i-help"/></svg>
+    </span>
+    <div>
+      <h2 class="dialog__title" id="confirm-title" data-confirm-title>Confirm action</h2>
+      <p class="dialog__sub" data-confirm-sub>This prototype never saves changes.</p>
+    </div>
+  </div>
+  <div class="dialog__body" id="confirm-body" data-confirm-body></div>
+  <div class="dialog__body" data-confirm-extra hidden>
+    <div class="field">
+      <label class="field__label" for="confirm-comment">What needs to change?</label>
+      <textarea class="textarea" id="confirm-comment" name="confirm-comment" rows="3"
+                placeholder="Share the reason so the task owner can act on it."></textarea>
+    </div>
+  </div>
+  <div class="dialog__foot">
+    <button class="btn btn--secondary" type="button" data-confirm-cancel>Cancel</button>
+    <button class="btn btn--primary" type="button" data-confirm-ok>Confirm</button>
+  </div>
+</dialog>

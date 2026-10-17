@@ -1,0 +1,129 @@
+<header class="topbar">
+  <div class="topbar__left">
+    <button class="icon-btn topbar__menu-btn" type="button" data-nav-toggle aria-expanded="false" aria-controls="sidebar" aria-label="Open navigation">
+      <svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>
+    </button>
+    <button class="icon-btn topbar__collapse-btn" type="button" data-sidebar-collapse aria-label="Collapse navigation">
+      <svg class="icon" aria-hidden="true"><use href="#i-chevron-left"/></svg>
+    </button>
+
+    <div class="search" role="search">
+      <div class="search__field">
+        <label class="sr-only" for="global-search">Search cases, people or tasks</label>
+        <svg class="icon icon--sm search__icon" aria-hidden="true"><use href="#i-search"/></svg>
+        <input class="search__input" id="global-search" type="search" placeholder="Search cases, people or tasks…"
+               autocomplete="off" role="combobox" aria-expanded="false" aria-controls="search-panel"
+               aria-autocomplete="list" data-search-input>
+        <span class="search__kbd" aria-hidden="true">⌘K</span>
+      </div>
+      <div class="search__panel" id="search-panel" role="listbox" aria-label="Search results" data-search-panel hidden></div>
+    </div>
+  </div>
+
+  <div class="topbar__right">
+    <a class="btn btn--ghost btn--sm topbar__help" href="design-system.html">
+      <svg class="icon icon--sm" aria-hidden="true"><use href="#i-palette"/></svg>
+      Guidance
+    </a>
+
+    <div class="menu" data-menu>
+      <button class="icon-btn" type="button" data-menu-trigger data-notif-trigger aria-expanded="false" aria-haspopup="true" aria-controls="notif-panel" aria-label="Notifications, 3 unread">
+        <svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg>
+        <span class="icon-btn__dot" aria-hidden="true" data-notif-dot></span>
+      </button>
+      <div class="menu__panel menu__panel--wide" id="notif-panel" data-menu-panel hidden>
+        <div class="menu__head">
+          <h2 class="menu__title">Notifications</h2>
+          <button class="btn btn--link text-sm" type="button" data-notif-read-all>Mark all as read</button>
+        </div>
+        <div class="menu__list">
+          <article class="notif is-unread">
+            <span class="notif__icon notif__icon--warn" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-shield"/></svg></span>
+            <div class="grow">
+              <p class="notif__title">Access request needs approval</p>
+              <p class="notif__body">IT · Entra ID access groups for Amara Okafor</p>
+              <p class="notif__body text-xs">2 hours ago</p>
+            </div>
+            <span class="notif__mark" aria-hidden="true"></span>
+            <span class="sr-only">Unread</span>
+          </article>
+          <article class="notif is-unread">
+            <span class="notif__icon notif__icon--warn" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-alert"/></svg></span>
+            <div class="grow">
+              <p class="notif__title">Overdue task escalated</p>
+              <p class="notif__body">Finance · Payroll enrolment for Chen Wei is 3 days overdue</p>
+              <p class="notif__body text-xs">4 hours ago</p>
+            </div>
+            <span class="notif__mark" aria-hidden="true"></span>
+            <span class="sr-only">Unread</span>
+          </article>
+          <article class="notif is-unread">
+            <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-calendar"/></svg></span>
+            <div class="grow">
+              <p class="notif__title">Start date approaching</p>
+              <p class="notif__body">Daniel Whitfield starts 27 Oct 2026 · 6 tasks still open</p>
+              <p class="notif__body text-xs">Yesterday</p>
+            </div>
+            <span class="notif__mark" aria-hidden="true"></span>
+            <span class="sr-only">Unread</span>
+          </article>
+          <article class="notif is-read">
+            <span class="notif__icon notif__icon--ok" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-check-circle"/></svg></span>
+            <div class="grow">
+              <p class="notif__title">Right to work verified</p>
+              <p class="notif__body">HR · Marcus Bennett · documented 16 Oct 2026</p>
+              <p class="notif__body text-xs">Yesterday</p>
+            </div>
+            <span class="notif__mark" aria-hidden="true"></span>
+            <span class="sr-only">Read</span>
+          </article>
+        </div>
+        <div class="menu__foot">
+          <span class="text-xs muted">Showing the 4 most recent</span>
+          <a class="btn btn--link text-sm" href="tasks.html">View all activity</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu" data-menu>
+      <button class="profile-btn" type="button" data-menu-trigger aria-expanded="false" aria-haspopup="true" aria-controls="profile-panel">
+        <span class="avatar avatar--sm" aria-hidden="true">RB</span>
+        <span class="profile-btn__text">
+          <span class="profile-btn__name">Rosa Bell</span>
+          <span class="profile-btn__role">People Operations Lead</span>
+        </span>
+        <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+      </button>
+      <div class="menu__panel" id="profile-panel" data-menu-panel hidden>
+        <div class="menu__head">
+          <div class="row">
+            <span class="avatar avatar--lg" aria-hidden="true">RB</span>
+            <span>
+              <span class="strong">Rosa Bell</span>
+              <span class="notif__body">rosa.bell@casidra.example</span>
+            </span>
+          </div>
+        </div>
+        <div class="menu__list">
+          <button class="menu__item menu__item--row" type="button" data-toast="Profile" data-toast-message="Profile screens are outside this prototype's scope.">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg>
+            <span>Your profile</span>
+          </button>
+          <button class="menu__item menu__item--row" type="button" data-toast="Notification preferences" data-toast-message="Preferences are shown for design only — nothing is stored.">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-bell"/></svg>
+            <span>Notification preferences</span>
+          </button>
+          <a class="menu__item menu__item--row" href="design-system.html">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-palette"/></svg>
+            <span>Design system</span>
+          </a>
+          <div class="menu__divider" role="presentation"></div>
+          <button class="menu__item menu__item--row" type="button" data-toast="Sign out" data-toast-message="Authentication is not implemented in this prototype.">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-logout"/></svg>
+            <span>Sign out</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

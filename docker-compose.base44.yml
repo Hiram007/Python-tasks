@@ -1,0 +1,47 @@
+# Base44 development environment for this repository.
+#
+# The repo's tracked content is a set of interactive Python CLI scripts. This
+# branch adds `prototype/` — the Casidra Arrivals & Departures design prototype
+# (static HTML/CSS/JS, standard library only, no build step).
+#
+# The source is bind-mounted (never baked into an image) and `prototype/server.py`
+# is a stdlib dev server with `@include` partials and SSE live reload, so edits
+# to any page, style or script apply on refresh without a rebuild.
+#
+# There is no database, no cache and no external service: the prototype is
+# front-end only and needs no credentials.
+
+services:
+  web:
+    image: python:3.12-slim
+    working_dir: /app
+    command: ["python", "prototype/server.py"]
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./:/app
+    ports:
+      - "3000:3000"
+    healthcheck:
+      # The slim image has no curl, so the check uses Python's urllib and
+      # asserts on real page content rather than just a TCP connection.
+      test:
+        - CMD
+        - python
+        - -c
+        - |
+          import sys, urllib.request
+          try:
+              body = urllib.request.urlopen("http://127.0.0.1:3000/", timeout=3).read()
+          except Exception as exc:
+              print("web: dashboard request failed:", exc)
+              sys.exit(1)
+          if b"Casidra" not in body:
+              print("web: dashboard responded without expected content")
+              sys.exit(1)
+          sys.exit(0)
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: on-failure

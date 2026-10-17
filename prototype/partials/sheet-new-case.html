@@ -1,0 +1,150 @@
+<!-- Shared "new onboarding case" sheet. Client-side validation only: nothing is
+     submitted anywhere. Reuse this partial for future offboarding forms by
+     swapping the field set and the data-sheet-form handler. -->
+<dialog class="sheet" id="sheet-new-case" aria-labelledby="sheet-new-case-title">
+  <form class="sheet__form" data-sheet-form="new-case" novalidate>
+    <div class="sheet__head">
+      <div>
+        <h2 class="sheet__title" id="sheet-new-case-title">New onboarding case</h2>
+        <p class="sheet__sub">Opens the HR, IT, Facilities and Communications checklists for a new starter.</p>
+      </div>
+      <button class="icon-btn" type="button" data-sheet-close aria-label="Close">
+        <svg class="icon" aria-hidden="true"><use href="#i-close"/></svg>
+      </button>
+    </div>
+
+    <div class="sheet__body">
+      <div class="alert alert--danger" data-form-summary hidden role="alert">
+        <svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg>
+        <div>
+          <p class="alert__title">Check the highlighted fields</p>
+          <p data-form-summary-text>Some fields need attention before you can continue.</p>
+        </div>
+      </div>
+
+      <div class="form-grid mt-4">
+        <div class="field">
+          <label class="field__label" for="case-employee">Employee name<span class="field__req" aria-hidden="true">*</span></label>
+          <input class="input" id="case-employee" name="employee" type="text" placeholder="e.g. Amara Okafor"
+                 autocomplete="off" required data-validate
+                 data-required-message="Enter the new starter's full name.">
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="case-email">Work email<span class="field__req" aria-hidden="true">*</span></label>
+          <input class="input" id="case-email" name="email" type="email" placeholder="name@casidra.example"
+                 autocomplete="off" required data-validate
+                 data-required-message="Enter the work email so IT can create the account.">
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="case-role">Role or job title<span class="field__req" aria-hidden="true">*</span></label>
+          <input class="input" id="case-role" name="role" type="text" placeholder="e.g. Product Designer"
+                 autocomplete="off" required data-validate
+                 data-required-message="Enter the role this person is joining as.">
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="case-department">Department<span class="field__req" aria-hidden="true">*</span></label>
+          <select class="select" id="case-department" name="department" required data-validate
+                  data-required-message="Choose the department that owns the checklist.">
+            <option value="">Select a department</option>
+            <option>Design</option>
+            <option>Technology</option>
+            <option>Finance</option>
+            <option>Facilities</option>
+            <option>Marketing</option>
+            <option>Operations</option>
+            <option>People</option>
+            <option>Revenue</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="case-start">Start date<span class="field__req" aria-hidden="true">*</span></label>
+          <input class="input" id="case-start" name="start" type="date" min="2026-10-17"
+                 data-validate data-min-date="2026-10-17" required
+                 data-required-message="Choose the agreed start date.">
+          <p class="field__hint">Day-one readiness is measured against this date.</p>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="case-coordinator">Onboarding coordinator<span class="field__req" aria-hidden="true">*</span></label>
+          <select class="select" id="case-coordinator" name="coordinator" required data-validate
+                  data-required-message="Assign a coordinator so approvals have an owner.">
+            <option value="">Select a coordinator</option>
+            <option>Priya Raman</option>
+            <option>Tomás Ferreira</option>
+            <option>Hannah Cole</option>
+            <option>Aisha Khan</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="case-location">Work location</label>
+          <select class="select" id="case-location" name="location">
+            <option>London — hybrid</option>
+            <option>Manchester — on site</option>
+            <option>Leeds — on site</option>
+            <option>Bristol — hybrid</option>
+            <option>Lisbon — remote</option>
+            <option>Stockholm — hybrid</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="case-contract">Contract type</label>
+          <select class="select" id="case-contract" name="contract">
+            <option>Permanent</option>
+            <option>Fixed term — 12 months</option>
+            <option>Contractor</option>
+            <option>Internship</option>
+          </select>
+        </div>
+
+        <fieldset class="field field--full">
+          <legend class="field__label">Equipment profile</legend>
+          <div class="radio-row">
+            <label class="check">
+              <input type="radio" name="equipment" value="laptop" checked>
+              <span class="check__text">Laptop + standard peripherals</span>
+            </label>
+            <label class="check">
+              <input type="radio" name="equipment" value="desktop">
+              <span class="check__text">Desktop workstation</span>
+            </label>
+            <label class="check">
+              <input type="radio" name="equipment" value="field">
+              <span class="check__text">Field kit (mobile + PPE)</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="field field--full">
+          <label class="field__label" for="case-notes">Notes for the coordinators</label>
+          <textarea class="textarea" id="case-notes" name="notes" rows="3"
+                    placeholder="Anything HR, IT, Facilities or Communications should know before day one."></textarea>
+          <p class="field__hint">Visible to everyone assigned to this case.</p>
+        </div>
+
+        <div class="field field--full">
+          <label class="check">
+            <input type="checkbox" name="notify" checked>
+            <span class="check__text">
+              Notify the coordinator when each departmental checklist is signed off.
+              <span class="field__hint">Email delivery is shown here for design only — it is not implemented in this prototype.</span>
+            </span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="sheet__foot">
+      <p class="text-xs muted">Fields marked <span aria-hidden="true">*</span> are required. Nothing is saved in this prototype.</p>
+      <div class="sheet__foot-actions">
+        <button class="btn btn--secondary" type="button" data-sheet-close>Cancel</button>
+        <button class="btn btn--primary" type="submit">Create case</button>
+      </div>
+    </div>
+  </form>
+</dialog>

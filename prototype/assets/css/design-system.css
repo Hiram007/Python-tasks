@@ -1,0 +1,157 @@
+/* ==========================================================================
+   Design-system page furniture.
+   Only used by design-system.html — presentation helpers for documenting the
+   shared components, never by product screens.
+   ========================================================================== */
+
+.ds-section {
+  margin-top: var(--s-10);
+}
+
+.ds-section > .section-head {
+  padding-bottom: var(--s-4);
+  border-bottom: 1px solid var(--border);
+  align-items: flex-end;
+}
+
+.ds-grid {
+  display: grid;
+  gap: var(--s-4);
+  grid-template-columns: repeat(auto-fill, minmax(184px, 1fr));
+}
+
+.ds-grid--wide {
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.swatch {
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: var(--sh-xs);
+}
+
+.swatch__chip {
+  height: 62px;
+  border-bottom: 1px solid var(--border);
+}
+
+.swatch__body {
+  padding: var(--s-3);
+}
+
+.swatch__name {
+  color: var(--ink);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+}
+
+.swatch__value {
+  margin-top: 2px;
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+}
+
+.ds-panel {
+  padding: var(--s-5);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+}
+
+.ds-row {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  flex-wrap: wrap;
+}
+
+.ds-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+
+.ds-label {
+  color: var(--ink-3);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.ds-code {
+  padding: 2px 6px;
+  border-radius: var(--r-xs);
+  background: var(--surface-3);
+  color: var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  white-space: nowrap;
+}
+
+.ds-type {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr);
+  gap: var(--s-4);
+  align-items: baseline;
+  padding: var(--s-4) 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.ds-type:last-child {
+  border-bottom: 0;
+}
+
+.ds-type__spec {
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+}
+
+.ds-space {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+}
+
+.ds-space__bar {
+  height: 14px;
+  border-radius: 4px;
+  background: var(--brand-200);
+}
+
+.ds-radius {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--s-4);
+}
+
+.ds-radius__box {
+  height: 64px;
+  display: grid;
+  place-items: center;
+  background: var(--surface);
+  border: 1px solid var(--brand-200);
+  color: var(--ink-3);
+  font-size: var(--fs-2xs);
+}
+
+.ds-nav {
+  display: flex;
+  gap: var(--s-2);
+  flex-wrap: wrap;
+}
+
+.ds-scroll {
+  overflow-x: auto;
+}
+
+@media (max-width: 720px) {
+  .ds-type {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-2);
+  }
+}

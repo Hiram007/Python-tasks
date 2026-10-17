@@ -1,0 +1,149 @@
+/* ==========================================================================
+   Casidra design tokens
+   Single source of truth for colour, type, space, radius, elevation, motion.
+   Everything else in the system references these variables — change a value
+   here and it propagates to every module (onboarding today, offboarding next).
+   ========================================================================== */
+
+:root {
+  /* -- Typography ------------------------------------------------------- */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  --fs-2xs: 0.6875rem;  /* 11px — table meta, eyebrow labels */
+  --fs-xs: 0.75rem;     /* 12px — captions, badges */
+  --fs-sm: 0.8125rem;   /* 13px — dense UI, table cells */
+  --fs-md: 0.875rem;    /* 14px — body / default UI */
+  --fs-lg: 1rem;        /* 16px — emphasised body, card titles */
+  --fs-xl: 1.125rem;    /* 18px — section headings */
+  --fs-2xl: 1.375rem;   /* 22px — page sub-headings */
+  --fs-3xl: 1.75rem;    /* 28px — page titles */
+  --fs-4xl: 2.25rem;    /* 36px — KPI figures, hero numbers */
+
+  --lh-tight: 1.18;
+  --lh-snug: 1.35;
+  --lh-normal: 1.55;
+
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  --tracking-tight: -0.015em;
+  --tracking-caps: 0.07em;
+
+  /* -- Surfaces --------------------------------------------------------- */
+  --canvas: #f4f5f8;
+  --surface: #ffffff;
+  --surface-2: #fafbfd;
+  --surface-3: #f1f3f7;
+  --border: #e4e7ee;
+  --border-strong: #d3d8e3;
+
+  /* -- Ink -------------------------------------------------------------- */
+  --ink: #101828;
+  --ink-2: #475467;
+  --ink-3: #667085;
+  --ink-invert: #ffffff;
+
+  /* -- Brand (indigo) --------------------------------------------------- */
+  --brand-50: #eef1ff;
+  --brand-100: #e0e5ff;
+  --brand-200: #c7cfff;
+  --brand-400: #7f8cf5;
+  --brand-500: #5b62e8;
+  --brand-600: #4a4fd6;
+  --brand-700: #3b3fb0;
+  --brand-900: #242759;
+
+  /* -- Accent (teal, used sparingly for "positive motion") -------------- */
+  --accent-500: #0f9c8b;
+  --accent-100: #d7f2ee;
+
+  /* -- Semantic status -------------------------------------------------- */
+  --ok-600: #0b7a52;
+  --ok-100: #dcf5e9;
+  --ok-ink: #0a6b49;
+
+  --warn-600: #a15c00;
+  --warn-100: #fdf1dc;
+  --warn-ink: #8a4f00;
+
+  --danger-600: #c4322b;
+  --danger-100: #fdeceb;
+  --danger-ink: #a92a24;
+
+  --info-600: #1a6bc4;
+  --info-100: #e5f0fd;
+  --info-ink: #155ba7;
+
+  --neutral-600: #5a6577;
+  --neutral-100: #eef0f4;
+  --neutral-ink: #4a5464;
+
+  /* -- Dark chrome (sidebar) -------------------------------------------- */
+  --sidebar: #0d1526;
+  --sidebar-2: #111c31;
+  --sidebar-border: #1e2a42;
+  --sidebar-ink: #aab6cc;
+  --sidebar-ink-strong: #ffffff;
+  --sidebar-active: #1d2941;
+
+  /* -- Radius ----------------------------------------------------------- */
+  --r-xs: 6px;
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 22px;
+  --r-pill: 999px;
+
+  /* -- Space (4px base) ------------------------------------------------- */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 24px;
+  --s-7: 32px;
+  --s-8: 40px;
+  --s-9: 48px;
+  --s-10: 64px;
+
+  /* -- Elevation -------------------------------------------------------- */
+  --sh-xs: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --sh-sm: 0 1px 3px rgba(16, 24, 40, 0.07), 0 1px 2px rgba(16, 24, 40, 0.04);
+  --sh-md: 0 6px 16px -6px rgba(16, 24, 40, 0.14), 0 2px 6px -2px rgba(16, 24, 40, 0.06);
+  --sh-lg: 0 18px 40px -12px rgba(16, 24, 40, 0.2), 0 6px 14px -8px rgba(16, 24, 40, 0.1);
+  --sh-focus: 0 0 0 3px rgba(91, 98, 232, 0.3);
+
+  /* -- Layout ----------------------------------------------------------- */
+  --sidebar-w: 268px;
+  --topbar-h: 64px;
+  --content-max: 1440px;
+  --gutter: var(--s-7);
+
+  /* -- Motion ----------------------------------------------------------- */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --t-fast: 120ms;
+  --t-med: 200ms;
+
+  /* -- Layers ----------------------------------------------------------- */
+  --z-topbar: 40;
+  --z-drawer: 60;
+  --z-dropdown: 70;
+  --z-modal: 90;
+  --z-toast: 100;
+}
+
+@media (max-width: 1280px) {
+  :root {
+    --gutter: var(--s-6);
+  }
+}
+
+@media (max-width: 720px) {
+  :root {
+    --gutter: var(--s-4);
+  }
+}

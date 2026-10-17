@@ -1,0 +1,92 @@
+<aside class="sidebar" id="sidebar" aria-label="Primary">
+  <div class="sidebar__head">
+    <a class="brand" href="index.html">
+      <span class="brand__mark" aria-hidden="true">
+        <svg class="icon icon--lg"><use href="#i-casidra"/></svg>
+      </span>
+      <span>
+        <span class="brand__name">Casidra</span>
+        <span class="brand__sub">Arrivals &amp; Departures</span>
+      </span>
+    </a>
+    <button class="icon-btn sidebar__close" type="button" data-nav-close aria-label="Close navigation">
+      <svg class="icon" aria-hidden="true"><use href="#i-close"/></svg>
+    </button>
+  </div>
+
+  <nav class="sidebar__nav" aria-label="Sections">
+    <p class="sidebar__label" id="nav-label-overview">Overview</p>
+    <ul class="nav" aria-labelledby="nav-label-overview">
+      <li>
+        <a class="nav__item" href="index.html" data-nav="dashboard">
+          <svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg>
+          <span>Dashboard</span>
+        </a>
+      </li>
+    </ul>
+
+    <p class="sidebar__label" id="nav-label-onboarding">Onboarding</p>
+    <ul class="nav" aria-labelledby="nav-label-onboarding">
+      <li>
+        <a class="nav__item" href="cases.html" data-nav="cases">
+          <svg class="icon" aria-hidden="true"><use href="#i-users"/></svg>
+          <span>Cases</span>
+          <span class="nav__count">12</span>
+        </a>
+      </li>
+      <li>
+        <a class="nav__item" href="tasks.html" data-nav="tasks">
+          <svg class="icon" aria-hidden="true"><use href="#i-check-list"/></svg>
+          <span>Tasks</span>
+          <span class="nav__count nav__count--alert">6</span>
+        </a>
+      </li>
+    </ul>
+
+    <p class="sidebar__label" id="nav-label-offboarding">Offboarding</p>
+    <ul class="nav" aria-labelledby="nav-label-offboarding">
+      <li>
+        <span class="nav__item is-disabled" aria-disabled="true">
+          <svg class="icon" aria-hidden="true"><use href="#i-door"/></svg>
+          <span>Cases</span>
+          <span class="tag tag--soon">Next</span>
+        </span>
+      </li>
+      <li>
+        <span class="nav__item is-disabled" aria-disabled="true">
+          <svg class="icon" aria-hidden="true"><use href="#i-check-list"/></svg>
+          <span>Clearance tasks</span>
+        </span>
+      </li>
+    </ul>
+
+    <p class="sidebar__label" id="nav-label-workspace">Workspace</p>
+    <ul class="nav" aria-labelledby="nav-label-workspace">
+      <li>
+        <a class="nav__item" href="design-system.html" data-nav="design-system">
+          <svg class="icon" aria-hidden="true"><use href="#i-palette"/></svg>
+          <span>Design system</span>
+        </a>
+      </li>
+      <li>
+        <span class="nav__item is-disabled" aria-disabled="true">
+          <svg class="icon" aria-hidden="true"><use href="#i-settings"/></svg>
+          <span>Settings</span>
+        </span>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="sidebar__foot">
+    <div class="sidebar__user">
+      <span class="avatar avatar--ink" aria-hidden="true">RB</span>
+      <span class="grow">
+        <span class="sidebar__user-name">Rosa Bell</span>
+        <span class="sidebar__user-role">People Operations Lead</span>
+      </span>
+    </div>
+    <p class="sidebar__note">
+      <strong>Design prototype.</strong> Fictional sample data. No backend, authentication or email delivery is connected.
+    </p>
+  </div>
+</aside>

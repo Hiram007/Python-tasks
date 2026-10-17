@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Onboarding dashboard · Casidra</title>
+<meta name="description" content="Casidra Arrivals &amp; Departures — onboarding dashboard design prototype for HR, IT, Facilities, Communications and management.">
+<!-- @include partials/head-assets.html -->
+</head>
+<body class="app" data-page="dashboard">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- @include partials/icons.html -->
+<!-- @include partials/sidebar.html -->
+
+<div class="app__body">
+  <!-- @include partials/topbar.html -->
+
+  <main class="content" id="main">
+    <div class="page-head">
+      <div>
+        <p class="eyebrow">Arrivals &amp; Departures</p>
+        <h1 class="page-head__title">Onboarding dashboard</h1>
+        <p class="page-head__sub">
+          Every new starter, the approvals they are waiting on, and the tasks that must land before day one.
+          Coordinators, departments and managers work from this single view.
+        </p>
+      </div>
+      <div class="page-head__actions">
+        <button class="btn btn--secondary" type="button"
+                data-toast="Export queued" data-toast-message="Exports are part of the production build, not this prototype.">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-download"/></svg>
+          Export
+        </button>
+        <button class="btn btn--primary" type="button" data-sheet-open="sheet-new-case" aria-haspopup="dialog">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-plus"/></svg>
+          New onboarding case
+        </button>
+      </div>
+    </div>
+
+    <div class="notice" role="note">
+      <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
+      <p>
+        <strong>Design prototype.</strong> Every person, date and department below is fictional sample data.
+        Nothing is connected to a backend, and authentication, permissions, approvals and email delivery are
+        not implemented — they are shown here so the design can be reviewed.
+      </p>
+    </div>
+
+    <!-- 1: KPI summary -->
+    <section class="grid grid--kpis mt-6" aria-label="Onboarding key figures">
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Active onboarding cases</p>
+            <p class="kpi__value tnum mt-2">12</p>
+          </div>
+          <span class="kpi__icon" aria-hidden="true"><svg class="icon"><use href="#i-users"/></svg></span>
+        </div>
+        <div class="kpi__meta">
+          <span class="delta delta--up">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-trend-up"/></svg>
+            3 more
+          </span>
+          <span>than last month</span>
+        </div>
+        <div class="row row--between">
+          <p class="text-xs muted">4 start within the next 14 days</p>
+          <svg class="kpi__spark" viewBox="0 0 88 30" fill="none" aria-hidden="true">
+            <path d="M1 24l13-4 12 3 12-7 12 2 12-6 12 2 13-9" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <a class="kpi__link" href="cases.html">
+          View all cases
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Pending approvals</p>
+            <p class="kpi__value tnum mt-2">9</p>
+          </div>
+          <span class="kpi__icon" aria-hidden="true"><svg class="icon"><use href="#i-inbox"/></svg></span>
+        </div>
+        <div class="kpi__meta">
+          <span class="delta delta--flat">Oldest is 5 days</span>
+          <span>3 await HR sign-off</span>
+        </div>
+        <div class="row row--between">
+          <p class="text-xs muted">Approvals block 4 cases from closing</p>
+          <svg class="kpi__spark" viewBox="0 0 88 30" fill="none" aria-hidden="true">
+            <path d="M1 10l13 4 12-2 12 6 12-3 12 5 12-1 13 4" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <a class="kpi__link" href="#approvals">
+          Review approvals
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Outstanding tasks</p>
+            <p class="kpi__value tnum mt-2">87</p>
+          </div>
+          <span class="kpi__icon" aria-hidden="true"><svg class="icon"><use href="#i-check-list"/></svg></span>
+        </div>
+        <div class="kpi__meta">
+          <span class="delta delta--flat">19 due this week</span>
+          <span>across 12 cases</span>
+        </div>
+        <div class="row row--between">
+          <p class="text-xs muted">HR and IT hold 61% of open tasks</p>
+          <svg class="kpi__spark" viewBox="0 0 88 30" fill="none" aria-hidden="true">
+            <path d="M1 26l13-3 12-4 12 1 12-6 12-2 12-5 13-4" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <a class="kpi__link" href="tasks.html">
+          Open task queue
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Overdue tasks</p>
+            <p class="kpi__value tnum mt-2">6</p>
+          </div>
+          <span class="kpi__icon kpi__icon--danger" aria-hidden="true"><svg class="icon"><use href="#i-alert"/></svg></span>
+        </div>
+        <div class="kpi__meta">
+          <span class="delta delta--down">2 more than last week</span>
+        </div>
+        <div class="row row--between">
+          <p class="text-xs muted">Affecting 5 cases, 3 start next week</p>
+          <svg class="kpi__spark kpi__spark--danger" viewBox="0 0 88 30" fill="none" aria-hidden="true">
+            <path d="M1 22l13 2 12-5 12 6 12-3 12 4 12-7 13 3" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <a class="kpi__link" href="tasks.html">
+          Escalate overdue
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </article>
+    </section>
+
+    <!-- 2: Cases in progress -->
+    <section class="card mt-6" data-table-region data-count-noun="cases" aria-labelledby="cases-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="cases-title">Onboarding cases in progress</h2>
+          <p class="card__sub">Sorted by start date, nearest first. Select a person to open their case file.</p>
+        </div>
+        <a class="btn btn--secondary btn--sm" href="cases.html">All cases</a>
+      </div>
+
+      <div class="toolbar">
+        <div class="toolbar__search input-wrap">
+          <label class="sr-only" for="case-filter-search">Filter cases by name, role or coordinator</label>
+          <svg class="icon icon--sm input-wrap__icon" aria-hidden="true"><use href="#i-search"/></svg>
+          <input class="input input--icon" id="case-filter-search" type="search" placeholder="Filter by name or role…"
+                 autocomplete="off" data-table-search>
+        </div>
+        <div class="input-wrap">
+          <label class="sr-only" for="case-filter-department">Department</label>
+          <select class="select" id="case-filter-department" data-table-filter="department">
+            <option value="">All departments</option>
+            <option value="design">Design</option>
+            <option value="technology">Technology</option>
+            <option value="finance">Finance</option>
+            <option value="facilities">Facilities</option>
+            <option value="marketing">Marketing</option>
+            <option value="operations">Operations</option>
+            <option value="revenue">Revenue</option>
+          </select>
+        </div>
+        <div class="input-wrap">
+          <label class="sr-only" for="case-filter-status">Status</label>
+          <select class="select" id="case-filter-status" data-table-filter="status">
+            <option value="">Any status</option>
+            <option value="on-track">On track</option>
+            <option value="at-risk">At risk</option>
+            <option value="overdue">Overdue</option>
+            <option value="completed">Completed</option>
+          </select>
+        </div>
+        <button class="btn btn--ghost btn--sm" type="button" data-table-reset>
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-refresh"/></svg>
+          Reset
+        </button>
+      </div>
+
+      <div class="table-wrap" data-table-wrap>
+        <table class="table table--stack">
+          <caption class="sr-only">Onboarding cases in progress, with department, start date, coordinator, progress and status</caption>
+          <thead>
+            <tr>
+              <th scope="col">Employee</th>
+              <th scope="col">Department</th>
+              <th scope="col">Start date</th>
+              <th scope="col">Coordinator</th>
+              <th scope="col">Progress</th>
+              <th scope="col">Status</th>
+              <th scope="col" class="table__actions"><span class="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody data-table-rows>
+            <tr data-search="amara okafor product designer design priya raman london"
+                data-department="design" data-status="on-track" data-group="upcoming"
+                data-row-href="case.html">
+              <td data-label="Employee">
+                <a class="person" href="case.html">
+                  <span class="avatar" aria-hidden="true">AO</span>
+                  <span>
+                    <span class="person__name">Amara Okafor</span>
+                    <span class="person__meta">Product Designer</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Department">
+                <span class="dept dept--hr">
+                  <span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-palette"/></svg></span>
+                  Design
+                </span>
+              </td>
+              <td data-label="Start date">3 Nov 2026</td>
+              <td data-label="Coordinator">
+                <span class="owner"><span class="avatar avatar--sm avatar--rose" aria-hidden="true">PR</span> Priya Raman</span>
+              </td>
+              <td data-label="Progress">
+                <div class="progress progress--sm" role="progressbar" aria-valuenow="47" aria-valuemin="0" aria-valuemax="100"
+                     aria-label="Amara Okafor onboarding progress">
+                  <span class="progress__track"><span class="progress__fill" style="width:47%"></span></span>
+                  <span class="progress__value">47%</span>
+                </div>
+              </td>
+              <td data-label="Status"><span class="badge badge--ok"><span class="badge__dot"></span>On track</span></td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="case.html">
+                  Open
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg>
+                </a>
+              </td>
+            </tr>
+
+            <tr data-search="chen wei finance analyst finance aisha khan london"
+                data-department="finance" data-status="overdue" data-group="overdue"
+                data-row-href="cases.html">
+              <td data-label="Employee">
+                <a class="person" href="cases.html">
+                  <span class="avatar avatar--amber" aria-hidden="true">CW</span>
+                  <span>
+                    <span class="person__name">Chen Wei</span>
+                    <span class="person__meta">Finance Analyst</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Department">
+                <span class="dept dept--facilities">
+                  <span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-briefcase"/></svg></span>
+                  Finance
+                </span>
+              </td>
+              <td data-label="Start date">17 Oct 2026</td>
+              <td data-label="Coordinator">
+                <span class="owner"><span class="avatar avatar--sm avatar--slate" aria-hidden="true">AK</span> Aisha Khan</span>
+              </td>
+              <td data-label="Progress">
+                <div class="progress progress--sm" role="progressbar" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"
+                     aria-label="Chen Wei onboarding progress">
+                  <span class="progress__track"><span class="progress__fill progress__fill--danger" style="width:55%"></span></span>
+                  <span class="progress__value">55%</span>
+                </div>
+              </td>
+              <td data-label="Status"><span class="badge badge--danger"><span class="badge__dot"></span>Overdue</span></td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="cases.html">
+                  Open
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg>
+                </a>
+              </td>
+            </tr>
+
+            <tr data-search="marcus bennett facilities supervisor facilities priya raman leeds"
+                data-department="facilities" data-status="on-track" data-group="upcoming"
+                data-row-href="cases.html">
+              <td data-label="Employee">
+                <a class="person" href="cases.html">
+                  <span class="avatar avatar--teal" aria-hidden="true">MB</span>
+                  <span>
+                    <span class="person__name">Marcus Bennett</span>
+                    <span class="person__meta">Facilities Supervisor</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Department">
+                <span class="dept dept--facilities">
+                  <span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-building"/></svg></span>
+                  Facilities
+                </span>
+              </td>
+              <td data-label="Start date">20 Oct 2026</td>
+              <td data-label="Coordinator">
+                <span class="owner"><span class="avatar avatar--sm avatar--rose" aria-hidden="true">PR</span> Priya Raman</span>
+              </td>
+              <td data-label="Progress">
+                <div class="progress progress--sm" role="progressbar" aria-valuenow="96" aria-valuemin="0" aria-valuemax="100"
+                     aria-label="Marcus Bennett onboarding progress">
+                  <span class="progress__track"><span class="progress__fill progress__fill--ok" style="width:96%"></span></span>
+                  <span class="progress__value">96%</span>
+                </div>
+              </td>
+              <td data-label="Status"><span class="badge badge--ok"><span class="badge__dot"></span>On track</span></td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="cases.html">
+                  Open
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg>
+                </a>
+              </td>
+            </tr>
+
+            <tr data-search="daniel whitfield site reliability engineer technology tomas ferreira manchester"
+                data-department="technology" data-status="on-track" data-group="upcoming"
+                data-row-href="cases.html">
+              <td data-label="Employee">
+                <a class="person" href="cases.html">
+                  <span class="avatar avatar--slate" aria-hidden="true">DW</span>
+                  <span>
+                    <span class="person__name">Daniel Whitfield</span>
+                    <span class="person__meta">Site Reliability Engineer</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Department">
+                <span class="dept dept--it">
+                  <span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-monitor"/></svg></span>
+                  Technology
+                </span>
+              </td>
+              <td data-label="Start date">27 Oct 2026</td>
+              <td data-label="Coordinator">
+                <span class="owner"><span class="avatar avatar--sm avatar--amber" aria-hidden="true">TF</span> Tomás Ferreira</span>
+              </td>
+              <td data-label="Progress">
+                <div class="progress progress--sm" role="progressbar" aria-valuenow="84" aria-valuemin="0" aria-valuemax="100"
+                     aria-label="Daniel Whitfield onboarding progress">
+                  <span class="progress__track"><span class="progress__fill" style="width:84%"></span></span>
+                  <span class="progress__value">84%</span>
+                </div>
+              </td>
+              <td data-label="Status"><span class="badge badge--ok"><span class="badge__dot"></span>On track</span></td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="cases.html">
+                  Open
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg>
+                </a>
+              </td>
+            </tr>
+
+            <tr data-search="sofia almeida marketing manager marketing hannah cole lisbon"
+                data-department="marketing" data-status="at-risk" data-group="at-risk"
+                data-row-href="cases.html">
+              <td data-label="Employee">
+                <a class="person" href="cases.html">
+                  <span class="avatar avatar--rose" aria-hidden="true">SA</span>
+                  <span>
+                    <span class="person__name">Sofia Almeida</span>
+                    <span class="person__meta">Marketing Manager</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Department">
+                <span class="dept dept--comms">
+                  <span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-megaphone"/></svg></span>
+                  Marketing
+                </span>
+              </td>
+              <td data-label="Start date">10 Nov 2026</td>
+              <td data-label="Coordinator">
+                <span class="owner"><span class="avatar avatar--sm avatar--teal" aria-hidden="true">HC</span> Hannah Cole</span>
+              </td>
+              <td data-label="Progress">
+                <div class="progress progress--sm" role="progressbar" aria-valuenow="41" aria-valuemin="0" aria-valuemax="100"
+                     aria-label="Sofia Almeida onboarding progress">
+                  <span class="progress__track"><span class="progress__fill progress__fill--warn" style="width:41%"></span></span>
+                  <span class="progress__value">41%</span>
+                </div>
+              </td>
+              <td data-label="Status"><span class="badge badge--warn"><span class="badge__dot"></span>At risk</span></td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="cases.html">
+                  Open
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg>
+                </a>
+              </td>
+            </tr>
+
+            <tr data-search="priyanka nair data scientist technology tomas ferreira bristol"
+                data-department="technology" data-status="on-track" data-group="upcoming"
+                data-row-href="cases.html">
+              <td data-label="Employee">
+                <a class="person" href="cases.html">
+                  <span class="avatar" aria-hidden="true">PN</span>
+                  <span>
+                    <span class="person__name">Priyanka Nair</span>
+                    <span class="person__meta">Data Scientist</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Department">
+                <span class="dept dept--it">
+                  <span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-monitor"/></svg></span>
+                  Technology
+                </span>
+              </td>
+              <td data-label="Start date">24 Nov 2026</td>
+              <td data-label="Coordinator">
+                <span class="owner"><span class="avatar avatar--sm avatar--amber" aria-hidden="true">TF</span> Tomás Ferreira</span>
+              </td>
+              <td data-label="Progress">
+                <div class="progress progress--sm" role="progressbar" aria-valuenow="22" aria-valuemin="0" aria-valuemax="100"
+                     aria-label="Priyanka Nair onboarding progress">
+                  <span class="progress__track"><span class="progress__fill" style="width:22%"></span></span>
+                  <span class="progress__value">22%</span>
+                </div>
+              </td>
+              <td data-label="Status"><span class="badge badge--ok"><span class="badge__dot"></span>On track</span></td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="cases.html">
+                  Open
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg>
+                </a>
+              </td>
+            </tr>
+
+            <tr data-search="jonas lindqvist customer success lead revenue hannah cole stockholm"
+                data-department="revenue" data-status="at-risk" data-group="at-risk"
+                data-row-href="cases.html">
+              <td data-label="Employee">
+                <a class="person" href="cases.html">
+                  <span class="avatar avatar--slate" aria-hidden="true">JL</span>
+                  <span>
+                    <span class="person__name">Jonas Lindqvist</span>
+                    <span class="person__meta">Customer Success Lead</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Department">
+                <span class="dept dept--comms">
+                  <span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-megaphone"/></svg></span>
+                  Revenue
+                </span>
+              </td>
+              <td data-label="Start date">3 Nov 2026</td>
+              <td data-label="Coordinator">
+                <span class="owner"><span class="avatar avatar--sm avatar--teal" aria-hidden="true">HC</span> Hannah Cole</span>
+              </td>
+              <td data-label="Progress">
+                <div class="progress progress--sm" role="progressbar" aria-valuenow="68" aria-valuemin="0" aria-valuemax="100"
+                     aria-label="Jonas Lindqvist onboarding progress">
+                  <span class="progress__track"><span class="progress__fill progress__fill--warn" style="width:68%"></span></span>
+                  <span class="progress__value">68%</span>
+                </div>
+              </td>
+              <td data-label="Status"><span class="badge badge--warn"><span class="badge__dot"></span>At risk</span></td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="cases.html">
+                  Open
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg>
+                </a>
+              </td>
+            </tr>
+
+            <tr data-search="oliver grant warehouse operative operations priya raman sheffield"
+                data-department="operations" data-status="completed" data-group="completed"
+                data-row-href="cases.html">
+              <td data-label="Employee">
+                <a class="person" href="cases.html">
+                  <span class="avatar avatar--teal" aria-hidden="true">OG</span>
+                  <span>
+                    <span class="person__name">Oliver Grant</span>
+                    <span class="person__meta">Warehouse Operative</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Department">
+                <span class="dept dept--facilities">
+                  <span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-building"/></svg></span>
+                  Operations
+                </span>
+              </td>
+              <td data-label="Start date">13 Oct 2026</td>
+              <td data-label="Coordinator">
+                <span class="owner"><span class="avatar avatar--sm avatar--rose" aria-hidden="true">PR</span> Priya Raman</span>
+              </td>
+              <td data-label="Progress">
+                <div class="progress progress--sm" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
+                     aria-label="Oliver Grant onboarding progress">
+                  <span class="progress__track"><span class="progress__fill progress__fill--ok" style="width:100%"></span></span>
+                  <span class="progress__value">100%</span>
+                </div>
+              </td>
+              <td data-label="Status"><span class="badge badge--brand"><span class="badge__dot"></span>Completed</span></td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="cases.html">
+                  Open
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="empty" data-table-empty hidden>
+        <span class="empty__art" aria-hidden="true"><svg class="icon icon--lg"><use href="#i-search"/></svg></span>
+        <h3 class="empty__title">No cases match these filters</h3>
+        <p class="empty__text">
+          Try a different name or reset the department and status filters. Cases appear here as soon as a
+          coordinator opens them for a new starter.
+        </p>
+        <div class="empty__actions">
+          <button class="btn btn--secondary" type="button" data-table-reset>Clear filters</button>
+          <button class="btn btn--primary" type="button" data-sheet-open="sheet-new-case" aria-haspopup="dialog">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-plus"/></svg>
+            New onboarding case
+          </button>
+        </div>
+      </div>
+
+      <div class="card__foot">
+        <p data-table-count>Showing all 8 cases</p>
+        <a class="btn btn--link text-sm" href="cases.html">
+          All 12 cases
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- 3: Approvals and upcoming starts -->
+    <div class="grid grid--halves mt-6">
+      <section class="card" id="approvals" aria-labelledby="approvals-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="approvals-title">Approvals awaiting review</h2>
+            <p class="card__sub">Steps that block a case from being marked ready for day one.</p>
+          </div>
+          <span class="badge badge--warn"><span class="badge__dot"></span>3 waiting</span>
+        </div>
+        <div class="list">
+          <article class="list__item" data-approval-item>
+            <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-shield"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">Entra ID access groups</p>
+              <p class="list__meta">Amara Okafor · IT · requested today at 09:14</p>
+            </div>
+            <div class="list__aside">
+              <button class="btn btn--primary btn--sm" type="button" data-approve-request
+                      data-request-title="Entra ID access groups"
+                      data-request-meta="Amara Okafor · IT">
+                Approve
+              </button>
+            </div>
+          </article>
+          <article class="list__item" data-approval-item>
+            <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-megaphone"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">Intranet profile &amp; org chart entry</p>
+              <p class="list__meta">Amara Okafor · Communications · requested yesterday</p>
+            </div>
+            <div class="list__aside">
+              <button class="btn btn--primary btn--sm" type="button" data-approve-request
+                      data-request-title="Intranet profile and org chart entry"
+                      data-request-meta="Amara Okafor · Communications">
+                Approve
+              </button>
+            </div>
+          </article>
+          <article class="list__item" data-approval-item>
+            <span class="notif__icon notif__icon--warn" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-key"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">Elevated production access</p>
+              <p class="list__meta">Daniel Whitfield · IT · blocked for 2 days</p>
+            </div>
+            <div class="list__aside">
+              <button class="btn btn--primary btn--sm" type="button" data-approve-request
+                      data-request-title="Elevated production access"
+                      data-request-meta="Daniel Whitfield · IT">
+                Approve
+              </button>
+            </div>
+          </article>
+        </div>
+        <div class="card__foot">
+          <p>6 more approvals sit with department owners</p>
+          <a class="btn btn--link text-sm" href="tasks.html">See all approvals</a>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="starts-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="starts-title">Starting soon</h2>
+            <p class="card__sub">Arrivals over the next three weeks.</p>
+          </div>
+        </div>
+        <div class="list">
+          <article class="list__item">
+            <span class="date-chip" aria-hidden="true"><span class="date-chip__month">Oct</span><span class="date-chip__day">20</span></span>
+            <div class="list__main">
+              <p class="list__title">Marcus Bennett</p>
+              <p class="list__meta">Facilities Supervisor · Leeds · 96% ready</p>
+            </div>
+            <div class="list__aside">
+              <span class="badge badge--ok"><span class="badge__dot"></span>On track</span>
+            </div>
+          </article>
+          <article class="list__item">
+            <span class="date-chip" aria-hidden="true"><span class="date-chip__month">Oct</span><span class="date-chip__day">27</span></span>
+            <div class="list__main">
+              <p class="list__title">Daniel Whitfield</p>
+              <p class="list__meta">Site Reliability Engineer · Manchester · 84% ready</p>
+            </div>
+            <div class="list__aside">
+              <span class="badge badge--warn"><span class="badge__dot"></span>Access blocked</span>
+            </div>
+          </article>
+          <article class="list__item">
+            <span class="date-chip" aria-hidden="true"><span class="date-chip__month">Nov</span><span class="date-chip__day">3</span></span>
+            <div class="list__main">
+              <p class="list__title">Amara Okafor</p>
+              <p class="list__meta">Product Designer · London · 47% ready</p>
+            </div>
+            <div class="list__aside">
+              <span class="badge badge--ok"><span class="badge__dot"></span>On track</span>
+            </div>
+          </article>
+          <article class="list__item">
+            <span class="date-chip" aria-hidden="true"><span class="date-chip__month">Nov</span><span class="date-chip__day">10</span></span>
+            <div class="list__main">
+              <p class="list__title">Sofia Almeida</p>
+              <p class="list__meta">Marketing Manager · Lisbon · 41% ready</p>
+            </div>
+            <div class="list__aside">
+              <span class="badge badge--warn"><span class="badge__dot"></span>At risk</span>
+            </div>
+          </article>
+        </div>
+        <div class="card__foot">
+          <p>Day-one readiness is measured per departmental checklist</p>
+          <a class="btn btn--link text-sm" href="cases.html">Plan arrivals</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="page-foot">
+    <p>Casidra Arrivals &amp; Departures · onboarding dashboard design prototype</p>
+    <p>Fictional sample data · UI only · not connected to a backend</p>
+  </footer>
+</div>
+
+<!-- @include partials/shell-end.html -->
+<!-- @include partials/sheet-new-case.html -->
+<!-- @include partials/scripts.html -->
+</body>
+</html>

@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Task queue · Casidra</title>
+<meta name="description" content="Every open onboarding task across HR, IT, Facilities and Communications, with owners, due dates and approvals.">
+<!-- @include partials/head-assets.html -->
+</head>
+<body class="app" data-page="tasks">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- @include partials/icons.html -->
+<!-- @include partials/sidebar.html -->
+
+<div class="app__body">
+  <!-- @include partials/topbar.html -->
+
+  <main class="content" id="main">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Dashboard</a>
+      <span class="breadcrumb__sep" aria-hidden="true">/</span>
+      <span aria-current="page">Task queue</span>
+    </nav>
+
+    <div class="page-head">
+      <div>
+        <h1 class="page-head__title">Onboarding task queue</h1>
+        <p class="page-head__sub">
+          Every open task across the four departments, with the owner, the due date and the approvals that are
+          holding a case back. Work from overdue first.
+        </p>
+      </div>
+      <div class="page-head__actions">
+        <button class="btn btn--secondary" type="button"
+                data-toast="Reminders queued"
+                data-toast-message="Email reminders are not implemented in this prototype.">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-bell"/></svg>
+          Remind overdue owners
+        </button>
+        <button class="btn btn--secondary" type="button"
+                data-toast="Export queued" data-toast-message="Exports are part of the production build, not this prototype.">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-download"/></svg>
+          Export
+        </button>
+      </div>
+    </div>
+
+    <div class="alert alert--warn" role="note">
+      <svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg>
+      <div>
+        <p class="alert__title">4 tasks are overdue</p>
+        <p>Two of them belong to cases starting within the next ten days. Overdue items are flagged in the
+          dashboard figures as well as here.</p>
+      </div>
+    </div>
+
+    <section class="card mt-6" data-table-region data-count-noun="tasks" aria-labelledby="queue-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="queue-title">Tasks</h2>
+          <p class="card__sub">Sorted by due date, most urgent first.</p>
+        </div>
+        <div class="segmented" role="tablist" aria-label="Filter tasks by urgency" data-table-group>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="true" data-group-value="all">
+            All <span class="segmented__count">17</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="overdue">
+            Overdue <span class="segmented__count">4</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="soon">
+            Due soon <span class="segmented__count">9</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="completed">
+            Completed <span class="segmented__count">4</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="toolbar__search input-wrap">
+          <label class="sr-only" for="task-search">Search tasks</label>
+          <svg class="icon icon--sm input-wrap__icon" aria-hidden="true"><use href="#i-search"/></svg>
+          <input class="input input--icon" id="task-search" type="search" placeholder="Search task or person…"
+                 autocomplete="off" data-table-search>
+        </div>
+        <div class="input-wrap">
+          <label class="sr-only" for="task-filter-department">Department</label>
+          <select class="select" id="task-filter-department" data-table-filter="department">
+            <option value="">All departments</option>
+            <option value="hr">HR</option>
+            <option value="it">IT</option>
+            <option value="facilities">Facilities</option>
+            <option value="comms">Communications</option>
+          </select>
+        </div>
+        <div class="input-wrap">
+          <label class="sr-only" for="task-filter-owner">Owner</label>
+          <select class="select" id="task-filter-owner" data-table-filter="owner">
+            <option value="">All owners</option>
+            <option value="aisha">Aisha Khan</option>
+            <option value="tomas">Tomás Ferreira</option>
+            <option value="priya">Priya Raman</option>
+            <option value="hannah">Hannah Cole</option>
+            <option value="nadia">Nadia Haddad</option>
+          </select>
+        </div>
+        <div class="input-wrap">
+          <label class="sr-only" for="task-filter-status">Status</label>
+          <select class="select" id="task-filter-status" data-table-filter="status">
+            <option value="">Any status</option>
+            <option value="overdue">Overdue</option>
+            <option value="blocked">Blocked</option>
+            <option value="approval">Awaiting approval</option>
+            <option value="in-progress">In progress</option>
+            <option value="not-started">Not started</option>
+            <option value="complete">Complete</option>
+          </select>
+        </div>
+        <button class="btn btn--ghost btn--sm" type="button" data-table-reset>
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-refresh"/></svg>
+          Reset
+        </button>
+      </div>
+
+      <div class="table-wrap" data-table-wrap>
+        <table class="table table--stack">
+          <caption class="sr-only">Onboarding tasks across all departments</caption>
+          <thead>
+            <tr>
+              <th scope="col">Task</th>
+              <th scope="col">Employee</th>
+              <th scope="col">Department</th>
+              <th scope="col">Owner</th>
+              <th scope="col">Due date</th>
+              <th scope="col">Status</th>
+              <th scope="col" class="table__actions"><span class="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody data-table-rows>
+            <tr data-search="payroll enrolment chen wei hr aisha khan" data-department="hr" data-owner="aisha"
+                data-status="overdue" data-group="overdue">
+              <td data-label="Task">
+                <span class="table__primary">Payroll enrolment</span>
+                <br><span class="text-xs muted">Missed the October payroll cut-off</span>
+              </td>
+              <td data-label="Employee">Chen Wei</td>
+              <td data-label="Department">
+                <span class="dept dept--hr"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-briefcase"/></svg></span> HR</span>
+              </td>
+              <td data-label="Owner"><span class="owner"><span class="avatar avatar--sm avatar--slate" aria-hidden="true">AK</span> Aisha Khan</span></td>
+              <td data-label="Due date"><span class="due due--overdue"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg> 14 Oct 2026</span></td>
+              <td data-label="Status" data-row-status><span class="badge badge--danger"><span class="badge__dot"></span>Overdue</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-row-action="complete"
+                        data-row-task="Payroll enrolment for Chen Wei">Complete</button>
+              </td>
+            </tr>
+
+            <tr data-search="right to work verification grace sullivan hr aisha khan" data-department="hr" data-owner="aisha"
+                data-status="overdue" data-group="overdue">
+              <td data-label="Task">
+                <span class="table__primary">Right to work verification</span>
+                <br><span class="text-xs muted">Evidence not returned by the new starter</span>
+              </td>
+              <td data-label="Employee">Grace Sullivan</td>
+              <td data-label="Department">
+                <span class="dept dept--hr"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-briefcase"/></svg></span> HR</span>
+              </td>
+              <td data-label="Owner"><span class="owner"><span class="avatar avatar--sm avatar--slate" aria-hidden="true">AK</span> Aisha Khan</span></td>
+              <td data-label="Due date"><span class="due due--overdue"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg> 15 Oct 2026</span></td>
+              <td data-label="Status" data-row-status><span class="badge badge--danger"><span class="badge__dot"></span>Overdue</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-row-action="complete"
+                        data-row-task="Right to work verification for Grace Sullivan">Complete</button>
+              </td>
+            </tr>
+
+            <tr data-search="building access card sofia almeida facilities priya raman" data-department="facilities" data-owner="priya"
+                data-status="overdue" data-group="overdue">
+              <td data-label="Task">
+                <span class="table__primary">Building access card</span>
+                <br><span class="text-xs muted">Print queue delayed at the Lisbon office</span>
+              </td>
+              <td data-label="Employee">Sofia Almeida</td>
+              <td data-label="Department">
+                <span class="dept dept--facilities"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-building"/></svg></span> Facilities</span>
+              </td>
+              <td data-label="Owner"><span class="owner"><span class="avatar avatar--sm avatar--rose" aria-hidden="true">PR</span> Priya Raman</span></td>
+              <td data-label="Due date"><span class="due due--overdue"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg> 16 Oct 2026</span></td>
+              <td data-label="Status" data-row-status><span class="badge badge--danger"><span class="badge__dot"></span>Overdue</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-row-action="complete"
+                        data-row-task="Building access card for Sofia Almeida">Complete</button>
+              </td>
+            </tr>
+
+            <tr data-search="laptop build daniel whitfield it tomas ferreira" data-department="it" data-owner="tomas"
+                data-status="overdue" data-group="overdue">
+              <td data-label="Task">
+                <span class="table__primary">Laptop build</span>
+                <br><span class="text-xs muted">Image pending the security baseline release</span>
+              </td>
+              <td data-label="Employee">Daniel Whitfield</td>
+              <td data-label="Department">
+                <span class="dept dept--it"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-monitor"/></svg></span> IT</span>
+              </td>
+              <td data-label="Owner"><span class="owner"><span class="avatar avatar--sm avatar--amber" aria-hidden="true">TF</span> Tomás Ferreira</span></td>
+              <td data-label="Due date"><span class="due due--overdue"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg> 17 Oct 2026</span></td>
+              <td data-label="Status" data-row-status><span class="badge badge--danger"><span class="badge__dot"></span>Overdue</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-row-action="complete"
+                        data-row-task="Laptop build for Daniel Whitfield">Complete</button>
+              </td>
+            </tr>
+
+            <tr data-search="policy acknowledgements amara okafor hr aisha khan" data-department="hr" data-owner="aisha"
+                data-status="in-progress" data-group="soon">
+              <td data-label="Task">
+                <span class="table__primary">Policy acknowledgements</span>
+                <br><span class="text-xs muted">Handbook and security policy signatures</span>
+              </td>
+              <td data-label="Employee">Amara Okafor</td>
+              <td data-label="Department">
+                <span class="dept dept--hr"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-briefcase"/></svg></span> HR</span>
+              </td>
+              <td data-label="Owner"><span class="owner"><span class="avatar avatar--sm avatar--slate" aria-hidden="true">AK</span> Aisha Khan</span></td>
+              <td data-label="Due date"><span class="due">22 Oct 2026</span></td>
+              <td data-label="Status" data-row-status><span class="badge badge--info"><span class="badge__dot"></span>In progress</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-row-action="complete"
+                        data-row-task="Policy acknowledgements for Amara Okafor">Complete</button>
+              </td>
+            </tr>
+
+            <tr data-search="access groups vpn amara okafor it tomas ferreira elevated access" data-department="it" data-owner="tomas"
+                data-status="blocked" data-group="soon">
+              <td data-label="Task">
+                <span class="table__primary">Access groups &amp; VPN</span>
+                <br><span class="text-xs muted">Blocked: manager approval for elevated access</span>
+              </td>
+              <td data-label="Employee">Amara Okafor</td>
+              <td data-label="Department">
+                <span class="dept dept--it"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-monitor"/></svg></span> IT</span>
+              </td>
+              <td data-label="Owner"><span class="owner"><span class="avatar avatar--sm avatar--amber" aria-hidden="true">TF</span> Tomás Ferreira</span></td>
+              <td data-label="Due date"><span class="due due--soon">24 Oct 2026</span></td>
+              <td data-label="Status" data-row-status><span class="badge badge--danger"><span class="badge__dot"></span>Blocked</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--primary btn--sm" type="button" data-row-action="approve"
+                        data-row-task="Access groups and VPN for Amara Okafor">Approve</button>
+              </td>
+            </tr>
+
+            <tr data-search="entra id account work email amara okafor it tomas ferreira" data-department="it" data-owner="tomas"
+                data-status="approval" data-group="soon">
+              <td data-label="Task">
+                <span class="table__primary">Entra ID account &amp; work email</span>
+                <br><span class="text-xs muted">Awaiting IT sign-off before provisioning</span>
+              </td>
+              <td data-label="Employee">Amara Okafor</td>
+              <td data-label="Department">
+                <span class="dept dept--it"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-monitor"/></svg></span> IT</span>
+              </td>
+              <td data-label="Owner"><span class="owner"><span class="avatar avatar--sm avatar--amber" aria-hidden="true">TF</span> Tomás Ferreira</span></td>
+              <td data-label="Due date"><span class="due due--soon">24 Oct 2026</span></td>
+              <td data-label="Status" data-row-status><span class="badge badge--warn"><span class="badge__dot"></span>Awaiting approval</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--primary btn--sm" type="button" data-row-action="approve"
+                        data-row-task="Entra ID account and work email for Amara Okafor">Approve</button>
+              </td>
+            </tr>
+
+            <tr data-search="desk setup priyanka nair facilities priya raman" data-department="facilities" data-owner="priya"
+                data-status="in-progress" data-group="soon">
+              <td data-label="Task">
+                <span class="table__primary">Facilities &amp; desk setup</span>
+                <br><span class="text-xs muted">Bristol floor plan to confirm</span>
+              </td>
+              <td data-label="Employee">Priyanka Nair</td>
+              <td data-label="Department">
+                <span class="dept dept--facilities"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-building"/></svg></span> Facilities</span>
+              </td>
+              <td data-label="Owner"><span class="owner"><span class="avatar avatar--sm avatar--rose" aria-hidden="true">PR</span> Priya Raman</span></td>
+              <td data-label="Due date"><span class="due">26 Oct 2026</span></td>
+              <td data-label="Status" data-row-status><span class="badge badge--info"><span class="badge__dot"></span>In progress</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-row-action="complete"
+                        data-row-task="Facilities and desk setup for Priyanka Nair">Complete</button>
+              </td>
+            </tr>
+
+            <tr data-search="intranet profile org chart jonas lindqvist communications hannah cole" data-department="comms" data-owner="hannah"
+                data-status="approval" data-group="soon">
+              <td data-label="Task">
+                <span class="table__primary">Intranet profile &amp; org chart</span>
+                <br><span class="text-xs muted">Photo and reporting line awaiting approval</span>
+              </td>
+              <td data-label="Employee">Jonas Lindqvist</td>
+              <td data-label="Department">
+                <span class="dept dept--comms"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-megaphone"/></svg></span> Communications</span>
+              </td>
+              <td data-label="Owner"><span class="owner"><span class="avatar avatar--sm avatar--teal" aria-hidden="true">HC</span> Hannah Cole</span></td>
+              <td data-label="Due date"><span class="due">27 Oct 2026</span></td>
+              <td data-label="Status" data-row-status><span class="badge badge--warn"><span class="badge__dot"></span>Awaiting approval</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--primary btn--sm" type="button" data-row-action="approve"
+                        data-row-task="Intranet profile and org chart for Jonas Lindqvist">Approve</button>
+              </td>
+            </tr>
+
+            <tr data-search="health safety briefing amara okafor facilities priya raman" data-department="facilities" data-owner="priya"
+                data-status="in-progress" data-group="soon">
+              <td data-label="Task">
+                <span class="table__primary">Health &amp; safety briefing</span>
+                <br><span class="text-xs muted">Studio walkthrough with the floor warden</span>
+              </td>
+              <td data-label="Employee">Amara Okafor</td>
+              <td data-label="Department">
+                <span class="dept dept--facilities"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-building"/></svg></span> Facilities</span>
+              </td>
+              <td data-label="Owner"><span class="owner"><span class="avatar avatar--sm avatar--rose" aria-hidden="true">PR</span> Priya Raman</span></td>
+              <td data-label="Due date"><span class="due">30 Oct 2026</span></td>
+              <td data-label="Status" data-row-status><span class="badge badge--info"><span class="badge__dot"></span>In progress</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-row-action="complete"
+                        data-row-task="Health and safety briefing for Amara Okafor">Complete</button>
+              </td>
+            </tr>
+
+            <tr data-search="mfa device enrolment amara okafor it tomas ferreira" data-department="it" data-owner="tomas"
+                data-status="not-started" data-group="soon">
+              <td data-label="Task">
+                <span class="table__primary">MFA device enrolment</span>
+                <br><span class="text-xs muted">Authenticator app and hardware key</span>
+              </td>
+              <td data-label="Employee">Amara Okafor</td>
+              <td data-label="Department">
+                <span class="dept dept--it"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-monitor"/></svg></span> IT</span>
+              </td>
+              <td data-label="Owner"><span class="owner"><span class="avatar avatar--sm avatar--amber" aria-hidden="true">TF</span> Tomás Ferreira</span></td>
+              <td data-label="Due date"><span class="due">31 Oct 2026</span></td>
+              <td data-label="Status" data-row-status><span class="badge"><span class="badge__dot"></span>Not started</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-row-action="complete"
+                        data-row-task="MFA device enrolment for Amara Okafor">Complete</button>
+              </td>
+            </tr>
+
+            <tr data-search="first week newsletter feature amara okafor communications hannah cole" data-department="comms" data-owner="hannah"
+                data-status="not-started" data-group="soon">
+              <td data-label="Task">
+                <span class="table__primary">First-week newsletter feature</span>
+                <br><span class="text-xs muted">Profile scheduled for week one</span>
+              </td>
+              <td data-label="Employee">Amara Okafor</td>
+              <td data-label="Department">
+                <span class="dept dept--comms"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-megaphone"/></svg></span> Communications</span>
+              </td>
+              <td data-label="Owner"><span class="owner"><span class="avatar avatar--sm avatar--teal" aria-hidden="true">HC</span> Hannah Cole</span></td>
+              <td data-label="Due date"><span class="due">31 Oct 2026</span></td>
+              <td data-label="Status" data-row-status><span class="badge"><span class="badge__dot"></span>Not started</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-row-action="complete"
+                        data-row-task="First-week newsletter feature for Amara Okafor">Complete</button>
+              </td>
+            </tr>
+
+            <tr data-search="probation review scheduled amara okafor hr nadia haddad" data-department="hr" data-owner="nadia"
+                data-status="not-started" data-group="soon">
+              <td data-label="Task">
+                <span class="table__primary">Probation review scheduled</span>
+                <br><span class="text-xs muted">Three-month review with the hiring manager</span>
+              </td>
+              <td data-label="Employee">Amara Okafor</td>
+              <td data-label="Department">
+                <span class="dept dept--hr"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-briefcase"/></svg></span> HR</span>
+              </td>
+              <td data-label="Owner"><span class="owner"><span class="avatar avatar--sm" aria-hidden="true">NH</span> Nadia Haddad</span></td>
+              <td data-label="Due date"><span class="due">3 Nov 2026</span></td>
+              <td data-label="Status" data-row-status><span class="badge"><span class="badge__dot"></span>Not started</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-row-action="complete"
+                        data-row-task="Probation review scheduling for Amara Okafor">Complete</button>
+              </td>
+            </tr>
+
+            <tr data-search="offer letter contract marcus bennett hr aisha khan" data-department="hr" data-owner="aisha"
+                data-status="complete" data-group="completed">
+              <td data-label="Task">
+                <span class="table__primary">Offer letter &amp; contract</span>
+                <br><span class="text-xs muted">Signed and filed</span>
+              </td>
+              <td data-label="Employee">Marcus Bennett</td>
+              <td data-label="Department">
+                <span class="dept dept--hr"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-briefcase"/></svg></span> HR</span>
+              </td>
+              <td data-label="Owner"><span class="owner"><span class="avatar avatar--sm avatar--slate" aria-hidden="true">AK</span> Aisha Khan</span></td>
+              <td data-label="Due date"><span class="due">9 Oct 2026</span></td>
+              <td data-label="Status" data-row-status><span class="badge badge--ok"><span class="badge__dot"></span>Complete</span></td>
+              <td data-label="" class="table__actions"><span class="text-xs muted">No action needed</span></td>
+            </tr>
+
+            <tr data-search="equipment ordered marcus bennett it tomas ferreira" data-department="it" data-owner="tomas"
+                data-status="complete" data-group="completed">
+              <td data-label="Task">
+                <span class="table__primary">Equipment ordered</span>
+                <br><span class="text-xs muted">Delivered to the Leeds depot</span>
+              </td>
+              <td data-label="Employee">Marcus Bennett</td>
+              <td data-label="Department">
+                <span class="dept dept--it"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-monitor"/></svg></span> IT</span>
+              </td>
+              <td data-label="Owner"><span class="owner"><span class="avatar avatar--sm avatar--amber" aria-hidden="true">TF</span> Tomás Ferreira</span></td>
+              <td data-label="Due date"><span class="due">12 Oct 2026</span></td>
+              <td data-label="Status" data-row-status><span class="badge badge--ok"><span class="badge__dot"></span>Complete</span></td>
+              <td data-label="" class="table__actions"><span class="text-xs muted">No action needed</span></td>
+            </tr>
+
+            <tr data-search="desk allocation marcus bennett facilities priya raman" data-department="facilities" data-owner="priya"
+                data-status="complete" data-group="completed">
+              <td data-label="Task">
+                <span class="table__primary">Desk allocation</span>
+                <br><span class="text-xs muted">Leeds — Zone A workstation</span>
+              </td>
+              <td data-label="Employee">Marcus Bennett</td>
+              <td data-label="Department">
+                <span class="dept dept--facilities"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-building"/></svg></span> Facilities</span>
+              </td>
+              <td data-label="Owner"><span class="owner"><span class="avatar avatar--sm avatar--rose" aria-hidden="true">PR</span> Priya Raman</span></td>
+              <td data-label="Due date"><span class="due">12 Oct 2026</span></td>
+              <td data-label="Status" data-row-status><span class="badge badge--ok"><span class="badge__dot"></span>Complete</span></td>
+              <td data-label="" class="table__actions"><span class="text-xs muted">No action needed</span></td>
+            </tr>
+
+            <tr data-search="welcome announcement marcus bennett communications hannah cole" data-department="comms" data-owner="hannah"
+                data-status="complete" data-group="completed">
+              <td data-label="Task">
+                <span class="table__primary">Welcome announcement</span>
+                <br><span class="text-xs muted">Posted to the depot channel</span>
+              </td>
+              <td data-label="Employee">Marcus Bennett</td>
+              <td data-label="Department">
+                <span class="dept dept--comms"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-megaphone"/></svg></span> Communications</span>
+              </td>
+              <td data-label="Owner"><span class="owner"><span class="avatar avatar--sm avatar--teal" aria-hidden="true">HC</span> Hannah Cole</span></td>
+              <td data-label="Due date"><span class="due">14 Oct 2026</span></td>
+              <td data-label="Status" data-row-status><span class="badge badge--ok"><span class="badge__dot"></span>Complete</span></td>
+              <td data-label="" class="table__actions"><span class="text-xs muted">No action needed</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="empty" data-table-empty hidden>
+        <span class="empty__art" aria-hidden="true"><svg class="icon icon--lg"><use href="#i-check-list"/></svg></span>
+        <h3 class="empty__title">Nothing matches these filters</h3>
+        <p class="empty__text">
+          No task matches the department, owner and status you selected. Clear the filters to see the whole
+          queue, or open a case to add the work that is missing.
+        </p>
+        <div class="empty__actions">
+          <button class="btn btn--secondary" type="button" data-table-reset>Clear filters</button>
+          <a class="btn btn--primary" href="cases.html">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-users"/></svg>
+            Browse cases
+          </a>
+        </div>
+      </div>
+
+      <div class="card__foot">
+        <p data-table-count>Showing all 17 tasks</p>
+        <p class="text-xs muted">Approvals and completions are shown for design review — nothing is saved.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-foot">
+    <p>Casidra Arrivals &amp; Departures · onboarding task queue</p>
+    <p>Fictional sample data · UI only · not connected to a backend</p>
+  </footer>
+</div>
+
+<!-- @include partials/shell-end.html -->
+<!-- @include partials/scripts.html -->
+</body>
+</html>
