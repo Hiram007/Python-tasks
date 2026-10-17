@@ -15,78 +15,188 @@
   </div>
 
   <nav class="sidebar__nav" aria-label="Sections">
-    <p class="sidebar__label" id="nav-label-overview">Overview</p>
-    <ul class="nav" aria-labelledby="nav-label-overview">
-      <li>
-        <a class="nav__item" href="index.html" data-nav="dashboard">
-          <svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg>
-          <span>Dashboard</span>
-        </a>
-      </li>
-    </ul>
+    <!-- Navigation groups are filtered by the selected role (data-roles / data-roles-except).
+         In Django this is one `{% if perms %}` check per group, kept in a single nav partial. -->
+    <div class="nav-group">
+      <p class="sidebar__label" id="nav-label-overview">Overview</p>
+      <ul class="nav" aria-labelledby="nav-label-overview">
+        <li>
+          <a class="nav__item" href="index.html" data-nav="dashboard">
+            <svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li data-roles="exec,hr,manager,admin">
+          <a class="nav__item" href="approvals.html" data-nav="approvals">
+            <svg class="icon" aria-hidden="true"><use href="#i-inbox"/></svg>
+            <span>Approvals inbox</span>
+            <span class="nav__count nav__count--alert">9</span>
+          </a>
+        </li>
+        <li>
+          <a class="nav__item" href="notifications.html" data-nav="notifications">
+            <svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg>
+            <span>Notifications</span>
+            <span class="nav__count nav__count--alert">3</span>
+          </a>
+        </li>
+      </ul>
+    </div>
 
-    <p class="sidebar__label" id="nav-label-onboarding">Onboarding</p>
-    <ul class="nav" aria-labelledby="nav-label-onboarding">
-      <li>
-        <a class="nav__item" href="cases.html" data-nav="cases">
-          <svg class="icon" aria-hidden="true"><use href="#i-users"/></svg>
-          <span>Cases</span>
-          <span class="nav__count">12</span>
-        </a>
-      </li>
-      <li>
-        <a class="nav__item" href="tasks.html" data-nav="tasks">
-          <svg class="icon" aria-hidden="true"><use href="#i-check-list"/></svg>
-          <span>Tasks</span>
-          <span class="nav__count nav__count--alert">6</span>
-        </a>
-      </li>
-    </ul>
+    <div class="nav-group">
+      <p class="sidebar__label" id="nav-label-people">People</p>
+      <ul class="nav" aria-labelledby="nav-label-people">
+        <li>
+          <a class="nav__item" href="directory.html" data-nav="directory">
+            <svg class="icon" aria-hidden="true"><use href="#i-users"/></svg>
+            <span>Employee directory</span>
+          </a>
+        </li>
+        <li>
+          <a class="nav__item" href="employee.html" data-nav="employee">
+            <svg class="icon" aria-hidden="true"><use href="#i-file"/></svg>
+            <span>Lifecycle record</span>
+          </a>
+        </li>
+      </ul>
+    </div>
 
-    <p class="sidebar__label" id="nav-label-offboarding">Offboarding</p>
-    <ul class="nav" aria-labelledby="nav-label-offboarding">
-      <li>
-        <span class="nav__item is-disabled" aria-disabled="true">
-          <svg class="icon" aria-hidden="true"><use href="#i-door"/></svg>
-          <span>Cases</span>
-          <span class="tag tag--soon">Next</span>
-        </span>
-      </li>
-      <li>
-        <span class="nav__item is-disabled" aria-disabled="true">
-          <svg class="icon" aria-hidden="true"><use href="#i-check-list"/></svg>
-          <span>Clearance tasks</span>
-        </span>
-      </li>
-    </ul>
+    <div class="nav-group" data-roles="exec,hr,it,facilities,comms,manager,admin">
+      <p class="sidebar__label" id="nav-label-arrivals">Arrivals</p>
+      <ul class="nav" aria-labelledby="nav-label-arrivals">
+        <li>
+          <a class="nav__item" href="cases.html" data-nav="cases">
+            <svg class="icon" aria-hidden="true"><use href="#i-users"/></svg>
+            <span>Onboarding cases</span>
+            <span class="nav__count">12</span>
+          </a>
+        </li>
+        <li>
+          <a class="nav__item" href="tasks.html" data-nav="tasks">
+            <svg class="icon" aria-hidden="true"><use href="#i-check-list"/></svg>
+            <span>Task queues</span>
+            <span class="nav__count nav__count--alert">6</span>
+          </a>
+        </li>
+      </ul>
+    </div>
 
-    <p class="sidebar__label" id="nav-label-workspace">Workspace</p>
-    <ul class="nav" aria-labelledby="nav-label-workspace">
-      <li>
-        <a class="nav__item" href="design-system.html" data-nav="design-system">
-          <svg class="icon" aria-hidden="true"><use href="#i-palette"/></svg>
-          <span>Design system</span>
-        </a>
-      </li>
-      <li>
-        <span class="nav__item is-disabled" aria-disabled="true">
-          <svg class="icon" aria-hidden="true"><use href="#i-settings"/></svg>
-          <span>Settings</span>
-        </span>
-      </li>
-    </ul>
+    <div class="nav-group" data-roles="exec,hr,it,facilities,comms,manager,admin">
+      <p class="sidebar__label" id="nav-label-departures">Departures</p>
+      <ul class="nav" aria-labelledby="nav-label-departures">
+        <li>
+          <a class="nav__item" href="offboarding.html" data-nav="offboarding">
+            <svg class="icon" aria-hidden="true"><use href="#i-door"/></svg>
+            <span>Departure cases</span>
+            <span class="nav__count">5</span>
+          </a>
+        </li>
+        <li data-roles="hr,it,facilities,comms,manager,admin">
+          <a class="nav__item" href="departure.html" data-nav="departure">
+            <svg class="icon" aria-hidden="true"><use href="#i-check-list"/></svg>
+            <span>Clearance tasks</span>
+            <span class="nav__count nav__count--alert">7</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="nav-group" data-roles="exec,hr,it,facilities,manager,admin">
+      <p class="sidebar__label" id="nav-label-assets">Assets</p>
+      <ul class="nav" aria-labelledby="nav-label-assets">
+        <li>
+          <a class="nav__item" href="equipment.html" data-nav="equipment">
+            <svg class="icon" aria-hidden="true"><use href="#i-monitor"/></svg>
+            <span>Equipment register</span>
+          </a>
+        </li>
+        <li data-roles="hr,it,facilities,manager,admin">
+          <a class="nav__item" href="equipment.html#handover" data-nav="equipment-handover">
+            <svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg>
+            <span>Handover &amp; returns</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="nav-group" data-roles="exec,hr,manager,admin">
+      <p class="sidebar__label" id="nav-label-insight">Insight</p>
+      <ul class="nav" aria-labelledby="nav-label-insight">
+        <li>
+          <a class="nav__item" href="reports.html" data-nav="reports">
+            <svg class="icon" aria-hidden="true"><use href="#i-trend-up"/></svg>
+            <span>Reports &amp; exports</span>
+          </a>
+        </li>
+        <li data-roles="hr,admin">
+          <a class="nav__item" href="audit.html" data-nav="audit">
+            <svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg>
+            <span>Audit trail</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="nav-group" data-roles="hr,admin">
+      <p class="sidebar__label" id="nav-label-admin">Administration</p>
+      <ul class="nav" aria-labelledby="nav-label-admin">
+        <li>
+          <a class="nav__item" href="workflows.html" data-nav="workflows">
+            <svg class="icon" aria-hidden="true"><use href="#i-settings"/></svg>
+            <span>Workflow templates</span>
+          </a>
+        </li>
+        <li data-roles="admin">
+          <a class="nav__item" href="admin-users.html" data-nav="admin-users">
+            <svg class="icon" aria-hidden="true"><use href="#i-users"/></svg>
+            <span>Users &amp; roles</span>
+          </a>
+        </li>
+        <li data-roles="admin">
+          <a class="nav__item" href="admin-system.html" data-nav="admin-system">
+            <svg class="icon" aria-hidden="true"><use href="#i-key"/></svg>
+            <span>System settings</span>
+          </a>
+        </li>
+        <li data-roles="admin">
+          <a class="nav__item" href="notifications.html#settings" data-nav="notification-settings">
+            <svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg>
+            <span>Notification settings</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <p class="sidebar__label" id="nav-label-workspace">Workspace</p>
+      <ul class="nav" aria-labelledby="nav-label-workspace">
+        <li>
+          <a class="nav__item" href="design-system.html" data-nav="design-system">
+            <svg class="icon" aria-hidden="true"><use href="#i-palette"/></svg>
+            <span>Design system</span>
+          </a>
+        </li>
+        <li>
+          <a class="nav__item" href="handover.html" data-nav="handover">
+            <svg class="icon" aria-hidden="true"><use href="#i-file"/></svg>
+            <span>Django handover</span>
+          </a>
+        </li>
+      </ul>
+    </div>
   </nav>
 
   <div class="sidebar__foot">
     <div class="sidebar__user">
-      <span class="avatar avatar--ink" aria-hidden="true">RB</span>
+      <span class="avatar" data-user-avatar aria-hidden="true">RB</span>
       <span class="grow">
-        <span class="sidebar__user-name">Rosa Bell</span>
-        <span class="sidebar__user-role">People Operations Lead</span>
+        <span class="sidebar__user-name" data-user-name>Rosa Bell</span>
+        <span class="sidebar__user-role" data-user-role>People Operations Lead</span>
       </span>
     </div>
     <p class="sidebar__note">
-      <strong>Design prototype.</strong> Fictional sample data. No backend, authentication or email delivery is connected.
+      <strong>Design prototype.</strong> Fictional data. Nothing is saved and no backend, email or identity
+      service is connected — screens are shown for design review only.
     </p>
   </div>
 </aside>

@@ -9,9 +9,9 @@
 
     <div class="search" role="search">
       <div class="search__field">
-        <label class="sr-only" for="global-search">Search cases, people or tasks</label>
+        <label class="sr-only" for="global-search">Search people, cases, tasks, assets or approvals</label>
         <svg class="icon icon--sm search__icon" aria-hidden="true"><use href="#i-search"/></svg>
-        <input class="search__input" id="global-search" type="search" placeholder="Search cases, people or tasks…"
+        <input class="search__input" id="global-search" type="search" placeholder="Search people, cases, tasks, assets…"
                autocomplete="off" role="combobox" aria-expanded="false" aria-controls="search-panel"
                aria-autocomplete="list" data-search-input>
         <span class="search__kbd" aria-hidden="true">⌘K</span>
@@ -21,9 +21,96 @@
   </div>
 
   <div class="topbar__right">
-    <a class="btn btn--ghost btn--sm topbar__help" href="design-system.html">
-      <svg class="icon icon--sm" aria-hidden="true"><use href="#i-palette"/></svg>
-      Guidance
+    <!-- Role switcher: a design-review device. It changes which navigation, dashboards and
+         actions are shown; it is not an authentication or authorisation control. -->
+    <div class="menu" data-menu>
+      <button class="btn btn--secondary btn--sm role-btn" type="button" data-menu-trigger aria-expanded="false"
+              aria-haspopup="true" aria-controls="role-panel">
+        <svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg>
+        <span class="role-btn__label"><span class="muted">Viewing as</span> <span class="strong" data-role-label>HR administrator</span></span>
+        <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+      </button>
+      <div class="menu__panel menu__panel--wide" id="role-panel" data-menu-panel hidden>
+        <div class="menu__head">
+          <div>
+            <h2 class="menu__title">Role-based view</h2>
+            <p class="menu__item-meta">Switch role to review the navigation, dashboard and actions designed for each user group.</p>
+          </div>
+        </div>
+        <div class="menu__list">
+          <p class="menu__section">Management and HR</p>
+          <button class="menu__item" type="button" data-role-set="exec">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-trend-up"/></svg>
+            <span class="menu__item-text">
+              <span class="menu__item-title">Executive / management</span>
+              <span class="menu__item-meta">Portfolio KPIs, exceptions and reports</span>
+            </span>
+          </button>
+          <button class="menu__item" type="button" data-role-set="hr">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-briefcase"/></svg>
+            <span class="menu__item-text">
+              <span class="menu__item-title">HR administrator</span>
+              <span class="menu__item-meta">Cases, people records, approvals, templates</span>
+            </span>
+          </button>
+
+          <p class="menu__section">Departmental task owners</p>
+          <button class="menu__item" type="button" data-role-set="it">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-monitor"/></svg>
+            <span class="menu__item-text">
+              <span class="menu__item-title">IT task owner</span>
+              <span class="menu__item-meta">Accounts, equipment, access removal</span>
+            </span>
+          </button>
+          <button class="menu__item" type="button" data-role-set="facilities">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-building"/></svg>
+            <span class="menu__item-text">
+              <span class="menu__item-title">Facilities task owner</span>
+              <span class="menu__item-meta">Desks, buildings, passes, vehicles</span>
+            </span>
+          </button>
+          <button class="menu__item" type="button" data-role-set="comms">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-megaphone"/></svg>
+            <span class="menu__item-text">
+              <span class="menu__item-title">Communications task owner</span>
+              <span class="menu__item-meta">Announcements, intranet, publications</span>
+            </span>
+          </button>
+
+          <p class="menu__section">Managers and employees</p>
+          <button class="menu__item" type="button" data-role-set="manager">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg>
+            <span class="menu__item-text">
+              <span class="menu__item-title">Line manager / approver</span>
+              <span class="menu__item-meta">Team arrivals, departures, approvals</span>
+            </span>
+          </button>
+          <button class="menu__item" type="button" data-role-set="employee">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-users"/></svg>
+            <span class="menu__item-text">
+              <span class="menu__item-title">Employee / coordinator</span>
+              <span class="menu__item-meta">Own details and requests raised</span>
+            </span>
+          </button>
+
+          <p class="menu__section">Administration</p>
+          <button class="menu__item" type="button" data-role-set="admin">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-settings"/></svg>
+            <span class="menu__item-text">
+              <span class="menu__item-title">System administrator</span>
+              <span class="menu__item-meta">Roles, templates, integrations, audit</span>
+            </span>
+          </button>
+        </div>
+        <div class="menu__foot">
+          <span class="text-xs muted">Visibility only. The Django backend enforces authorisation.</span>
+        </div>
+      </div>
+    </div>
+
+    <a class="btn btn--ghost btn--sm topbar__help" href="handover.html">
+      <svg class="icon icon--sm" aria-hidden="true"><use href="#i-file"/></svg>
+      Handover
     </a>
 
     <div class="menu" data-menu>
@@ -60,8 +147,8 @@
           <article class="notif is-unread">
             <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-calendar"/></svg></span>
             <div class="grow">
-              <p class="notif__title">Start date approaching</p>
-              <p class="notif__body">Daniel Whitfield starts 27 Oct 2026 · 6 tasks still open</p>
+              <p class="notif__title">Clearance reminder</p>
+              <p class="notif__body">Helena Marsh departs 30 Oct 2026 · 7 actions outstanding</p>
               <p class="notif__body text-xs">Yesterday</p>
             </div>
             <span class="notif__mark" aria-hidden="true"></span>
@@ -80,45 +167,52 @@
         </div>
         <div class="menu__foot">
           <span class="text-xs muted">Showing the 4 most recent</span>
-          <a class="btn btn--link text-sm" href="tasks.html">View all activity</a>
+          <a class="btn btn--link text-sm" href="notifications.html">Open notification centre</a>
         </div>
       </div>
     </div>
 
     <div class="menu" data-menu>
       <button class="profile-btn" type="button" data-menu-trigger aria-expanded="false" aria-haspopup="true" aria-controls="profile-panel">
-        <span class="avatar avatar--sm" aria-hidden="true">RB</span>
+        <span class="avatar avatar--sm" data-user-avatar aria-hidden="true">RB</span>
         <span class="profile-btn__text">
-          <span class="profile-btn__name">Rosa Bell</span>
-          <span class="profile-btn__role">People Operations Lead</span>
+          <span class="profile-btn__name" data-user-name>Rosa Bell</span>
+          <span class="profile-btn__role" data-user-role>People Operations Lead</span>
         </span>
         <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-down"/></svg>
       </button>
       <div class="menu__panel" id="profile-panel" data-menu-panel hidden>
         <div class="menu__head">
           <div class="row">
-            <span class="avatar avatar--lg" aria-hidden="true">RB</span>
+            <span class="avatar avatar--lg" data-user-avatar aria-hidden="true">RB</span>
             <span>
-              <span class="strong">Rosa Bell</span>
-              <span class="notif__body">rosa.bell@casidra.example</span>
+              <span class="strong" data-user-name>Rosa Bell</span>
+              <span class="notif__body" data-user-email>rosa.bell@casidra.example</span>
             </span>
           </div>
         </div>
         <div class="menu__list">
-          <button class="menu__item menu__item--row" type="button" data-toast="Profile" data-toast-message="Profile screens are outside this prototype's scope.">
+          <p class="menu__section" data-role-label>HR administrator</p>
+          <button class="menu__item menu__item--row" type="button" data-toast="Your profile"
+                  data-toast-message="Profile screens are outside this prototype's scope.">
             <svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg>
             <span>Your profile</span>
           </button>
-          <button class="menu__item menu__item--row" type="button" data-toast="Notification preferences" data-toast-message="Preferences are shown for design only — nothing is stored.">
+          <a class="menu__item menu__item--row" href="notifications.html#preferences">
             <svg class="icon icon--sm" aria-hidden="true"><use href="#i-bell"/></svg>
             <span>Notification preferences</span>
-          </button>
-          <a class="menu__item menu__item--row" href="design-system.html">
-            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-palette"/></svg>
-            <span>Design system</span>
+          </a>
+          <a class="menu__item menu__item--row" href="admin-system.html#identity">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg>
+            <span>Identity &amp; sign-in</span>
+          </a>
+          <a class="menu__item menu__item--row" href="handover.html">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-file"/></svg>
+            <span>Django handover notes</span>
           </a>
           <div class="menu__divider" role="presentation"></div>
-          <button class="menu__item menu__item--row" type="button" data-toast="Sign out" data-toast-message="Authentication is not implemented in this prototype.">
+          <button class="menu__item menu__item--row" type="button" data-toast="Sign out"
+                  data-toast-message="Authentication is not implemented in this prototype — Entra ID SSO is planned, not configured.">
             <svg class="icon icon--sm" aria-hidden="true"><use href="#i-logout"/></svg>
             <span>Sign out</span>
           </button>

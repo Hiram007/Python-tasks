@@ -21,6 +21,10 @@
       <label class="field__label" for="confirm-comment">What needs to change?</label>
       <textarea class="textarea" id="confirm-comment" name="confirm-comment" rows="3"
                 placeholder="Share the reason so the task owner can act on it."></textarea>
+      <p class="field__error" data-confirm-error hidden>
+        <svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg>
+        <span>A comment is required for this decision.</span>
+      </p>
     </div>
   </div>
   <div class="dialog__foot">

@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Users &amp; roles · Casidra</title>
+<meta name="description" content="User and role administration: accounts, role assignments, permissions, departments and groups, and identity mapping.">
+<!-- @include partials/head-assets.html -->
+</head>
+<body class="app" data-page="admin-users">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- @include partials/icons.html -->
+<!-- @include partials/sidebar.html -->
+
+<div class="app__body">
+  <!-- @include partials/topbar.html -->
+
+  <main class="content" id="main">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Dashboard</a>
+      <span class="breadcrumb__sep" aria-hidden="true">/</span>
+      <span aria-current="page">Users &amp; roles</span>
+    </nav>
+
+    <div class="page-head">
+      <div>
+        <p class="eyebrow">Administration</p>
+        <h1 class="page-head__title">Users, roles &amp; permissions</h1>
+        <p class="page-head__sub">
+          Employee accounts, the roles assigned to them, what those roles may do, and how departments and groups
+          map onto the system.
+        </p>
+      </div>
+      <div class="page-head__actions">
+        <button class="btn btn--secondary" type="button" data-confirm
+                data-confirm-title="Invite a user account?"
+                data-confirm-sub="Invitations are matched to an employee record before access is granted."
+                data-confirm-body="The invite captures the employee record, the primary role and the department. Access is only granted once the account is matched and MFA is enrolled."
+                data-confirm-label="Open invite form"
+                data-confirm-icon="i-plus"
+                data-confirm-toast="Invite form"
+                data-confirm-toast-message="Account invitations are not implemented in this prototype."
+                data-confirm-toast-tone="info">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-plus"/></svg>
+          Invite user
+        </button>
+        <a class="btn btn--primary" href="admin-system.html#identity">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg>
+          Identity &amp; sign-in
+        </a>
+      </div>
+    </div>
+
+    <div class="alert alert--warn" role="note">
+      <svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg>
+      <div>
+        <p class="alert__title">Role changes are consequential and audited</p>
+        <p>
+          Granting a role changes what someone can see and do, including access to restricted employee
+          information. Every change here requires a comment and is written to the administrative audit trail in
+          production. This prototype changes nothing.
+        </p>
+      </div>
+    </div>
+
+    <!-- 1: account figures -->
+    <section class="grid grid--kpis mt-6" aria-label="Account figures">
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">User accounts</p>
+            <p class="kpi__value tnum mt-2">268</p>
+          </div>
+          <span class="kpi__icon" aria-hidden="true"><svg class="icon"><use href="#i-users"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--flat">4 suspended</span><span>5 awaiting activation</span></div>
+        <p class="text-xs muted mt-4">One account per employee record</p>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Role assignments</p>
+            <p class="kpi__value tnum mt-2">412</p>
+          </div>
+          <span class="kpi__icon" aria-hidden="true"><svg class="icon"><use href="#i-shield"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--flat">7 roles</span><span>3 delegated approvers</span></div>
+        <p class="text-xs muted mt-4">Users may hold more than one department role</p>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Administrator accounts</p>
+            <p class="kpi__value tnum mt-2">5</p>
+          </div>
+          <span class="kpi__icon kpi__icon--warn" aria-hidden="true"><svg class="icon"><use href="#i-key"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--flat">Reviewed quarterly</span></div>
+        <p class="text-xs muted mt-4">2 hold HR administrator access as well</p>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">MFA not enrolled</p>
+            <p class="kpi__value tnum mt-2">4</p>
+          </div>
+          <span class="kpi__icon kpi__icon--danger" aria-hidden="true"><svg class="icon"><use href="#i-alert"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--down">Access blocked after 7 days</span></div>
+        <a class="kpi__link" href="admin-system.html#identity">
+          Identity policy
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </article>
+    </section>
+
+    <!-- 2: user accounts -->
+    <section class="card mt-6" data-table-region data-count-noun="accounts" aria-labelledby="accounts-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="accounts-title">User accounts</h2>
+          <p class="card__sub">Search by name, role or department. Role changes are confirmed before they apply.</p>
+        </div>
+        <div class="segmented" role="tablist" aria-label="Filter accounts by state" data-table-group>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="true" data-group-value="all">
+            All <span class="segmented__count">10</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="admin">
+            Administrators <span class="segmented__count">3</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="attention">
+            Needs attention <span class="segmented__count">3</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="leaver">
+            Leavers <span class="segmented__count">2</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="toolbar__search input-wrap">
+          <label class="sr-only" for="user-search">Search accounts</label>
+          <svg class="icon icon--sm input-wrap__icon" aria-hidden="true"><use href="#i-search"/></svg>
+          <input class="input input--icon" id="user-search" type="search" placeholder="Search name, role or department…"
+                 autocomplete="off" data-table-search>
+        </div>
+        <div class="input-wrap">
+          <label class="sr-only" for="user-role">Role</label>
+          <select class="select" id="user-role" data-table-filter="role">
+            <option value="">All roles</option>
+            <option value="exec">Executive / management</option>
+            <option value="hr">HR administrator</option>
+            <option value="it">IT task owner</option>
+            <option value="facilities">Facilities task owner</option>
+            <option value="comms">Communications task owner</option>
+            <option value="manager">Line manager</option>
+            <option value="admin">System administrator</option>
+          </select>
+        </div>
+        <div class="input-wrap">
+          <label class="sr-only" for="user-mfa">MFA state</label>
+          <select class="select" id="user-mfa" data-table-filter="mfa">
+            <option value="">Any MFA state</option>
+            <option value="enrolled">Enrolled</option>
+            <option value="pending">Not enrolled</option>
+          </select>
+        </div>
+        <button class="btn btn--ghost btn--sm" type="button" data-table-reset>
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-refresh"/></svg>
+          Reset
+        </button>
+      </div>
+
+      <div class="table-wrap" data-table-wrap>
+        <table class="table table--stack">
+          <caption class="sr-only">User accounts with roles, department, MFA state and last sign-in</caption>
+          <thead>
+            <tr>
+              <th scope="col">User</th>
+              <th scope="col">Roles</th>
+              <th scope="col">Department</th>
+              <th scope="col">MFA</th>
+              <th scope="col">Last sign-in</th>
+              <th scope="col">State</th>
+              <th scope="col" class="table__actions"><span class="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody data-table-rows>
+            <tr data-search="dev sharma systems administrator technology admin" data-role="admin" data-mfa="enrolled"
+                data-group="admin">
+              <td data-label="User">
+                <span class="person">
+                  <span class="avatar avatar--slate" aria-hidden="true">DS</span>
+                  <span><span class="person__name">Dev Sharma</span><span class="person__meta">dev.sharma@casidra.example</span></span>
+                </span>
+              </td>
+              <td data-label="Roles"><span class="badge badge--brand"><span class="badge__dot"></span>System administrator</span></td>
+              <td data-label="Department">Technology</td>
+              <td data-label="MFA"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Enrolled</span></td>
+              <td data-label="Last sign-in">Today, 08:02</td>
+              <td data-label="State"><span class="badge badge--ok"><span class="badge__dot"></span>Active</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-confirm
+                        data-confirm-title="Change the role for Dev Sharma?"
+                        data-confirm-sub="Role changes take effect at the next sign-in and are audited."
+                        data-confirm-body="Removing the system administrator role would immediately remove access to roles, templates, integrations and the audit trail."
+                        data-confirm-label="Review change"
+                        data-confirm-tone="danger"
+                        data-confirm-comment="Reason for the change"
+                        data-confirm-require-comment
+                        data-confirm-toast="Role change prepared"
+                        data-confirm-toast-tone="warn">
+                  Change role
+                </button>
+              </td>
+            </tr>
+
+            <tr data-search="rosa bell people operations lead hr admin" data-role="hr" data-mfa="enrolled"
+                data-group="admin">
+              <td data-label="User">
+                <span class="person">
+                  <span class="avatar avatar--ink" aria-hidden="true">RB</span>
+                  <span><span class="person__name">Rosa Bell</span><span class="person__meta">rosa.bell@casidra.example</span></span>
+                </span>
+              </td>
+              <td data-label="Roles">
+                <span class="badge badge--brand"><span class="badge__dot"></span>HR administrator</span>
+              </td>
+              <td data-label="Department">People</td>
+              <td data-label="MFA"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Enrolled</span></td>
+              <td data-label="Last sign-in">Today, 07:45</td>
+              <td data-label="State"><span class="badge badge--ok"><span class="badge__dot"></span>Active</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-confirm
+                        data-confirm-title="Change the role for Rosa Bell?"
+                        data-confirm-sub="Role changes take effect at the next sign-in and are audited."
+                        data-confirm-body="Rosa Bell coordinates arrival and departure cases and may approve exceptions. A change here would alter her approval route."
+                        data-confirm-label="Review change"
+                        data-confirm-comment="Reason for the change"
+                        data-confirm-require-comment
+                        data-confirm-toast="Role change prepared"
+                        data-confirm-toast-tone="warn">
+                  Change role
+                </button>
+              </td>
+            </tr>
+
+            <tr data-search="ines duarte chief operating officer executive management" data-role="exec"
+                data-mfa="enrolled" data-group="admin">
+              <td data-label="User">
+                <span class="person">
+                  <span class="avatar avatar--ink" aria-hidden="true">ID</span>
+                  <span><span class="person__name">Ines Duarte</span><span class="person__meta">ines.duarte@casidra.example</span></span>
+                </span>
+              </td>
+              <td data-label="Roles"><span class="badge badge--info"><span class="badge__dot"></span>Executive / management</span></td>
+              <td data-label="Department">Operations</td>
+              <td data-label="MFA"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Enrolled</span></td>
+              <td data-label="Last sign-in">Yesterday, 17:32</td>
+              <td data-label="State"><span class="badge badge--ok"><span class="badge__dot"></span>Active</span></td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="reports.html">View permissions</a>
+              </td>
+            </tr>
+
+            <tr data-search="tomas ferreira it services lead technology" data-role="it" data-mfa="enrolled"
+                data-group="all">
+              <td data-label="User">
+                <span class="person">
+                  <span class="avatar avatar--amber" aria-hidden="true">TF</span>
+                  <span><span class="person__name">Tomás Ferreira</span><span class="person__meta">tomas.ferreira@casidra.example</span></span>
+                </span>
+              </td>
+              <td data-label="Roles"><span class="badge badge--info"><span class="badge__dot"></span>IT task owner</span></td>
+              <td data-label="Department">Technology</td>
+              <td data-label="MFA"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Enrolled</span></td>
+              <td data-label="Last sign-in">Today, 08:41</td>
+              <td data-label="State"><span class="badge badge--ok"><span class="badge__dot"></span>Active</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-confirm
+                        data-confirm-title="Grant the approver role?"
+                        data-confirm-sub="Approvers may decide access and equipment requests."
+                        data-confirm-body="Tomás Ferreira would additionally be able to approve access requests for his own department, subject to separation-of-duties rules."
+                        data-confirm-label="Grant role"
+                        data-confirm-status="Roles updated|ok"
+                        data-confirm-toast="Role change prepared">
+                  Grant approver
+                </button>
+              </td>
+            </tr>
+
+            <tr data-search="priya raman facilities coordinator" data-role="facilities" data-mfa="enrolled"
+                data-group="all">
+              <td data-label="User">
+                <span class="person">
+                  <span class="avatar avatar--rose" aria-hidden="true">PR</span>
+                  <span><span class="person__name">Priya Raman</span><span class="person__meta">priya.raman@casidra.example</span></span>
+                </span>
+              </td>
+              <td data-label="Roles"><span class="badge badge--info"><span class="badge__dot"></span>Facilities task owner</span></td>
+              <td data-label="Department">Facilities</td>
+              <td data-label="MFA"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Enrolled</span></td>
+              <td data-label="Last sign-in">Today, 08:15</td>
+              <td data-label="State"><span class="badge badge--ok"><span class="badge__dot"></span>Active</span></td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="audit.html?actor=priya">Activity</a>
+              </td>
+            </tr>
+
+            <tr data-search="hannah cole internal communications manager marketing" data-role="comms"
+                data-mfa="enrolled" data-group="all">
+              <td data-label="User">
+                <span class="person">
+                  <span class="avatar avatar--teal" aria-hidden="true">HC</span>
+                  <span><span class="person__name">Hannah Cole</span><span class="person__meta">hannah.cole@casidra.example</span></span>
+                </span>
+              </td>
+              <td data-label="Roles"><span class="badge badge--info"><span class="badge__dot"></span>Communications task owner</span></td>
+              <td data-label="Department">Marketing</td>
+              <td data-label="MFA"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Enrolled</span></td>
+              <td data-label="Last sign-in">Yesterday, 16:04</td>
+              <td data-label="State"><span class="badge badge--ok"><span class="badge__dot"></span>Active</span></td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="audit.html?actor=hannah">Activity</a>
+              </td>
+            </tr>
+
+            <tr data-search="nadia haddad head of design manager approver" data-role="manager" data-mfa="enrolled"
+                data-group="all">
+              <td data-label="User">
+                <span class="person">
+                  <span class="avatar avatar--slate" aria-hidden="true">NH</span>
+                  <span><span class="person__name">Nadia Haddad</span><span class="person__meta">nadia.haddad@casidra.example</span></span>
+                </span>
+              </td>
+              <td data-label="Roles"><span class="badge badge--info"><span class="badge__dot"></span>Line manager / approver</span></td>
+              <td data-label="Department">Design</td>
+              <td data-label="MFA"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Enrolled</span></td>
+              <td data-label="Last sign-in">Yesterday, 18:10</td>
+              <td data-label="State"><span class="badge badge--ok"><span class="badge__dot"></span>Active</span></td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="approvals.html">Approvals</a>
+              </td>
+            </tr>
+
+            <tr data-search="aisha khan people partner hr" data-role="hr" data-mfa="pending" data-group="attention">
+              <td data-label="User">
+                <span class="person">
+                  <span class="avatar avatar--slate" aria-hidden="true">AK</span>
+                  <span><span class="person__name">Aisha Khan</span><span class="person__meta">aisha.khan@casidra.example</span></span>
+                </span>
+              </td>
+              <td data-label="Roles"><span class="badge badge--brand"><span class="badge__dot"></span>HR administrator</span></td>
+              <td data-label="Department">People</td>
+              <td data-label="MFA"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg> Not enrolled</span></td>
+              <td data-label="Last sign-in">16 Oct 2026, 17:04</td>
+              <td data-label="State"><span class="badge badge--warn"><span class="badge__dot"></span>Activation pending</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--primary btn--sm" type="button" data-confirm
+                        data-confirm-title="Send an MFA enrolment reminder?"
+                        data-confirm-sub="Accounts without MFA lose access after 7 days."
+                        data-confirm-body="A reminder would be sent to aisha.khan@casidra.example. Email delivery is not implemented in this prototype."
+                        data-confirm-label="Send reminder"
+                        data-confirm-icon="i-bell"
+                        data-confirm-status="Reminder sent|info"
+                        data-confirm-toast="Reminder prepared"
+                        data-confirm-toast-tone="info">
+                  Send reminder
+                </button>
+              </td>
+            </tr>
+
+            <tr data-search="heather marsh finance leaver suspended" data-role="hr" data-mfa="enrolled"
+                data-group="leaver">
+              <td data-label="User">
+                <span class="person">
+                  <span class="avatar avatar--rose" aria-hidden="true">HM</span>
+                  <span><span class="person__name">Helena Marsh</span><span class="person__meta">helena.marsh@casidra.example</span></span>
+                </span>
+              </td>
+              <td data-label="Roles"><span class="badge"><span class="badge__dot"></span>Employee</span></td>
+              <td data-label="Department">Finance</td>
+              <td data-label="MFA"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Enrolled</span></td>
+              <td data-label="Last sign-in">16 Oct 2026, 12:30</td>
+              <td data-label="State"><span class="badge badge--warn"><span class="badge__dot"></span>Ends 30 Oct 2026</span></td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="departure.html">Departure case</a>
+              </td>
+            </tr>
+
+            <tr data-search="yuki tanaka marketing leaver" data-role="employee" data-mfa="pending" data-group="leaver">
+              <td data-label="User">
+                <span class="person">
+                  <span class="avatar avatar--rose" aria-hidden="true">YT</span>
+                  <span><span class="person__name">Yuki Tanaka</span><span class="person__meta">yuki.tanaka@casidra.example</span></span>
+                </span>
+              </td>
+              <td data-label="Roles"><span class="badge"><span class="badge__dot"></span>Employee</span></td>
+              <td data-label="Department">Marketing</td>
+              <td data-label="MFA"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg> Not enrolled</span></td>
+              <td data-label="Last sign-in">10 Oct 2026, 09:55</td>
+              <td data-label="State"><span class="badge badge--danger"><span class="badge__dot"></span>Ends 20 Nov 2026</span></td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="offboarding.html">Departure case</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="empty" data-table-empty hidden>
+        <span class="empty__art" aria-hidden="true"><svg class="icon icon--lg"><use href="#i-users"/></svg></span>
+        <h3 class="empty__title">No accounts match these filters</h3>
+        <p class="empty__text">
+          Try a different role, MFA state or search term. Accounts appear here when an employee record is
+          matched, before any access is granted.
+        </p>
+        <div class="empty__actions">
+          <button class="btn btn--secondary" type="button" data-table-reset>Clear filters</button>
+        </div>
+      </div>
+
+      <div class="card__foot">
+        <p data-table-count>Showing all 10 accounts</p>
+        <p class="text-xs muted">Suspended accounts keep their history but cannot sign in</p>
+      </div>
+    </section>
+
+    <!-- 3: roles and permissions -->
+    <section class="card mt-6" aria-labelledby="matrix-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="matrix-title">Roles &amp; permissions</h2>
+          <p class="card__sub">
+            What each role is designed to see and do. Production authorisation is enforced by the Django backend
+            on every request — hiding a control is never a security control.
+          </p>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="table">
+          <caption class="sr-only">Permission matrix by role</caption>
+          <thead>
+            <tr>
+              <th scope="col">Capability</th>
+              <th scope="col">Executive</th>
+              <th scope="col">HR admin</th>
+              <th scope="col">Department task owner</th>
+              <th scope="col">Line manager</th>
+              <th scope="col">Employee</th>
+              <th scope="col">System admin</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="Capability"><span class="table__primary">View operational dashboard</span></td>
+              <td data-label="Executive"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Yes</span></td>
+              <td data-label="HR admin"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Yes</span></td>
+              <td data-label="Department task owner"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Yes</span></td>
+              <td data-label="Line manager"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Yes</span></td>
+              <td data-label="Employee"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Own only</span></td>
+              <td data-label="System admin"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Yes</span></td>
+            </tr>
+            <tr>
+              <td data-label="Capability"><span class="table__primary">Open and edit lifecycle cases</span></td>
+              <td data-label="Executive"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> No</span></td>
+              <td data-label="HR admin"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Yes</span></td>
+              <td data-label="Department task owner"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-refresh"/></svg> Own tasks</span></td>
+              <td data-label="Line manager"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Own team</span></td>
+              <td data-label="Employee"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Own requests</span></td>
+              <td data-label="System admin"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg> Break-glass only</span></td>
+            </tr>
+            <tr>
+              <td data-label="Capability"><span class="table__primary">Approve access and equipment requests</span></td>
+              <td data-label="Executive"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> No</span></td>
+              <td data-label="HR admin"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Yes</span></td>
+              <td data-label="Department task owner"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg> Department only</span></td>
+              <td data-label="Line manager"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Yes</span></td>
+              <td data-label="Employee"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> No</span></td>
+              <td data-label="System admin"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> No</span></td>
+            </tr>
+            <tr>
+              <td data-label="Capability"><span class="table__primary">View restricted employee information</span></td>
+              <td data-label="Executive"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> No</span></td>
+              <td data-label="HR admin"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Yes</span></td>
+              <td data-label="Department task owner"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> No</span></td>
+              <td data-label="Line manager"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> No</span></td>
+              <td data-label="Employee"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Own only</span></td>
+              <td data-label="System admin"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Yes</span></td>
+            </tr>
+            <tr>
+              <td data-label="Capability"><span class="table__primary">Manage workflow templates</span></td>
+              <td data-label="Executive"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> No</span></td>
+              <td data-label="HR admin"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-refresh"/></svg> Propose</span></td>
+              <td data-label="Department task owner"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> No</span></td>
+              <td data-label="Line manager"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> No</span></td>
+              <td data-label="Employee"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> No</span></td>
+              <td data-label="System admin"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Yes</span></td>
+            </tr>
+            <tr>
+              <td data-label="Capability"><span class="table__primary">Manage users, roles and departments</span></td>
+              <td data-label="Executive"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> No</span></td>
+              <td data-label="HR admin"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-refresh"/></svg> Request</span></td>
+              <td data-label="Department task owner"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> No</span></td>
+              <td data-label="Line manager"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> No</span></td>
+              <td data-label="Employee"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> No</span></td>
+              <td data-label="System admin"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Yes</span></td>
+            </tr>
+            <tr>
+              <td data-label="Capability"><span class="table__primary">Read the audit trail</span></td>
+              <td data-label="Executive"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-trend-up"/></svg> Summaries</span></td>
+              <td data-label="HR admin"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Yes</span></td>
+              <td data-label="Department task owner"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check-list"/></svg> Own tasks</span></td>
+              <td data-label="Line manager"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Own team</span></td>
+              <td data-label="Employee"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Own record</span></td>
+              <td data-label="System admin"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Yes</span></td>
+            </tr>
+            <tr>
+              <td data-label="Capability"><span class="table__primary">Export restricted data</span></td>
+              <td data-label="Executive"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> No</span></td>
+              <td data-label="HR admin"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg> With approval</span></td>
+              <td data-label="Department task owner"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> No</span></td>
+              <td data-label="Line manager"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> No</span></td>
+              <td data-label="Employee"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> No</span></td>
+              <td data-label="System admin"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg> With approval</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card__foot">
+        <p>Separation of duties: nobody may decide a request they raised</p>
+        <a class="btn btn--link text-sm" href="approvals.html">Approval routes</a>
+      </div>
+    </section>
+
+    <!-- 4: departments and groups -->
+    <div class="grid grid--halves mt-6">
+      <section class="card" aria-labelledby="departments-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="departments-title">Departments &amp; groups</h2>
+            <p class="card__sub">The organisational units that own checklist work.</p>
+          </div>
+        </div>
+        <div class="card__body">
+          <div class="def-list">
+            <div class="def-row">
+              <span class="def-row__label">HR</span>
+              <span class="def-row__value">14 accounts · 6 checklist owners</span>
+              <span class="def-row__action">
+                <button class="btn btn--ghost btn--sm" type="button" data-confirm
+                        data-confirm-title="Edit department configuration?"
+                        data-confirm-sub="Departments drive checklist ownership and escalation routing."
+                        data-confirm-body="Changing the HR department would affect task queues, escalation and reporting for 14 accounts."
+                        data-confirm-label="Open editor"
+                        data-confirm-comment="Reason for the change"
+                        data-confirm-require-comment
+                        data-confirm-toast="Department editor"
+                        data-confirm-toast-message="Department editing is not built in this prototype."
+                        data-confirm-toast-tone="info">Edit</button>
+              </span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">IT</span>
+              <span class="def-row__value">31 accounts · 4 checklist owners</span>
+              <span class="def-row__action"><button class="btn btn--ghost btn--sm" type="button" data-toast="IT configuration" data-toast-message="Department editing is not built in this prototype.">Edit</button></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Facilities</span>
+              <span class="def-row__value">17 accounts · 3 checklist owners</span>
+              <span class="def-row__action"><button class="btn btn--ghost btn--sm" type="button" data-toast="Facilities configuration" data-toast-message="Department editing is not built in this prototype.">Edit</button></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Communications</span>
+              <span class="def-row__value">9 accounts · 2 checklist owners</span>
+              <span class="def-row__action"><button class="btn btn--ghost btn--sm" type="button" data-toast="Communications configuration" data-toast-message="Department editing is not built in this prototype.">Edit</button></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Locations</span>
+              <span class="def-row__value">London · Leeds · Bristol · Manchester · Lisbon · Stockholm · Sheffield</span>
+              <span class="def-row__action"><button class="btn btn--ghost btn--sm" type="button" data-toast="Location configuration" data-toast-message="Location editing is not built in this prototype.">Edit</button></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Delegated approvers</span>
+              <span class="def-row__value">3 configured · 1 active this week</span>
+              <span class="def-row__action"><a class="btn btn--ghost btn--sm" href="approvals.html">Review</a></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="identity-map-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="identity-map-title">Identity mapping</h2>
+            <p class="card__sub">How directory groups map onto system roles.</p>
+          </div>
+          <span class="simulated">Not configured</span>
+        </div>
+        <div class="card__body">
+          <div class="def-list">
+            <div class="def-row">
+              <span class="def-row__label">Entra ID group</span>
+              <span class="def-row__value">Casidra-A&D-People-Ops → HR administrator</span>
+              <span class="def-row__action"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> Unmapped</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Entra ID group</span>
+              <span class="def-row__value">Casidra-IT-Services → IT task owner</span>
+              <span class="def-row__action"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> Unmapped</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Entra ID group</span>
+              <span class="def-row__value">Casidra-Facilities → Facilities task owner</span>
+              <span class="def-row__action"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> Unmapped</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Provisioning</span>
+              <span class="def-row__value">SCIM from the employee record, on arrival and departure</span>
+              <span class="def-row__action"><span class="simulated">Planned</span></span>
+            </div>
+          </div>
+          <div class="alert alert--info mt-6" role="note">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
+            <div>
+              <p class="alert__title">Directory integration is designed, not connected</p>
+              <p>Group mapping is shown so the intended behaviour can be reviewed. No tenant, connector or
+                provisioning job exists in this prototype.</p>
+            </div>
+          </div>
+        </div>
+        <div class="card__foot">
+          <p>Identity configuration lives in system settings</p>
+          <a class="btn btn--link text-sm" href="admin-system.html#identity">Open identity settings</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="page-foot">
+    <p>Casidra Arrivals &amp; Departures · user administration design prototype</p>
+    <p>Fictional sample data · UI only · no role or account is changed here</p>
+  </footer>
+</div>
+
+<!-- @include partials/shell-end.html -->
+<!-- @include partials/scripts.html -->
+</body>
+</html>

@@ -1894,3 +1894,281 @@
   border-radius: 3px;
   background: var(--brand-600);
 }
+
+/* ==========================================================================
+   System-wide modules (arrivals, departures, assets, insight, administration)
+   Everything below is reused exactly as it appears on the design-system page.
+   ========================================================================== */
+
+/* -- Role switcher (topbar + role panels) -------------------------------- */
+.role-btn {
+  padding-inline: var(--s-3);
+}
+
+.role-btn__label {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.role-btn__label .muted {
+  font-weight: var(--fw-regular);
+}
+
+.menu__item-text {
+  min-width: 0;
+}
+
+.menu__item-title,
+.menu__item-meta {
+  display: block;
+}
+
+.menu__item.is-active {
+  background: var(--brand-50);
+}
+
+.menu__item.is-active .menu__item-title {
+  color: var(--brand-700);
+}
+
+.menu__item.is-active .icon {
+  color: var(--brand-600);
+}
+
+/* -- Role scope banner --------------------------------------------------- */
+.role-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-3);
+  padding: var(--s-4);
+  border: 1px solid var(--brand-100);
+  border-radius: var(--r-md);
+  background: linear-gradient(180deg, var(--brand-50), var(--surface));
+  color: var(--ink-2);
+  font-size: var(--fs-sm);
+}
+
+.role-banner .icon {
+  color: var(--brand-600);
+  flex: none;
+  margin-top: 1px;
+}
+
+.role-banner__title {
+  color: var(--ink);
+  font-weight: var(--fw-semibold);
+}
+
+/* -- Charts (reports) ---------------------------------------------------- */
+.bars {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--s-3);
+  height: 172px;
+  padding-top: var(--s-4);
+}
+
+.bars__col {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--s-2);
+  height: 100%;
+  min-width: 0;
+}
+
+.bars__stack {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 2px;
+  width: 100%;
+  max-width: 44px;
+  height: 100%;
+}
+
+.bars__seg {
+  border-radius: 3px;
+  background: var(--brand-500);
+}
+
+.bars__seg--ok { background: var(--ok-600); }
+.bars__seg--warn { background: var(--warn-600); }
+.bars__seg--danger { background: var(--danger-600); }
+.bars__seg--info { background: var(--info-600); }
+.bars__seg--soft { background: var(--surface-3); }
+
+.bars__value {
+  color: var(--ink);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+.bars__label {
+  color: var(--ink-3);
+  font-size: var(--fs-2xs);
+  text-align: center;
+}
+
+.hbars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+
+.hbar {
+  display: grid;
+  grid-template-columns: 168px minmax(0, 1fr) 48px;
+  align-items: center;
+  gap: var(--s-3);
+  font-size: var(--fs-sm);
+}
+
+.hbar__label {
+  color: var(--ink-2);
+}
+
+.hbar__track {
+  height: 10px;
+  border-radius: var(--r-pill);
+  background: var(--surface-3);
+  overflow: hidden;
+}
+
+.hbar__fill {
+  display: block;
+  height: 100%;
+  border-radius: var(--r-pill);
+  background: var(--brand-500);
+}
+
+.hbar__fill--ok { background: var(--ok-600); }
+.hbar__fill--warn { background: var(--warn-600); }
+.hbar__fill--danger { background: var(--danger-600); }
+.hbar__fill--info { background: var(--info-600); }
+
+.hbar__value {
+  color: var(--ink);
+  font-weight: var(--fw-semibold);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+/* -- Permission matrix --------------------------------------------------- */
+.permit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+}
+
+.permit--yes { color: var(--ok-ink); }
+.permit--no { color: var(--ink-3); }
+.permit--limited { color: var(--warn-ink); }
+
+/* -- Code and handover blocks -------------------------------------------- */
+.code {
+  padding: 2px 6px;
+  border-radius: var(--r-xs);
+  background: var(--surface-3);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+}
+
+.code-block {
+  display: block;
+  padding: var(--s-4);
+  border-radius: var(--r-md);
+  background: var(--sidebar);
+  color: #dbe4f5;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  line-height: 1.75;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+/* -- "Design only" marker for unbuilt integrations ----------------------- */
+.simulated {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--r-pill);
+  background: var(--surface-2);
+  color: var(--ink-3);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* -- Timeline: requested but not yet actioned ---------------------------- */
+.timeline__item--requested .timeline__dot {
+  background: var(--warn-100);
+  color: var(--warn-ink);
+  box-shadow: 0 0 0 1px #f3dcaa;
+}
+
+/* -- Definition rows for configuration screens --------------------------- */
+.def-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.def-row {
+  display: grid;
+  grid-template-columns: minmax(150px, 230px) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--s-4);
+  padding: var(--s-4) 0;
+  border-bottom: 1px solid var(--border);
+  font-size: var(--fs-sm);
+}
+
+.def-row:last-child {
+  border-bottom: 0;
+}
+
+.def-row__label {
+  color: var(--ink);
+  font-weight: var(--fw-semibold);
+}
+
+.def-row__value {
+  color: var(--ink-2);
+}
+
+.def-row__action {
+  justify-self: end;
+}
+
+@media (max-width: 720px) {
+  .hbar {
+    grid-template-columns: 110px minmax(0, 1fr) 44px;
+  }
+
+  .def-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-2);
+  }
+
+  .def-row__action {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 560px) {
+  .role-btn__label {
+    display: none;
+  }
+}

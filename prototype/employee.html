@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Helena Marsh · Lifecycle record · Casidra</title>
+<meta name="description" content="Employee lifecycle record: employment summary, arrival and departure history, related tasks, approvals, equipment and restricted information.">
+<!-- @include partials/head-assets.html -->
+</head>
+<body class="app" data-page="employee">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- @include partials/icons.html -->
+<!-- @include partials/sidebar.html -->
+
+<div class="app__body">
+  <!-- @include partials/topbar.html -->
+
+  <main class="content" id="main">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Dashboard</a>
+      <span class="breadcrumb__sep" aria-hidden="true">/</span>
+      <a href="directory.html">Employee directory</a>
+      <span class="breadcrumb__sep" aria-hidden="true">/</span>
+      <span aria-current="page">Helena Marsh</span>
+    </nav>
+
+    <div class="page-head">
+      <div>
+        <div class="row row--wrap">
+          <span class="avatar avatar--xl avatar--rose" aria-hidden="true">HM</span>
+          <div>
+            <h1 class="page-head__title">Helena Marsh</h1>
+            <p class="page-head__sub">Finance Business Partner · Finance · EMP-100190</p>
+          </div>
+        </div>
+        <div class="chip-row mt-4">
+          <span class="badge badge--warn"><span class="badge__dot"></span>Leaving</span>
+          <span class="tag tag--quiet">Departs Fri 30 Oct 2026</span>
+          <span class="tag tag--quiet">Coordinator: Rosa Bell</span>
+          <span class="tag tag--quiet">Leeds — hybrid</span>
+          <span class="tag tag--quiet">Manager: Yusuf Adeyemi</span>
+        </div>
+      </div>
+      <div class="page-head__actions">
+        <button class="btn btn--secondary" type="button"
+                data-toast="Record export queued"
+                data-toast-message="Confidential record exports require an authorised reason — not implemented in this prototype."
+                data-toast-tone="warn">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-download"/></svg>
+          Export record
+        </button>
+        <a class="btn btn--primary" href="departure.html">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-door"/></svg>
+          Open departure case
+        </a>
+      </div>
+    </div>
+
+    <!-- Employment summary — the non-restricted view every permitted role sees -->
+    <section class="card" aria-labelledby="summary-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="summary-title">Employment summary</h2>
+          <p class="card__sub">Summary information visible to HR, IT, Facilities, Communications, managers and administrators.</p>
+        </div>
+        <span class="tag">Employee record</span>
+      </div>
+      <div class="card__body">
+        <div class="meta-grid">
+          <div>
+            <p class="meta__label">Employee number</p>
+            <p class="meta__value numeric">EMP-100190</p>
+          </div>
+          <div>
+            <p class="meta__label">Department</p>
+            <p class="meta__value">Finance</p>
+          </div>
+          <div>
+            <p class="meta__label">Job title</p>
+            <p class="meta__value">Finance Business Partner</p>
+          </div>
+          <div>
+            <p class="meta__label">Reporting manager</p>
+            <p class="meta__value">Yusuf Adeyemi</p>
+          </div>
+          <div>
+            <p class="meta__label">Employment status</p>
+            <p class="meta__value">Leaving — resignation accepted</p>
+          </div>
+          <div>
+            <p class="meta__label">Original start date</p>
+            <p class="meta__value">Mon 4 Mar 2019</p>
+          </div>
+          <div>
+            <p class="meta__label">Departure date</p>
+            <p class="meta__value">Fri 30 Oct 2026</p>
+          </div>
+          <div>
+            <p class="meta__label">Lifecycle coordinator</p>
+            <p class="meta__value">Rosa Bell · People Operations</p>
+          </div>
+          <div>
+            <p class="meta__label">Work location</p>
+            <p class="meta__value">Leeds — hybrid</p>
+          </div>
+          <div>
+            <p class="meta__label">Active cases</p>
+            <p class="meta__value">1 departure case (DEP-2026-0031)</p>
+          </div>
+        </div>
+      </div>
+      <div class="card__foot">
+        <p>Case progress rolls up from the departmental clearance checklists</p>
+        <a class="btn btn--link text-sm" href="departure.html">
+          Open DEP-2026-0031
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <div class="grid grid--detail mt-6">
+      <div class="stack-lg">
+        <!-- Lifecycle history -->
+        <section class="card" aria-labelledby="history-title">
+          <div class="card__head">
+            <div>
+              <h2 class="card__title" id="history-title">Lifecycle history</h2>
+              <p class="card__sub">Every arrival, change and departure recorded against this employee.</p>
+            </div>
+            <span class="badge badge--outline">5 events</span>
+          </div>
+          <div class="card__body">
+            <ol class="timeline">
+              <li class="timeline__item timeline__item--done">
+                <div class="timeline__rail">
+                  <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
+                  <span class="timeline__line"></span>
+                </div>
+                <div class="timeline__body">
+                  <p class="timeline__title">Joined as Finance Analyst</p>
+                  <p class="timeline__meta">
+                    <span>4 Mar 2019</span>
+                    <span class="badge badge--ok"><span class="badge__dot"></span>Onboarding completed</span>
+                    <span>Case ONB-2019-0210</span>
+                  </p>
+                </div>
+              </li>
+              <li class="timeline__item timeline__item--done">
+                <div class="timeline__rail">
+                  <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
+                  <span class="timeline__line"></span>
+                </div>
+                <div class="timeline__body">
+                  <p class="timeline__title">Promoted to Senior Finance Analyst</p>
+                  <p class="timeline__meta"><span>1 Apr 2021</span><span>Change recorded by HR</span></p>
+                </div>
+              </li>
+              <li class="timeline__item timeline__item--done">
+                <div class="timeline__rail">
+                  <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
+                  <span class="timeline__line"></span>
+                </div>
+                <div class="timeline__body">
+                  <p class="timeline__title">Promoted to Finance Business Partner</p>
+                  <p class="timeline__meta"><span>1 Sep 2023</span><span>Reporting line changed to Yusuf Adeyemi</span></p>
+                </div>
+              </li>
+              <li class="timeline__item timeline__item--done">
+                <div class="timeline__rail">
+                  <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
+                  <span class="timeline__line"></span>
+                </div>
+                <div class="timeline__body">
+                  <p class="timeline__title">Resignation received and authorised</p>
+                  <p class="timeline__meta">
+                    <span>2 Oct 2026</span>
+                    <span class="badge badge--ok"><span class="badge__dot"></span>Approved</span>
+                    <span>Yusuf Adeyemi</span>
+                  </p>
+                </div>
+              </li>
+              <li class="timeline__item timeline__item--active">
+                <div class="timeline__rail">
+                  <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-clock"/></svg></span>
+                  <span class="timeline__line"></span>
+                </div>
+                <div class="timeline__body">
+                  <p class="timeline__title">Departure case in clearance</p>
+                  <p class="timeline__meta">
+                    <span>DEP-2026-0031 · opened 6 Oct 2026</span>
+                    <span class="badge badge--warn"><span class="badge__dot"></span>7 actions outstanding</span>
+                    <a href="departure.html">Open case</a>
+                  </p>
+                </div>
+              </li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- Related work -->
+        <section class="card" data-table-region data-count-noun="items" aria-labelledby="related-title">
+          <div class="card__head">
+            <div>
+              <h2 class="card__title" id="related-title">Related tasks, approvals and equipment</h2>
+              <p class="card__sub">Everything currently assigned to this employee's lifecycle.</p>
+            </div>
+            <div class="segmented" role="tablist" aria-label="Filter related records" data-table-group>
+              <button class="segmented__btn" type="button" role="tab" aria-selected="true" data-group-value="all">
+                All <span class="segmented__count">7</span>
+              </button>
+              <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="task">
+                Tasks <span class="segmented__count">3</span>
+              </button>
+              <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="approval">
+                Approvals <span class="segmented__count">2</span>
+              </button>
+              <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="asset">
+                Equipment <span class="segmented__count">2</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="table-wrap" data-table-wrap>
+            <table class="table table--stack">
+              <caption class="sr-only">Tasks, approvals and equipment related to Helena Marsh</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Record</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Owner or approver</th>
+                  <th scope="col">Due or raised</th>
+                  <th scope="col">State</th>
+                  <th scope="col" class="table__actions"><span class="sr-only">Actions</span></th>
+                </tr>
+              </thead>
+              <tbody data-table-rows>
+                <tr data-search="knowledge transfer handover document hr rosa bell task" data-group="task">
+                  <td data-label="Record">
+                    <span class="table__primary">Knowledge transfer document</span>
+                    <br><span class="text-xs muted">Handover pack for the finance team</span>
+                  </td>
+                  <td data-label="Type">Task · HR</td>
+                  <td data-label="Owner or approver">Rosa Bell</td>
+                  <td data-label="Due or raised">Due 29 Oct 2026</td>
+                  <td data-label="State"><span class="badge badge--info"><span class="badge__dot"></span>In progress</span></td>
+                  <td data-label="" class="table__actions">
+                    <a class="btn btn--secondary btn--sm" href="departure.html#clearance">Open</a>
+                  </td>
+                </tr>
+                <tr data-search="accounts email deactivation it tomas ferreira task" data-group="task">
+                  <td data-label="Record">
+                    <span class="table__primary">Accounts &amp; email deactivation</span>
+                    <br><span class="text-xs muted">Scheduled for the last working day</span>
+                  </td>
+                  <td data-label="Type">Task · IT</td>
+                  <td data-label="Owner or approver">Tomás Ferreira</td>
+                  <td data-label="Due or raised">Due 30 Oct 2026</td>
+                  <td data-label="State"><span class="badge badge--warn"><span class="badge__dot"></span>Awaiting approval</span></td>
+                  <td data-label="" class="table__actions">
+                    <a class="btn btn--secondary btn--sm" href="approvals.html">Decision</a>
+                  </td>
+                </tr>
+                <tr data-search="payroll final settlement hr aisha khan task" data-group="task">
+                  <td data-label="Record">
+                    <span class="table__primary">Final payroll &amp; pension settlement</span>
+                    <br><span class="text-xs muted">November run, includes accrued leave</span>
+                  </td>
+                  <td data-label="Type">Task · HR</td>
+                  <td data-label="Owner or approver">Aisha Khan</td>
+                  <td data-label="Due or raised">Due 13 Nov 2026</td>
+                  <td data-label="State"><span class="badge"><span class="badge__dot"></span>Not started</span></td>
+                  <td data-label="" class="table__actions">
+                    <a class="btn btn--secondary btn--sm" href="departure.html#clearance">Open</a>
+                  </td>
+                </tr>
+                <tr data-search="departure authorisation approval yusuf adeyemi aisha khan" data-group="approval">
+                  <td data-label="Record">
+                    <span class="table__primary">Departure authorisation</span>
+                    <br><span class="text-xs muted">Resignation accepted, notice period confirmed</span>
+                  </td>
+                  <td data-label="Type">Approval · HR</td>
+                  <td data-label="Owner or approver">Aisha Khan</td>
+                  <td data-label="Due or raised">Raised 2 Oct 2026</td>
+                  <td data-label="State"><span class="badge badge--ok"><span class="badge__dot"></span>Approved</span></td>
+                  <td data-label="" class="table__actions">
+                    <a class="btn btn--secondary btn--sm" href="approvals.html#history">History</a>
+                  </td>
+                </tr>
+                <tr data-search="email retention exception approval it tomas ferreira nadia haddad" data-group="approval">
+                  <td data-label="Record">
+                    <span class="table__primary">Email retention exception</span>
+                    <br><span class="text-xs muted">Mailbox kept 14 days past the last working day</span>
+                  </td>
+                  <td data-label="Type">Approval · IT</td>
+                  <td data-label="Owner or approver">Nadia Haddad</td>
+                  <td data-label="Due or raised">Raised 14 Oct 2026</td>
+                  <td data-label="State"><span class="badge badge--warn"><span class="badge__dot"></span>Awaiting approval</span></td>
+                  <td data-label="" class="table__actions">
+                    <a class="btn btn--secondary btn--sm" href="approvals.html">Decision</a>
+                  </td>
+                </tr>
+                <tr data-search="laptop ast-1042 equipment asset it custody" data-group="asset">
+                  <td data-label="Record">
+                    <span class="table__primary">Laptop · AST-1042</span>
+                    <br><span class="text-xs muted">14" MacBook Pro, in Helena's custody</span>
+                  </td>
+                  <td data-label="Type">Equipment · IT</td>
+                  <td data-label="Owner or approver">Tomás Ferreira</td>
+                  <td data-label="Due or raised">Return due 30 Oct 2026</td>
+                  <td data-label="State"><span class="badge badge--danger"><span class="badge__dot"></span>Return outstanding</span></td>
+                  <td data-label="" class="table__actions">
+                    <a class="btn btn--secondary btn--sm" href="equipment.html#handover">Return</a>
+                  </td>
+                </tr>
+                <tr data-search="mobile phone ast-1043 equipment asset it custody" data-group="asset">
+                  <td data-label="Record">
+                    <span class="table__primary">Mobile phone · AST-1043</span>
+                    <br><span class="text-xs muted">iPhone 16 with the finance SIM</span>
+                  </td>
+                  <td data-label="Type">Equipment · IT</td>
+                  <td data-label="Owner or approver">Tomás Ferreira</td>
+                  <td data-label="Due or raised">Return due 30 Oct 2026</td>
+                  <td data-label="State"><span class="badge badge--danger"><span class="badge__dot"></span>Return outstanding</span></td>
+                  <td data-label="" class="table__actions">
+                    <a class="btn btn--secondary btn--sm" href="equipment.html#handover">Return</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card__foot">
+            <p data-table-count>Showing all 7 items</p>
+            <p class="text-xs muted">Items come from the case management, approvals and asset registers</p>
+          </div>
+        </section>
+
+        <!-- Handover information -->
+        <section class="card" aria-labelledby="handover-title">
+          <div class="card__head">
+            <div>
+              <h2 class="card__title" id="handover-title">Handover information</h2>
+              <p class="card__sub">What the team needs to know before the last working day.</p>
+            </div>
+            <span class="badge badge--info"><span class="badge__dot"></span>Draft agreed</span>
+          </div>
+          <div class="card__body">
+            <div class="meta-grid">
+              <div>
+                <p class="meta__label">Handover owner</p>
+                <p class="meta__value">Yusuf Adeyemi</p>
+              </div>
+              <div>
+                <p class="meta__label">Successor</p>
+                <p class="meta__value">Chen Wei · appointed 14 Oct 2026</p>
+              </div>
+              <div>
+                <p class="meta__label">Customer accounts</p>
+                <p class="meta__value">6 accounts reassigned</p>
+              </div>
+              <div>
+                <p class="meta__label">Open commitments</p>
+                <p class="meta__value">2 supplier reviews in progress</p>
+              </div>
+            </div>
+            <div class="blocker mt-6" style="background:var(--brand-50);color:var(--brand-900);">
+              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
+              Handover notes are stored on the departure case, not on this record, so they can be reviewed with
+              the clearance checklist.
+            </div>
+          </div>
+          <div class="card__foot">
+            <p>Handover is tracked as an HR clearance action</p>
+            <a class="btn btn--link text-sm" href="departure.html#clearance">Review clearance checklist</a>
+          </div>
+        </section>
+      </div>
+
+      <aside class="stack-lg" aria-label="Restricted information and audit">
+        <!-- Restricted information: HR and system administrators only.
+             The prototype swaps the real panel for an explanatory card for other roles. -->
+        <section class="card" data-roles="hr,admin" aria-labelledby="restricted-title">
+          <div class="card__head">
+            <div>
+              <h2 class="card__title" id="restricted-title">Restricted employee information</h2>
+              <p class="card__sub">Visible to HR administrators and system administrators only.</p>
+            </div>
+            <span class="badge badge--danger"><span class="badge__dot"></span>Restricted</span>
+          </div>
+          <div class="card__body">
+            <div class="meta-grid">
+              <div>
+                <p class="meta__label">Right to work evidence</p>
+                <p class="meta__value">Passport · verified 4 Mar 2019 · expires 12 Aug 2027</p>
+              </div>
+              <div>
+                <p class="meta__label">Personal email</p>
+                <p class="meta__value">h.marsh@example.com</p>
+              </div>
+              <div>
+                <p class="meta__label">Personal phone</p>
+                <p class="meta__value">+44 7700 900412</p>
+              </div>
+              <div>
+                <p class="meta__label">Occupational health</p>
+                <p class="meta__value">One recorded referral · 2024 · no restrictions in force</p>
+              </div>
+              <div>
+                <p class="meta__label">Reason for leaving</p>
+                <p class="meta__value">Resignation — relocation</p>
+              </div>
+              <div>
+                <p class="meta__label">Exit interview</p>
+                <p class="meta__value">Booked 29 Oct 2026 · Rosa Bell</p>
+              </div>
+            </div>
+          </div>
+          <div class="card__foot">
+            <p>Every view of this panel is audited in production</p>
+            <a class="btn btn--link text-sm" href="audit.html">View access history</a>
+          </div>
+        </section>
+
+        <section class="card" data-roles-except="hr,admin" aria-labelledby="restricted-denied-title">
+          <div class="card__head">
+            <div>
+              <h2 class="card__title" id="restricted-denied-title">Restricted employee information</h2>
+              <p class="card__sub">Not shown in this role's view.</p>
+            </div>
+            <span class="badge">Restricted</span>
+          </div>
+          <div class="card__body">
+            <div class="alert alert--warn" role="note">
+              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg>
+              <div>
+                <p class="alert__title">Requires the HR administrator or system administrator role</p>
+                <p>
+                  Right-to-work evidence, personal contact details and occupational health information are held
+                  separately from the employment summary. Use the role switcher to review the HR administrator
+                  view. Hiding this panel is a design device — production authorisation is enforced by the
+                  Django backend.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="record-actions-title">
+          <div class="card__head">
+            <div>
+              <h2 class="card__title" id="record-actions-title">Record actions</h2>
+              <p class="card__sub">Consequential changes require confirmation and a comment.</p>
+            </div>
+          </div>
+          <div class="card__body">
+            <div class="stack-sm">
+              <button class="btn btn--secondary btn--block" type="button" data-confirm
+                      data-confirm-title="Extend the clearance deadline?"
+                      data-confirm-sub="Only HR administrators can change a departure deadline."
+                      data-confirm-body="Moving Helena Marsh's last working day from 30 Oct 2026 reschedules every open clearance action."
+                      data-confirm-label="Change deadline"
+                      data-confirm-comment="Reason for the change"
+                      data-confirm-require-comment
+                      data-confirm-toast="Deadline change prepared"
+                      data-confirm-toast-tone="warn">
+                <svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg>
+                Change departure date
+              </button>
+              <button class="btn btn--secondary btn--block" type="button" data-confirm
+                      data-confirm-title="Reassign the lifecycle coordinator?"
+                      data-confirm-sub="Coordinators own the case end to end."
+                      data-confirm-body="Aisha Khan would take over Helena Marsh's departure case from Rosa Bell."
+                      data-confirm-label="Reassign coordinator"
+                      data-confirm-status="Reassigned|info"
+                      data-confirm-toast="Coordinator reassigned">
+                <svg class="icon icon--sm" aria-hidden="true"><use href="#i-users"/></svg>
+                Reassign coordinator
+              </button>
+              <button class="btn btn--danger btn--block" type="button" data-confirm
+                      data-confirm-title="Suspend this departure case?"
+                      data-confirm-sub="The leaver keeps their access until the case is reopened."
+                      data-confirm-body="Suspending DEP-2026-0031 pauses IT access removal and freezes all open clearance actions."
+                      data-confirm-label="Suspend case"
+                      data-confirm-tone="danger"
+                      data-confirm-comment="Reason for suspending"
+                      data-confirm-require-comment
+                      data-confirm-toast="Case suspended"
+                      data-confirm-toast-tone="danger">
+                <svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg>
+                Suspend case
+              </button>
+            </div>
+          </div>
+          <div class="card__foot">
+            <p class="text-xs muted">Nothing is saved in this prototype</p>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="docs-title">
+          <div class="card__head">
+            <div>
+              <h2 class="card__title" id="docs-title">Record documents</h2>
+              <p class="card__sub">Contract variations, evidence and signed acknowledgements.</p>
+            </div>
+            <span class="badge badge--outline">3 files</span>
+          </div>
+          <div class="list">
+            <article class="list__item">
+              <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-file"/></svg></span>
+              <div class="list__main">
+                <p class="list__title">Resignation letter</p>
+                <p class="list__meta">PDF · uploaded 2 Oct 2026 · HR only</p>
+              </div>
+            </article>
+            <article class="list__item">
+              <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-file"/></svg></span>
+              <div class="list__main">
+                <p class="list__title">Promotion letter · 2023</p>
+                <p class="list__meta">PDF · signed 1 Sep 2023 · HR only</p>
+              </div>
+            </article>
+            <article class="list__item">
+              <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-file"/></svg></span>
+              <div class="list__main">
+                <p class="list__title">Handover pack</p>
+                <p class="list__meta">PDF · draft 16 Oct 2026 · Finance and HR</p>
+              </div>
+            </article>
+          </div>
+          <div class="card__foot">
+            <p class="text-xs muted">Uploads and storage are not part of this prototype</p>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="page-foot">
+    <p>Casidra Arrivals &amp; Departures · employee lifecycle record EMP-100190</p>
+    <p>Fictional sample data · UI only · restricted information is separated by design, not by real permissions</p>
+  </footer>
+</div>
+
+<!-- @include partials/shell-end.html -->
+<!-- @include partials/scripts.html -->
+</body>
+</html>

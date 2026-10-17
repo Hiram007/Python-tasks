@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notification centre · Casidra</title>
+<meta name="description" content="Notification centre with read and unread states, reminders, approval alerts, preferences and administrative delivery configuration.">
+<!-- @include partials/head-assets.html -->
+</head>
+<body class="app" data-page="notifications">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- @include partials/icons.html -->
+<!-- @include partials/sidebar.html -->
+
+<div class="app__body">
+  <!-- @include partials/topbar.html -->
+
+  <main class="content" id="main">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Dashboard</a>
+      <span class="breadcrumb__sep" aria-hidden="true">/</span>
+      <span aria-current="page">Notifications</span>
+    </nav>
+
+    <div class="page-head">
+      <div>
+        <p class="eyebrow">Communication</p>
+        <h1 class="page-head__title">Notification centre</h1>
+        <p class="page-head__sub">
+          Workflow, approval, reminder and escalation notifications in one place, with the delivery history and
+          the administrative configuration behind them.
+        </p>
+      </div>
+      <div class="page-head__actions">
+        <button class="btn btn--secondary" type="button" data-notif-read-all>
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg>
+          Mark all as read
+        </button>
+        <a class="btn btn--primary" href="#preferences">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-settings"/></svg>
+          Preferences
+        </a>
+      </div>
+    </div>
+
+    <div class="alert alert--warn" role="note">
+      <svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg>
+      <div>
+        <p class="alert__title">Delivery is designed, not operational</p>
+        <p>
+          Email, Microsoft 365 and reminder scheduling appear on this screen so the experience can be reviewed.
+          Nothing is sent, queued or scheduled by this prototype — the Django application drives real delivery.
+        </p>
+      </div>
+    </div>
+
+    <!-- 1: notification centre -->
+    <section class="card mt-6" data-table-region data-count-noun="notifications" aria-labelledby="centre-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="centre-title">Your notifications</h2>
+          <p class="card__sub">Newest first. Read state is held in the browser only.</p>
+        </div>
+        <div class="segmented" role="tablist" aria-label="Filter notifications by read state" data-table-group>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="true" data-group-value="all">
+            All <span class="segmented__count">8</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="unread">
+            Unread <span class="segmented__count">3</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="read">
+            Read <span class="segmented__count">5</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="toolbar__search input-wrap">
+          <label class="sr-only" for="notif-search">Search notifications</label>
+          <svg class="icon icon--sm input-wrap__icon" aria-hidden="true"><use href="#i-search"/></svg>
+          <input class="input input--icon" id="notif-search" type="search" placeholder="Search notifications…"
+                 autocomplete="off" data-table-search>
+        </div>
+        <div class="input-wrap">
+          <label class="sr-only" for="notif-category">Category</label>
+          <select class="select" id="notif-category" data-table-filter="category">
+            <option value="">All categories</option>
+            <option value="approval">Approval requests</option>
+            <option value="task">Workflow and tasks</option>
+            <option value="reminder">Reminders and overdue</option>
+            <option value="security">Access and security</option>
+          </select>
+        </div>
+        <button class="btn btn--ghost btn--sm" type="button" data-table-reset>
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-refresh"/></svg>
+          Reset
+        </button>
+      </div>
+
+      <div class="table-wrap" data-table-wrap>
+        <table class="table table--stack">
+          <caption class="sr-only">Notifications with category, related record, time and read state</caption>
+          <thead>
+            <tr>
+              <th scope="col">Notification</th>
+              <th scope="col">Category</th>
+              <th scope="col">Related record</th>
+              <th scope="col">Received</th>
+              <th scope="col">State</th>
+              <th scope="col" class="table__actions"><span class="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody data-table-rows>
+            <tr data-search="access request approval amara okafor entra id it" data-category="approval"
+                data-group="unread" data-notif-item data-unread="true">
+              <td data-label="Notification">
+                <span class="table__primary">Access request needs approval</span>
+                <br><span class="text-xs muted">Entra ID access groups for Amara Okafor are waiting on you</span>
+              </td>
+              <td data-label="Category">Approval request</td>
+              <td data-label="Related record"><a href="approvals.html">AP-3391 · ONB-2026-0148</a></td>
+              <td data-label="Received">Today, 09:14</td>
+              <td data-label="State" data-notif-state><span class="badge badge--brand"><span class="badge__dot"></span>Unread</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-notif-toggle>Mark as read</button>
+              </td>
+            </tr>
+
+            <tr data-search="overdue escalated payroll enrolment chen wei finance" data-category="reminder"
+                data-group="unread" data-notif-item data-unread="true">
+              <td data-label="Notification">
+                <span class="table__primary">Overdue task escalated</span>
+                <br><span class="text-xs muted">Payroll enrolment for Chen Wei is 3 days overdue</span>
+              </td>
+              <td data-label="Category">Reminder / overdue</td>
+              <td data-label="Related record"><a href="tasks.html">Task · HR · ONB-2026-0155</a></td>
+              <td data-label="Received">Today, 07:30</td>
+              <td data-label="State" data-notif-state><span class="badge badge--brand"><span class="badge__dot"></span>Unread</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-notif-toggle>Mark as read</button>
+              </td>
+            </tr>
+
+            <tr data-search="clearance reminder helena marsh departure seven actions" data-category="reminder"
+                data-group="unread" data-notif-item data-unread="true">
+              <td data-label="Notification">
+                <span class="table__primary">Clearance reminder</span>
+                <br><span class="text-xs muted">Helena Marsh departs 30 Oct 2026 · 7 actions still outstanding</span>
+              </td>
+              <td data-label="Category">Reminder / overdue</td>
+              <td data-label="Related record"><a href="departure.html">DEP-2026-0031</a></td>
+              <td data-label="Received">Yesterday, 16:00</td>
+              <td data-label="State" data-notif-state><span class="badge badge--brand"><span class="badge__dot"></span>Unread</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-notif-toggle>Mark as read</button>
+              </td>
+            </tr>
+
+            <tr data-search="decision recorded right to work marcus bennett approved" data-category="approval"
+                data-group="read" data-notif-item data-unread="false">
+              <td data-label="Notification">
+                <span class="table__primary">Approval decision recorded</span>
+                <br><span class="text-xs muted">Right to work verification for Marcus Bennett was approved</span>
+              </td>
+              <td data-label="Category">Approval decision</td>
+              <td data-label="Related record"><a href="approvals.html#history">ONB-2026-0151</a></td>
+              <td data-label="Received">Yesterday, 10:12</td>
+              <td data-label="State" data-notif-state><span class="badge"><span class="badge__dot"></span>Read</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-notif-toggle>Mark as unread</button>
+              </td>
+            </tr>
+
+            <tr data-search="blocked access groups vpn amara okafor manager approval" data-category="task"
+                data-group="read" data-notif-item data-unread="false">
+              <td data-label="Notification">
+                <span class="table__primary">Task blocked</span>
+                <br><span class="text-xs muted">Access groups &amp; VPN is blocked pending manager approval for elevated access</span>
+              </td>
+              <td data-label="Category">Workflow and tasks</td>
+              <td data-label="Related record"><a href="case.html#checklists">ONB-2026-0148</a></td>
+              <td data-label="Received">17 Oct 2026, 08:41</td>
+              <td data-label="State" data-notif-state><span class="badge"><span class="badge__dot"></span>Read</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-notif-toggle>Mark as unread</button>
+              </td>
+            </tr>
+
+            <tr data-search="start date approaching daniel whitfield six tasks open" data-category="task"
+                data-group="read" data-notif-item data-unread="false">
+              <td data-label="Notification">
+                <span class="table__primary">Start date approaching</span>
+                <br><span class="text-xs muted">Daniel Whitfield starts 27 Oct 2026 · 6 tasks still open</span>
+              </td>
+              <td data-label="Category">Workflow and tasks</td>
+              <td data-label="Related record"><a href="case.html">ONB-2026-0142</a></td>
+              <td data-label="Received">16 Oct 2026, 08:00</td>
+              <td data-label="State" data-notif-state><span class="badge"><span class="badge__dot"></span>Read</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-notif-toggle>Mark as unread</button>
+              </td>
+            </tr>
+
+            <tr data-search="mfa enrolment completed tomas ferreira security" data-category="security"
+                data-group="read" data-notif-item data-unread="false">
+              <td data-label="Notification">
+                <span class="table__primary">MFA policy applied</span>
+                <br><span class="text-xs muted">Conditional access policy updated by a system administrator</span>
+              </td>
+              <td data-label="Category">Access and security</td>
+              <td data-label="Related record"><a href="admin-system.html#identity">Identity configuration</a></td>
+              <td data-label="Received">15 Oct 2026, 14:22</td>
+              <td data-label="State" data-notif-state><span class="badge"><span class="badge__dot"></span>Read</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-notif-toggle>Mark as unread</button>
+              </td>
+            </tr>
+
+            <tr data-search="template activation approved arrival standard v4" data-category="task"
+                data-group="read" data-notif-item data-unread="false">
+              <td data-label="Notification">
+                <span class="table__primary">Workflow template activated</span>
+                <br><span class="text-xs muted">Arrival — standard v4 is now in use for new onboarding cases</span>
+              </td>
+              <td data-label="Category">Workflow and tasks</td>
+              <td data-label="Related record"><a href="workflows.html">Template library</a></td>
+              <td data-label="Received">13 Oct 2026, 14:30</td>
+              <td data-label="State" data-notif-state><span class="badge"><span class="badge__dot"></span>Read</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-notif-toggle>Mark as unread</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="empty" data-table-empty hidden>
+        <span class="empty__art" aria-hidden="true"><svg class="icon icon--lg"><use href="#i-bell"/></svg></span>
+        <h3 class="empty__title">Nothing here</h3>
+        <p class="empty__text">
+          No notification matches this filter. Clear the filters to see everything that has been raised for your
+          role.
+        </p>
+        <div class="empty__actions">
+          <button class="btn btn--secondary" type="button" data-table-reset>Clear filters</button>
+        </div>
+      </div>
+
+      <div class="card__foot">
+        <p data-table-count>Showing all 8 notifications</p>
+        <p class="text-xs muted">Read state is not stored — this is a design prototype</p>
+      </div>
+    </section>
+
+    <!-- 2: preferences -->
+    <section class="card mt-6" id="preferences" aria-labelledby="preferences-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="preferences-title">Notification preferences</h2>
+          <p class="card__sub">What each role receives, and through which channel.</p>
+        </div>
+        <span class="tag tag--quiet">Applies to your account only</span>
+      </div>
+
+      <div class="table-wrap">
+        <table class="table table--stack">
+          <caption class="sr-only">Notification preferences by event type</caption>
+          <thead>
+            <tr>
+              <th scope="col">Event</th>
+              <th scope="col">In-app</th>
+              <th scope="col">Email</th>
+              <th scope="col">Digest</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="Event">
+                <span class="table__primary">Approval requested from you</span>
+                <br><span class="text-xs muted">Access, spend, departure and configuration requests</span>
+              </td>
+              <td data-label="In-app"><label class="check"><input type="checkbox" checked><span class="check__text">Always on</span></label></td>
+              <td data-label="Email"><label class="check"><input type="checkbox" checked><span class="check__text">Immediately</span></label></td>
+              <td data-label="Digest"><label class="check"><input type="checkbox"><span class="check__text">Included</span></label></td>
+            </tr>
+            <tr>
+              <td data-label="Event">
+                <span class="table__primary">Task assigned or reassigned to you</span>
+                <br><span class="text-xs muted">Onboarding and clearance checklist actions</span>
+              </td>
+              <td data-label="In-app"><label class="check"><input type="checkbox" checked><span class="check__text">Always on</span></label></td>
+              <td data-label="Email"><label class="check"><input type="checkbox" checked><span class="check__text">Immediately</span></label></td>
+              <td data-label="Digest"><label class="check"><input type="checkbox" checked><span class="check__text">Daily 08:00</span></label></td>
+            </tr>
+            <tr>
+              <td data-label="Event">
+                <span class="table__primary">Due-date reminder</span>
+                <br><span class="text-xs muted">3 days before a task or clearance action is due</span>
+              </td>
+              <td data-label="In-app"><label class="check"><input type="checkbox" checked><span class="check__text">Always on</span></label></td>
+              <td data-label="Email"><label class="check"><input type="checkbox" checked><span class="check__text">Immediately</span></label></td>
+              <td data-label="Digest"><label class="check"><input type="checkbox" checked><span class="check__text">Daily 08:00</span></label></td>
+            </tr>
+            <tr>
+              <td data-label="Event">
+                <span class="table__primary">Overdue escalation</span>
+                <br><span class="text-xs muted">Copied to the departmental lead after the due date</span>
+              </td>
+              <td data-label="In-app"><label class="check"><input type="checkbox" checked><span class="check__text">Always on</span></label></td>
+              <td data-label="Email"><label class="check"><input type="checkbox" checked><span class="check__text">Immediately</span></label></td>
+              <td data-label="Digest"><label class="check"><input type="checkbox"><span class="check__text">Not included</span></label></td>
+            </tr>
+            <tr>
+              <td data-label="Event">
+                <span class="table__primary">Weekly operational summary</span>
+                <br><span class="text-xs muted">Arrivals, departures, overdue actions and approvals</span>
+              </td>
+              <td data-label="In-app"><label class="check"><input type="checkbox"><span class="check__text">Hide</span></label></td>
+              <td data-label="Email"><label class="check"><input type="checkbox" checked><span class="check__text">Mondays 07:00</span></label></td>
+              <td data-label="Digest"><label class="check"><input type="checkbox" checked><span class="check__text">Included</span></label></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card__body">
+        <div class="meta-grid">
+          <div>
+            <p class="meta__label">Quiet hours</p>
+            <p class="meta__value">18:00 – 07:30 · no email, in-app only</p>
+          </div>
+          <div>
+            <p class="meta__label">Escalation copy</p>
+            <p class="meta__value">Departmental lead after 1 day overdue</p>
+          </div>
+          <div>
+            <p class="meta__label">Preferred channel</p>
+            <p class="meta__value">Microsoft 365 email (planned)</p>
+          </div>
+        </div>
+      </div>
+      <div class="card__foot">
+        <p>Preferences are per user and per role in production</p>
+        <button class="btn btn--primary btn--sm" type="button" data-confirm
+                data-confirm-title="Save notification preferences?"
+                data-confirm-sub="Preferences are stored against your user account."
+                data-confirm-body="Quiet hours, escalation copy and channel choices would be saved for your account and applied to future notifications. Nothing is saved in this prototype."
+                data-confirm-label="Save preferences"
+                data-confirm-icon="i-check"
+                data-confirm-toast="Preferences prepared">
+          Save preferences
+        </button>
+      </div>
+    </section>
+
+    <!-- 3: administrative configuration and delivery history -->
+    <div class="grid grid--halves mt-6">
+      <section class="card" data-roles="admin" id="settings" aria-labelledby="settings-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="settings-title">Notification administration</h2>
+            <p class="card__sub">Templates, triggers and delivery configuration.</p>
+          </div>
+          <span class="badge badge--outline">Administrators</span>
+        </div>
+        <div class="card__body">
+          <div class="def-list">
+            <div class="def-row">
+              <span class="def-row__label">Approval requested</span>
+              <span class="def-row__value">Template nt-approval-01 · in-app + email · immediate</span>
+              <span class="def-row__action"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Enabled</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Clearance reminder</span>
+              <span class="def-row__value">Template nt-clearance-03 · 7, 3 and 1 days before the last working day</span>
+              <span class="def-row__action"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Enabled</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Overdue escalation</span>
+              <span class="def-row__value">Copies the departmental lead and the coordinator after 1 day</span>
+              <span class="def-row__action"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Enabled</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Microsoft 365 delivery</span>
+              <span class="def-row__value">Graph mail send connector</span>
+              <span class="def-row__action"><span class="simulated">Not configured</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Scheduled reminder job</span>
+              <span class="def-row__value">Runs at 07:00 daily in production</span>
+              <span class="def-row__action"><span class="simulated">Design only</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="card__foot">
+          <p>Configuration changes require an administrator comment</p>
+          <button class="btn btn--secondary btn--sm" type="button" data-confirm
+                  data-confirm-title="Change notification configuration?"
+                  data-confirm-sub="Administrative changes are audited with your name and a timestamp."
+                  data-confirm-body="Reminder timings, escalation copy and delivery channels would change for every case in the organisation."
+                  data-confirm-label="Apply change"
+                  data-confirm-comment="Reason for the change"
+                  data-confirm-require-comment
+                  data-confirm-toast="Configuration change prepared"
+                  data-confirm-toast-tone="warn">
+            Edit configuration
+          </button>
+        </div>
+      </section>
+
+      <section class="card" data-roles="admin" aria-labelledby="delivery-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="delivery-title">Delivery history</h2>
+            <p class="card__sub">What would have been sent, and whether it succeeded.</p>
+          </div>
+          <span class="simulated">Design only</span>
+        </div>
+        <div class="list">
+          <article class="list__item">
+            <span class="notif__icon notif__icon--warn" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-alert"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">5 reminders failed to send</p>
+              <p class="list__meta">07:00 batch · mail connector not configured</p>
+            </div>
+            <div class="list__aside">
+              <button class="btn btn--secondary btn--sm" type="button" data-confirm
+                      data-confirm-title="Retry the failed notifications?"
+                      data-confirm-sub="Retries are recorded against each notification."
+                      data-confirm-body="5 clearance reminders would be queued again for delivery. Email delivery is not implemented in this prototype."
+                      data-confirm-label="Retry delivery"
+                      data-confirm-icon="i-refresh"
+                      data-confirm-toast="Retry prepared"
+                      data-confirm-toast-tone="warn">
+                Retry
+              </button>
+            </div>
+          </article>
+          <article class="list__item">
+            <span class="notif__icon notif__icon--ok" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-check-circle"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">18 approval requests delivered in-app</p>
+              <p class="list__meta">Since 1 Oct 2026 · in-app delivery only</p>
+            </div>
+            <div class="list__aside"><span class="badge badge--ok"><span class="badge__dot"></span>Delivered</span></div>
+          </article>
+          <article class="list__item">
+            <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-mail"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">Weekly summary scheduled</p>
+              <p class="list__meta">Mondays 07:00 · 46 recipients · not yet sent</p>
+            </div>
+            <div class="list__aside"><span class="badge badge--warn"><span class="badge__dot"></span>Queued — simulated</span></div>
+          </article>
+          <article class="list__item">
+            <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-shield"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">Security notification delivered</p>
+              <p class="list__meta">MFA policy applied · 15 Oct 2026, 14:22</p>
+            </div>
+            <div class="list__aside"><span class="badge badge--ok"><span class="badge__dot"></span>Delivered</span></div>
+          </article>
+        </div>
+        <div class="card__foot">
+          <p>Delivery history is retained for 90 days in production</p>
+          <a class="btn btn--link text-sm" href="audit.html">Administrative audit</a>
+        </div>
+      </section>
+    </div>
+
+    <div class="alert alert--info mt-6" data-roles-except="admin" role="note">
+      <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
+      <div>
+        <p class="alert__title">Notification administration is not shown in this role's view</p>
+        <p>
+          Templates, delivery connectors and the delivery history are administered by system administrators.
+          Use the role switcher to review that view.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="page-foot">
+    <p>Casidra Arrivals &amp; Departures · notification centre design prototype</p>
+    <p>Fictional sample data · UI only · no message is sent and nothing is scheduled</p>
+  </footer>
+</div>
+
+<!-- @include partials/shell-end.html -->
+<!-- @include partials/scripts.html -->
+</body>
+</html>

@@ -48,6 +48,212 @@
       </p>
     </div>
 
+    <!-- Role scope: what the role switcher changes on this dashboard -->
+    <section class="role-banner mt-6" aria-label="Current role">
+      <svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg>
+      <div>
+        <p class="role-banner__title">This dashboard is shown as <span data-role-label>HR administrator</span></p>
+        <p>
+          Signed in as <span class="strong" data-role-name>Rosa Bell</span>. The navigation, the panel below and the
+          actions offered all follow the selected role. Use the role switcher in the top bar to review the
+          executive, departmental, manager, employee and administrator views. Real authorisation is enforced by
+          the Django backend — this is a design device, not a security control.
+        </p>
+      </div>
+    </section>
+
+    <!-- Role-specific dashboard panels -->
+    <section class="card mt-4" data-roles="exec" aria-labelledby="panel-exec-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="panel-exec-title">Management summary</h2>
+          <p class="card__sub">Portfolio health across arrivals and departures. No case editing from this view.</p>
+        </div>
+        <a class="btn btn--secondary btn--sm" href="reports.html">Reports</a>
+      </div>
+      <div class="card__body">
+        <div class="meta-grid">
+          <div>
+            <p class="meta__label">Day-one readiness on time</p>
+            <p class="meta__value">92% · 4 points better than last quarter</p>
+          </div>
+          <div>
+            <p class="meta__label">Median onboarding lead time</p>
+            <p class="meta__value">18 days</p>
+          </div>
+          <div>
+            <p class="meta__label">Median clearance time</p>
+            <p class="meta__value">11 days</p>
+          </div>
+          <div>
+            <p class="meta__label">Exceptions needing attention</p>
+            <p class="meta__value">3 · IT completion at 76%, 4 assets overdue, 1 case overdue</p>
+          </div>
+        </div>
+      </div>
+      <div class="card__foot">
+        <p>Exceptions are escalated by the departmental leads in the first instance</p>
+        <a class="btn btn--link text-sm" href="reports.html#outstanding">Overdue report</a>
+      </div>
+    </section>
+
+    <section class="card mt-4" data-roles="hr,admin" aria-labelledby="panel-hr-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="panel-hr-title">HR administrator queue</h2>
+          <p class="card__sub">What is waiting on the People team today.</p>
+        </div>
+        <a class="btn btn--secondary btn--sm" href="approvals.html">Approval inbox</a>
+      </div>
+      <div class="list">
+        <article class="list__item">
+          <span class="notif__icon notif__icon--warn" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-inbox"/></svg></span>
+          <div class="list__main">
+            <p class="list__title">3 requests await HR sign-off</p>
+            <p class="list__meta">Access exception, contract end confirmation and a confidential export</p>
+          </div>
+          <div class="list__aside"><a class="btn btn--primary btn--sm" href="approvals.html">Review</a></div>
+        </article>
+        <article class="list__item">
+          <span class="notif__icon notif__icon--warn" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-door"/></svg></span>
+          <div class="list__main">
+            <p class="list__title">2 departure cases need authorisation</p>
+            <p class="list__meta">Helena Marsh (5 days waiting) and Raj Patel (contract end)</p>
+          </div>
+          <div class="list__aside"><a class="btn btn--secondary btn--sm" href="offboarding.html">Open cases</a></div>
+        </article>
+        <article class="list__item">
+          <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-settings"/></svg></span>
+          <div class="list__main">
+            <p class="list__title">1 workflow template is in review</p>
+            <p class="list__meta">Arrival — fixed term (field operations) v3 · 14 steps</p>
+          </div>
+          <div class="list__aside"><a class="btn btn--secondary btn--sm" href="workflows.html">Templates</a></div>
+        </article>
+      </div>
+      <div class="card__foot">
+        <p>Restricted employee information is separated on each lifecycle record</p>
+        <a class="btn btn--link text-sm" href="directory.html">Employee directory</a>
+      </div>
+    </section>
+
+    <section class="card mt-4" data-roles="it,facilities,comms" aria-labelledby="panel-dept-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="panel-dept-title">My department queue</h2>
+          <p class="card__sub">Only the work owned by your department, and only the tasks assigned to you.</p>
+        </div>
+        <a class="btn btn--secondary btn--sm" href="tasks.html#my-tasks">My tasks</a>
+      </div>
+      <div class="list">
+        <article class="list__item">
+          <span class="notif__icon notif__icon--warn" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-alert"/></svg></span>
+          <div class="list__main">
+            <p class="list__title">2 actions are overdue in your queue</p>
+            <p class="list__meta">Laptop build for Daniel Whitfield · vehicle return for Michael Osei</p>
+          </div>
+          <div class="list__aside"><span class="badge badge--danger"><span class="badge__dot"></span>Overdue</span></div>
+        </article>
+        <article class="list__item">
+          <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-clock"/></svg></span>
+          <div class="list__main">
+            <p class="list__title">3 actions are due within 3 days</p>
+            <p class="list__meta">Access groups, desk setup and the welcome announcement</p>
+          </div>
+          <div class="list__aside"><span class="badge badge--warn"><span class="badge__dot"></span>Due soon</span></div>
+        </article>
+        <article class="list__item">
+          <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-shield"/></svg></span>
+          <div class="list__main">
+            <p class="list__title">1 action is blocked on an approval</p>
+            <p class="list__meta">Elevated access for Amara Okafor · manager approval outstanding</p>
+          </div>
+          <div class="list__aside"><span class="badge badge--danger"><span class="badge__dot"></span>Blocked</span></div>
+        </article>
+      </div>
+      <div class="card__foot">
+        <p>Completion updates the case readiness score immediately</p>
+        <a class="btn btn--link text-sm" href="tasks.html#department-queues">Department queues</a>
+      </div>
+    </section>
+
+    <section class="card mt-4" data-roles="manager" aria-labelledby="panel-manager-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="panel-manager-title">My team</h2>
+          <p class="card__sub">Arrivals and departures in your reporting line, and the decisions waiting on you.</p>
+        </div>
+        <a class="btn btn--secondary btn--sm" href="approvals.html">Approvals</a>
+      </div>
+      <div class="list">
+        <article class="list__item">
+          <span class="date-chip" aria-hidden="true"><span class="date-chip__month">Nov</span><span class="date-chip__day">3</span></span>
+          <div class="list__main">
+            <p class="list__title">Amara Okafor arrives</p>
+            <p class="list__meta">Product Designer · Design · 47% ready for day one</p>
+          </div>
+          <div class="list__aside"><a class="btn btn--secondary btn--sm" href="case.html">Open case</a></div>
+        </article>
+        <article class="list__item">
+          <span class="notif__icon notif__icon--warn" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-shield"/></svg></span>
+          <div class="list__main">
+            <p class="list__title">1 approval is waiting on you</p>
+            <p class="list__meta">Elevated access for Amara Okafor · requested 15 Oct 2026</p>
+          </div>
+          <div class="list__aside"><a class="btn btn--primary btn--sm" href="approvals.html">Decide</a></div>
+        </article>
+        <article class="list__item">
+          <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-check-list"/></svg></span>
+          <div class="list__main">
+            <p class="list__title">Knowledge transfer awaiting your sign-off</p>
+            <p class="list__meta">Helena Marsh · departure 30 Oct 2026</p>
+          </div>
+          <div class="list__aside"><a class="btn btn--secondary btn--sm" href="departure.html#clearance">Review</a></div>
+        </article>
+      </div>
+      <div class="card__foot">
+        <p>Managers see their own team only</p>
+        <a class="btn btn--link text-sm" href="directory.html">Employee directory</a>
+      </div>
+    </section>
+
+    <section class="card mt-4" data-roles="employee" aria-labelledby="panel-employee-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="panel-employee-title">Your arrival</h2>
+          <p class="card__sub">Your own record and the requests you raised. Nothing else is visible to this role.</p>
+        </div>
+        <a class="btn btn--secondary btn--sm" href="case.html">Your case</a>
+      </div>
+      <div class="card__body">
+        <div class="row">
+          <span class="donut-wrap">
+            <svg class="donut" viewBox="0 0 44 44" role="img" aria-label="47% of your onboarding tasks are complete">
+              <circle class="donut__track" cx="22" cy="22" r="18"></circle>
+              <circle class="donut__value" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="59.9"></circle>
+            </svg>
+            <span class="donut-wrap__label" aria-hidden="true">47%</span>
+          </span>
+          <div>
+            <p class="strong">Your onboarding is 47% complete</p>
+            <p class="text-xs muted mt-2">
+              Starts Tue 3 Nov 2026 · Design · London (hybrid) · coordinator Priya Raman.
+              Two things need you: policy acknowledgements and emergency contact details.
+            </p>
+          </div>
+        </div>
+        <div class="chip-row mt-6">
+          <span class="tag tag--quiet"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-monitor"/></svg> Laptop AST-1042 issued</span>
+          <span class="tag tag--quiet"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Team intro booked 3 Nov</span>
+          <span class="tag tag--quiet"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-clock"/></svg> Right to work verified</span>
+        </div>
+      </div>
+      <div class="card__foot">
+        <p>Requests you raise are tracked here with their approval state</p>
+        <a class="btn btn--link text-sm" href="employee.html">Your lifecycle record</a>
+      </div>
+    </section>
+
     <!-- 1: KPI summary -->
     <section class="grid grid--kpis mt-6" aria-label="Onboarding key figures">
       <article class="kpi">
@@ -557,52 +763,61 @@
           <span class="badge badge--warn"><span class="badge__dot"></span>3 waiting</span>
         </div>
         <div class="list">
-          <article class="list__item" data-approval-item>
+          <article class="list__item">
             <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-shield"/></svg></span>
             <div class="list__main">
               <p class="list__title">Entra ID access groups</p>
               <p class="list__meta">Amara Okafor · IT · requested today at 09:14</p>
             </div>
-            <div class="list__aside">
-              <button class="btn btn--primary btn--sm" type="button" data-approve-request
-                      data-request-title="Entra ID access groups"
-                      data-request-meta="Amara Okafor · IT">
-                Approve
-              </button>
+            <div class="list__aside" data-decision-target>
+              <div class="row">
+                <button class="btn btn--primary btn--sm" type="button" data-decision="approve"
+                        data-request-title="Entra ID access groups"
+                        data-request-meta="Amara Okafor · IT">Approve</button>
+                <button class="btn btn--ghost btn--sm" type="button" data-decision="return"
+                        data-request-title="Entra ID access groups"
+                        data-request-meta="Amara Okafor · IT">Return</button>
+              </div>
             </div>
           </article>
-          <article class="list__item" data-approval-item>
+          <article class="list__item">
             <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-megaphone"/></svg></span>
             <div class="list__main">
               <p class="list__title">Intranet profile &amp; org chart entry</p>
               <p class="list__meta">Amara Okafor · Communications · requested yesterday</p>
             </div>
-            <div class="list__aside">
-              <button class="btn btn--primary btn--sm" type="button" data-approve-request
-                      data-request-title="Intranet profile and org chart entry"
-                      data-request-meta="Amara Okafor · Communications">
-                Approve
-              </button>
+            <div class="list__aside" data-decision-target>
+              <div class="row">
+                <button class="btn btn--primary btn--sm" type="button" data-decision="approve"
+                        data-request-title="Intranet profile and org chart entry"
+                        data-request-meta="Amara Okafor · Communications">Approve</button>
+                <button class="btn btn--ghost btn--sm" type="button" data-decision="return"
+                        data-request-title="Intranet profile and org chart entry"
+                        data-request-meta="Amara Okafor · Communications">Return</button>
+              </div>
             </div>
           </article>
-          <article class="list__item" data-approval-item>
+          <article class="list__item">
             <span class="notif__icon notif__icon--warn" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-key"/></svg></span>
             <div class="list__main">
               <p class="list__title">Elevated production access</p>
               <p class="list__meta">Daniel Whitfield · IT · blocked for 2 days</p>
             </div>
-            <div class="list__aside">
-              <button class="btn btn--primary btn--sm" type="button" data-approve-request
-                      data-request-title="Elevated production access"
-                      data-request-meta="Daniel Whitfield · IT">
-                Approve
-              </button>
+            <div class="list__aside" data-decision-target>
+              <div class="row">
+                <button class="btn btn--primary btn--sm" type="button" data-decision="approve"
+                        data-request-title="Elevated production access"
+                        data-request-meta="Daniel Whitfield · IT">Approve</button>
+                <button class="btn btn--ghost btn--sm" type="button" data-decision="reject"
+                        data-request-title="Elevated production access"
+                        data-request-meta="Daniel Whitfield · IT">Reject</button>
+              </div>
             </div>
           </article>
         </div>
         <div class="card__foot">
           <p>6 more approvals sit with department owners</p>
-          <a class="btn btn--link text-sm" href="tasks.html">See all approvals</a>
+          <a class="btn btn--link text-sm" href="approvals.html">Open the approval inbox</a>
         </div>
       </section>
 

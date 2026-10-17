@@ -28,9 +28,9 @@
       <div>
         <h1 class="page-head__title">Casidra design system</h1>
         <p class="page-head__sub">
-          The tokens and components every onboarding screen is built from, so the offboarding modules can be
-          assembled from the same parts. Class names below are the ones used in the HTML — they map one-to-one
-          onto Django template partials.
+          The tokens and components every screen is built from — arrivals, departures, assets, approvals,
+          reporting and administration. Class names below are the ones used in the HTML, and they map
+          one-to-one onto Django template partials.
         </p>
       </div>
       <div class="page-head__actions">
@@ -59,6 +59,7 @@
       <a class="btn btn--secondary btn--sm" href="#status">Status</a>
       <a class="btn btn--secondary btn--sm" href="#layout">Layout</a>
       <a class="btn btn--secondary btn--sm" href="#patterns">Patterns</a>
+      <a class="btn btn--secondary btn--sm" href="#system">System patterns</a>
       <a class="btn btn--secondary btn--sm" href="#accessibility">Accessibility</a>
       <a class="btn btn--secondary btn--sm" href="#django">Django mapping</a>
     </nav>
@@ -726,6 +727,199 @@
 
           <p class="ds-label mt-6">Dialogs and sheets</p>
           <p class="text-sm muted mt-2">Sheets hold multi-field forms; dialogs confirm a single decision. Both trap focus and close on Escape.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- System patterns -->
+    <section class="ds-section" id="system" aria-labelledby="system-title">
+      <div class="section-head">
+        <div>
+          <h2 class="section-head__title" id="system-title">System patterns</h2>
+          <p class="text-sm muted mt-2">
+            The patterns the arrivals, departures, assets, approvals, reporting and administration modules share.
+            Each one is a single reusable block, not a page-specific variant.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid--halves">
+        <div class="card card__body card__body--pad">
+          <p class="ds-label">Role-scoped visibility</p>
+          <p class="text-sm muted mt-2">
+            One shell serves every user group. Elements carry <span class="ds-code">data-roles</span> (shown only
+            for the listed roles) or <span class="ds-code">data-roles-except</span> (hidden for them), and the role
+            switcher in the top bar sets the current role. In production this is a <span class="ds-code">{% if perms %}</span>
+            check per navigation group — never a client-side check.
+          </p>
+          <div class="chip-row mt-4">
+            <span class="tag tag--quiet">Navigation groups</span>
+            <span class="tag tag--quiet">Dashboard panels</span>
+            <span class="tag tag--quiet">Restricted information panels</span>
+            <span class="tag tag--quiet">Administration screens</span>
+          </div>
+          <div class="role-banner mt-6">
+            <svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg>
+            <div>
+              <p class="role-banner__title">Shown as HR administrator</p>
+              <p>Role-scoped panels use this banner so a reviewer always knows which view they are seeing.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card__body card__body--pad">
+          <p class="ds-label">Charts without a charting dependency</p>
+          <p class="text-sm muted mt-2">
+            Volume bars (<span class="ds-code">.bars</span>) and comparison bars (<span class="ds-code">.hbars</span>)
+            are plain elements with inline percentages, so they render server-side and print correctly.
+          </p>
+          <div class="hbars mt-6">
+            <div class="hbar">
+              <span class="hbar__label">HR</span>
+              <span class="hbar__track"><span class="hbar__fill hbar__fill--ok" style="width:93%"></span></span>
+              <span class="hbar__value">93%</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar__label">IT</span>
+              <span class="hbar__track"><span class="hbar__fill hbar__fill--warn" style="width:76%"></span></span>
+              <span class="hbar__value">76%</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar__label">Finance</span>
+              <span class="hbar__track"><span class="hbar__fill hbar__fill--danger" style="width:71%"></span></span>
+              <span class="hbar__value">71%</span>
+            </div>
+          </div>
+          <div class="bars mt-6">
+            <div class="bars__col">
+              <span class="bars__value">12</span>
+              <span class="bars__stack">
+                <span class="bars__seg bars__seg--warn" style="height:29%"></span>
+                <span class="bars__seg" style="height:71%"></span>
+              </span>
+              <span class="bars__label">Jul</span>
+            </div>
+            <div class="bars__col">
+              <span class="bars__value">15</span>
+              <span class="bars__stack">
+                <span class="bars__seg bars__seg--warn" style="height:27%"></span>
+                <span class="bars__seg" style="height:73%"></span>
+              </span>
+              <span class="bars__label">Aug</span>
+            </div>
+            <div class="bars__col">
+              <span class="bars__value">19</span>
+              <span class="bars__stack">
+                <span class="bars__seg bars__seg--warn" style="height:26%"></span>
+                <span class="bars__seg" style="height:74%"></span>
+              </span>
+              <span class="bars__label">Sep</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card__body card__body--pad">
+          <p class="ds-label">Configuration rows &amp; permission indicators</p>
+          <p class="text-sm muted mt-2">
+            Administrative screens use <span class="ds-code">.def-list</span> with a permission indicator per row,
+            so a reviewer can see what each role may do without reading prose.
+          </p>
+          <div class="def-list mt-4">
+            <div class="def-row">
+              <span class="def-row__label">Block clearance with open actions</span>
+              <span class="def-row__value">Cannot be overridden by a task owner</span>
+              <span class="def-row__action"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Enabled</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Export restricted data</span>
+              <span class="def-row__value">Requires approval and a recorded purpose</span>
+              <span class="def-row__action"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg> With approval</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Edit a case in progress</span>
+              <span class="def-row__value">HR administrator only, with a reason</span>
+              <span class="def-row__action"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> Blocked</span></span>
+            </div>
+          </div>
+          <p class="ds-label mt-6">Described but not configured</p>
+          <p class="text-sm muted mt-2">
+            Anything drawn but not built carries <span class="ds-code">.simulated</span>, so no reviewer mistakes a
+            design for a working integration.
+          </p>
+          <div class="chip-row mt-4">
+            <span class="simulated">Not configured</span>
+            <span class="simulated">Design only</span>
+            <span class="simulated">Not connected here</span>
+          </div>
+        </div>
+
+        <div class="card card__body card__body--pad">
+          <p class="ds-label">Timeline and stage states</p>
+          <p class="text-sm muted mt-2">
+            Workflow screens must distinguish completed work from work that is merely requested, so the timeline
+            carries four explicit states plus a blocked state.
+          </p>
+          <ol class="timeline mt-4">
+            <li class="timeline__item timeline__item--done">
+              <div class="timeline__rail">
+                <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
+                <span class="timeline__line"></span>
+              </div>
+              <div class="timeline__body">
+                <p class="timeline__title">Completed</p>
+                <p class="timeline__meta"><span>Recorded with a date and an owner</span><span class="badge badge--ok"><span class="badge__dot"></span>Completed</span></p>
+              </div>
+            </li>
+            <li class="timeline__item timeline__item--active">
+              <div class="timeline__rail">
+                <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-clock"/></svg></span>
+                <span class="timeline__line"></span>
+              </div>
+              <div class="timeline__body">
+                <p class="timeline__title">Active</p>
+                <p class="timeline__meta"><span>Due date and responsible department</span><span class="badge badge--info"><span class="badge__dot"></span>In progress</span></p>
+              </div>
+            </li>
+            <li class="timeline__item timeline__item--requested">
+              <div class="timeline__rail">
+                <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-more"/></svg></span>
+                <span class="timeline__line"></span>
+              </div>
+              <div class="timeline__body">
+                <p class="timeline__title">Requested, not approved</p>
+                <p class="timeline__meta"><span>Raised by one person, waiting on another</span><span class="badge badge--warn"><span class="badge__dot"></span>Requested</span></p>
+              </div>
+            </li>
+            <li class="timeline__item timeline__item--blocked">
+              <div class="timeline__rail">
+                <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-alert"/></svg></span>
+                <span class="timeline__line"></span>
+              </div>
+              <div class="timeline__body">
+                <p class="timeline__title">Blocked</p>
+                <p class="timeline__meta"><span>Names the dependency that must clear first</span><span class="badge badge--danger"><span class="badge__dot"></span>Blocked</span></p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="card card__body card__body--pad mt-6">
+        <p class="ds-label">Decision dialogs</p>
+        <p class="text-sm muted mt-2">
+          Approvals, rejections and returns use the one shared dialog. Rejections and returns require a comment
+          before the decision can be recorded; destructive actions use the danger tone.
+        </p>
+        <div class="row row--wrap mt-4">
+          <button class="btn btn--primary" type="button" id="ds-demo-confirm">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-check-circle"/></svg>
+            Open the confirmation dialog
+          </button>
+          <span class="text-xs muted">
+            Or declare it in markup with <span class="ds-code">data-confirm</span>,
+            <span class="ds-code">data-confirm-comment</span> and
+            <span class="ds-code">data-confirm-require-comment</span>.
+          </span>
         </div>
       </div>
     </section>

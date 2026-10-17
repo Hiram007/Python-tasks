@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>System settings · Casidra</title>
+<meta name="description" content="System configuration: operational status, enterprise identity integration with Microsoft Entra ID and MFA, departments, notification and workflow configuration, security, retention and administrative audit.">
+<!-- @include partials/head-assets.html -->
+</head>
+<body class="app" data-page="admin-system">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- @include partials/icons.html -->
+<!-- @include partials/sidebar.html -->
+
+<div class="app__body">
+  <!-- @include partials/topbar.html -->
+
+  <main class="content" id="main">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Dashboard</a>
+      <span class="breadcrumb__sep" aria-hidden="true">/</span>
+      <span aria-current="page">System settings</span>
+    </nav>
+
+    <div class="page-head">
+      <div>
+        <p class="eyebrow">Administration</p>
+        <h1 class="page-head__title">System settings</h1>
+        <p class="page-head__sub">
+          Operational status, enterprise identity and sign-in, organisational configuration, security and
+          retention, and the administrative audit of configuration changes.
+        </p>
+      </div>
+      <div class="page-head__actions">
+        <a class="btn btn--secondary" href="audit.html">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg>
+          Administrative audit
+        </a>
+        <button class="btn btn--primary" type="button" data-confirm
+                data-confirm-title="Run a configuration health check?"
+                data-confirm-sub="The check verifies configuration consistency, not connectivity."
+                data-confirm-body="It would report unmapped Entra ID groups, accounts without MFA, templates awaiting review and departments without a checklist owner. Nothing is run in this prototype."
+                data-confirm-label="Run check"
+                data-confirm-icon="i-check-circle"
+                data-confirm-toast="Health check prepared"
+                data-confirm-toast-tone="info">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-refresh"/></svg>
+          Run health check
+        </button>
+      </div>
+    </div>
+
+    <div class="alert alert--warn" role="note">
+      <svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg>
+      <div>
+        <p class="alert__title">Nothing on this page is operational</p>
+        <p>
+          This is a design prototype. It is not connected to the Casidra Django application, its database, its
+          mail relay, or Microsoft Entra ID. Status indicators below describe the intended production
+          behaviour, and every integration is clearly marked as not configured.
+        </p>
+      </div>
+    </div>
+
+    <!-- 1: status figures -->
+    <section class="grid grid--kpis mt-6" aria-label="System figures">
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Application status</p>
+            <p class="kpi__value mt-2">Prototype</p>
+          </div>
+          <span class="kpi__icon" aria-hidden="true"><svg class="icon"><use href="#i-grid"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="badge badge--outline">Not connected</span></div>
+        <p class="text-xs muted mt-4">Production runs on Casidra-managed infrastructure</p>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Integrations configured</p>
+            <p class="kpi__value tnum mt-2">2 / 7</p>
+          </div>
+          <span class="kpi__icon kpi__icon--warn" aria-hidden="true"><svg class="icon"><use href="#i-key"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--flat">Enterprise identity not configured</span></div>
+        <a class="kpi__link" href="#identity">
+          Identity settings
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Accounts without MFA</p>
+            <p class="kpi__value tnum mt-2">4</p>
+          </div>
+          <span class="kpi__icon kpi__icon--danger" aria-hidden="true"><svg class="icon"><use href="#i-shield"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--down">Access blocked after 7 days</span></div>
+        <a class="kpi__link" href="admin-users.html">
+          Review accounts
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Configuration changes</p>
+            <p class="kpi__value tnum mt-2">18</p>
+          </div>
+          <span class="kpi__icon" aria-hidden="true"><svg class="icon"><use href="#i-file"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--flat">Last 30 days · all audited</span></div>
+        <p class="text-xs muted mt-4">Includes templates, roles, mappings and exports</p>
+      </article>
+    </section>
+
+    <!-- 2: identity and sign-in -->
+    <section class="card mt-6" id="identity" aria-labelledby="identity-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="identity-title">Enterprise identity &amp; sign-in</h2>
+          <p class="card__sub">
+            The intended configuration for Microsoft Entra ID single sign-on, multifactor authentication and
+            group-based role mapping. None of it is connected in this prototype.
+          </p>
+        </div>
+        <span class="simulated">Not configured</span>
+      </div>
+
+      <div class="card__body">
+        <div class="grid grid--halves">
+          <div>
+            <p class="meta__label">Single sign-on · Microsoft Entra ID</p>
+            <div class="def-list mt-2">
+              <div class="def-row">
+                <span class="def-row__label">Directory tenant</span>
+                <span class="def-row__value">casidra.onmicrosoft.com (sample)</span>
+                <span class="def-row__action"><span class="simulated">Not configured</span></span>
+              </div>
+              <div class="def-row">
+                <span class="def-row__label">Verified domain</span>
+                <span class="def-row__value">casidra.example</span>
+                <span class="def-row__action"><span class="simulated">Not verified</span></span>
+              </div>
+              <div class="def-row">
+                <span class="def-row__label">Sign-in protocol</span>
+                <span class="def-row__value">OpenID Connect · authorisation code with PKCE</span>
+                <span class="def-row__action"><span class="simulated">Not configured</span></span>
+              </div>
+              <div class="def-row">
+                <span class="def-row__label">Redirect URI</span>
+                <span class="def-row__value">https://ad.casidra.example/accounts/oidc/callback</span>
+                <span class="def-row__action"><span class="simulated">Not registered</span></span>
+              </div>
+              <div class="def-row">
+                <span class="def-row__label">Group claim</span>
+                <span class="def-row__value">groups · mapped to system roles</span>
+                <span class="def-row__action"><span class="simulated">Not mapped</span></span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <p class="meta__label">Multifactor authentication &amp; sessions</p>
+            <div class="def-list mt-2">
+              <div class="def-row">
+                <span class="def-row__label">MFA requirement</span>
+                <span class="def-row__value">Enforced for every account, no exceptions by role</span>
+                <span class="def-row__action"><span class="simulated">Not enforced</span></span>
+              </div>
+              <div class="def-row">
+                <span class="def-row__label">Permitted methods</span>
+                <span class="def-row__value">Authenticator app · hardware key · OTP fallback</span>
+                <span class="def-row__action"><span class="simulated">Not configured</span></span>
+              </div>
+              <div class="def-row">
+                <span class="def-row__label">Grace period</span>
+                <span class="def-row__value">7 days after activation, then access is blocked</span>
+                <span class="def-row__action"><span class="simulated">Not configured</span></span>
+              </div>
+              <div class="def-row">
+                <span class="def-row__label">Session lifetime</span>
+                <span class="def-row__value">8 hours · re-authentication for restricted exports</span>
+                <span class="def-row__action"><span class="simulated">Not configured</span></span>
+              </div>
+              <div class="def-row">
+                <span class="def-row__label">Administrator sign-in</span>
+                <span class="def-row__value">Hardware key required · conditional access by location</span>
+                <span class="def-row__action"><span class="simulated">Not configured</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert--info mt-6" role="note">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
+          <div>
+            <p class="alert__title">What implementing this requires</p>
+            <p>
+              An application registration in the Casidra Entra ID tenant, a client secret held as an environment
+              secret, group claims mapped to roles, conditional access and MFA policies applied by the identity
+              team, and an SCIM or scheduled provisioning job that follows the employee record. None of this is
+              done here, and no tenant, credential or connector exists in this prototype.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card__foot">
+        <p>Configuration changes are audited with the administrator's name and reason</p>
+        <button class="btn btn--secondary btn--sm" type="button" data-confirm
+                data-confirm-title="Begin the identity configuration?"
+                data-confirm-sub="This records an administrative change against your account."
+                data-confirm-body="Starting the Entra ID integration would register the application, request the group claim and enable MFA enforcement for all accounts. It cannot be done from this prototype."
+                data-confirm-label="Record decision"
+                data-confirm-icon="i-key"
+                data-confirm-comment="Reason for the change"
+                data-confirm-require-comment
+                data-confirm-toast="Change prepared"
+                data-confirm-toast-message="No configuration change is recorded by this prototype."
+                data-confirm-toast-tone="warn">
+          Configure Entra ID
+        </button>
+      </div>
+    </section>
+
+    <!-- 3: operational status -->
+    <section class="card mt-6" aria-labelledby="status-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="status-title">Operational status</h2>
+          <p class="card__sub">The components a production deployment depends on, and their intended state.</p>
+        </div>
+        <span class="badge badge--outline">Design view</span>
+      </div>
+      <div class="card__body">
+        <div class="def-list">
+          <div class="def-row">
+            <span class="def-row__label">Django application</span>
+            <span class="def-row__value">Casidra A&amp;D · production system of record</span>
+            <span class="def-row__action"><span class="simulated">Not connected here</span></span>
+          </div>
+          <div class="def-row">
+            <span class="def-row__label">Database</span>
+            <span class="def-row__value">Existing Casidra database · migrations applied on release</span>
+            <span class="def-row__action"><span class="simulated">Not connected here</span></span>
+          </div>
+          <div class="def-row">
+            <span class="def-row__label">Background job runner</span>
+            <span class="def-row__value">Reminder and escalation jobs at 07:00 daily</span>
+            <span class="def-row__action"><span class="simulated">Design only</span></span>
+          </div>
+          <div class="def-row">
+            <span class="def-row__label">Scheduled reminder job</span>
+            <span class="def-row__value">Due-date reminders, overdue escalations, weekly summary</span>
+            <span class="def-row__action"><span class="simulated">Design only</span></span>
+          </div>
+          <div class="def-row">
+            <span class="def-row__label">Mail relay</span>
+            <span class="def-row__value">Microsoft 365 via Graph send mail</span>
+            <span class="def-row__action"><span class="simulated">Not configured</span></span>
+          </div>
+          <div class="def-row">
+            <span class="def-row__label">Enterprise identity</span>
+            <span class="def-row__value">Entra ID SSO with MFA enforcement</span>
+            <span class="def-row__action"><span class="simulated">Not configured</span></span>
+          </div>
+          <div class="def-row">
+            <span class="def-row__label">Backup &amp; database recovery</span>
+            <span class="def-row__value">Nightly backup, 30-day retention, quarterly restore test</span>
+            <span class="def-row__action"><span class="simulated">Managed by infrastructure</span></span>
+          </div>
+        </div>
+        <div class="legend mt-6" role="list">
+          <span class="legend__item"><span class="legend__swatch" style="background:var(--ok-600)"></span> Operational in production</span>
+          <span class="legend__item"><span class="legend__swatch" style="background:var(--warn-600)"></span> To be implemented</span>
+          <span class="legend__item"><span class="legend__swatch" style="background:var(--border-strong)"></span> Not represented in this prototype</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4: configuration -->
+    <div class="grid grid--halves mt-6">
+      <section class="card" aria-labelledby="rules-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="rules-title">Operational rules</h2>
+            <p class="card__sub">The checks that govern what the workflows will and will not allow.</p>
+          </div>
+        </div>
+        <div class="card__body">
+          <div class="def-list">
+            <div class="def-row">
+              <span class="def-row__label">Block clearance with open actions</span>
+              <span class="def-row__value">Final clearance cannot be recorded while an action is incomplete</span>
+              <span class="def-row__action"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Enabled</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Block clearance with assets outstanding</span>
+              <span class="def-row__value">Including assets only requested, not returned</span>
+              <span class="def-row__action"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Enabled</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Require a comment on rejection</span>
+              <span class="def-row__value">Applies to every approver, including administrators</span>
+              <span class="def-row__action"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Enabled</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Prevent self-approval</span>
+              <span class="def-row__value">Nobody may decide a request they raised</span>
+              <span class="def-row__action"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Enabled</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Allow out-of-hours approvals</span>
+              <span class="def-row__value">Blocked for departure authorisation</span>
+              <span class="def-row__action"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> Blocked</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Editing a case in progress</span>
+              <span class="def-row__value">Only by an HR administrator, with a reason</span>
+              <span class="def-row__action"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-key"/></svg> Restricted</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="card__foot">
+          <p>Rules are enforced server-side in production</p>
+          <a class="btn btn--link text-sm" href="workflows.html#transitions">Status transitions</a>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="security-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="security-title">Security, retention &amp; data</h2>
+            <p class="card__sub">How long records are kept and who may read restricted fields.</p>
+          </div>
+        </div>
+        <div class="card__body">
+          <div class="def-list">
+            <div class="def-row">
+              <span class="def-row__label">Lifecycle &amp; approval records</span>
+              <span class="def-row__value">7 years after the case closes</span>
+              <span class="def-row__action"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Configured</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Notification history</span>
+              <span class="def-row__value">90 days, then aggregated</span>
+              <span class="def-row__action"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Configured</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Restricted employee information</span>
+              <span class="def-row__value">Separate permission · reads audited</span>
+              <span class="def-row__action"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Enforced</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Confidential exports</span>
+              <span class="def-row__value">Require approval and a recorded purpose</span>
+              <span class="def-row__action"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Configured</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">IP allowlist for administrators</span>
+              <span class="def-row__value">Casidra corporate ranges only</span>
+              <span class="def-row__action"><span class="simulated">To be configured</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Data residency</span>
+              <span class="def-row__value">Internal Casidra infrastructure, UK region</span>
+              <span class="def-row__action"><span class="simulated">Infrastructure</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="card__foot">
+          <p>Retention rules are applied by the Django application</p>
+          <a class="btn btn--link text-sm" href="audit.html#retention">Audit retention</a>
+        </div>
+      </section>
+    </div>
+
+    <!-- 5: administrative audit and maintenance -->
+    <div class="grid grid--split mt-6">
+      <section class="card" aria-labelledby="admin-audit-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="admin-audit-title">Recent configuration changes</h2>
+            <p class="card__sub">Every administrative change, with the reason it was made.</p>
+          </div>
+          <a class="btn btn--secondary btn--sm" href="audit.html">Full audit trail</a>
+        </div>
+        <div class="list">
+          <article class="list__item">
+            <span class="avatar avatar--sm avatar--slate" aria-hidden="true">DS</span>
+            <div class="list__main">
+              <p class="list__title">Dev Sharma activated “Arrival — standard v4”</p>
+              <p class="list__meta">13 Oct 2026, 14:30 · reason: quarterly template review</p>
+            </div>
+            <div class="list__aside"><span class="badge badge--brand"><span class="badge__dot"></span>Configuration</span></div>
+          </article>
+          <article class="list__item">
+            <span class="avatar avatar--sm avatar--slate" aria-hidden="true">DS</span>
+            <div class="list__main">
+              <p class="list__title">Granted “IT task owner” to Tomás Ferreira</p>
+              <p class="list__meta">12 Oct 2026, 09:05 · reason: departmental coverage</p>
+            </div>
+            <div class="list__aside"><span class="badge badge--brand"><span class="badge__dot"></span>Access control</span></div>
+          </article>
+          <article class="list__item">
+            <span class="avatar avatar--sm avatar--ink" aria-hidden="true">RB</span>
+            <div class="list__main">
+              <p class="list__title">Rosa Bell changed the clearance reminder timings</p>
+              <p class="list__meta">9 Oct 2026, 11:12 · reason: 7-day reminder added for leavers</p>
+            </div>
+            <div class="list__aside"><span class="badge badge--brand"><span class="badge__dot"></span>Notification</span></div>
+          </article>
+          <article class="list__item">
+            <span class="avatar avatar--sm avatar--ink" aria-hidden="true">RB</span>
+            <div class="list__main">
+              <p class="list__title">Exported a restricted lifecycle record</p>
+              <p class="list__meta">10 Oct 2026, 15:48 · purpose: pension audit</p>
+            </div>
+            <div class="list__aside"><span class="badge badge--danger"><span class="badge__dot"></span>Restricted export</span></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="maintenance-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="maintenance-title">Maintenance</h2>
+            <p class="card__sub">Controls that affect every user of the system.</p>
+          </div>
+        </div>
+        <div class="card__body">
+          <div class="stack-sm">
+            <button class="btn btn--secondary btn--block" type="button" data-confirm
+                    data-confirm-title="Rebuild the escalation queue?"
+                    data-confirm-sub="Queued reminders are recalculated from the current case data."
+                    data-confirm-body="Rebuilding recalculates every pending reminder and escalation. Nothing is recalculated in this prototype."
+                    data-confirm-label="Rebuild queue"
+                    data-confirm-icon="i-refresh"
+                    data-confirm-toast="Rebuild prepared"
+                    data-confirm-toast-message="Nothing is recalculated in this prototype."
+                    data-confirm-toast-tone="info">
+              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-refresh"/></svg>
+              Rebuild escalation queue
+            </button>
+            <button class="btn btn--secondary btn--block" type="button" data-confirm
+                    data-confirm-title="Export the configuration?"
+                    data-confirm-sub="Configuration export requires a reason and is audited."
+                    data-confirm-body="Templates, rules, departments, role mappings and notification settings would be exported as a package for review."
+                    data-confirm-label="Export configuration"
+                    data-confirm-icon="i-download"
+                    data-confirm-comment="Purpose of the export"
+                    data-confirm-require-comment
+                    data-confirm-toast="Export prepared"
+                    data-confirm-toast-message="No export is produced by this prototype."
+                    data-confirm-toast-tone="warn">
+              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-download"/></svg>
+              Export configuration
+            </button>
+            <button class="btn btn--danger btn--block" type="button" data-confirm
+                    data-confirm-title="Enable maintenance mode?"
+                    data-confirm-sub="Every user is signed out and the application becomes read-only."
+                    data-confirm-body="Maintenance mode stops task completion, approvals and clearance recording for all departments until it is switched off. It is not available in this prototype."
+                    data-confirm-label="Enable maintenance mode"
+                    data-confirm-tone="danger"
+                    data-confirm-comment="Reason for enabling maintenance mode"
+                    data-confirm-require-comment
+                    data-confirm-toast="Maintenance mode"
+                    data-confirm-toast-message="Maintenance mode is not implemented in this prototype."
+                    data-confirm-toast-tone="danger">
+              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg>
+              Enable maintenance mode
+            </button>
+          </div>
+        </div>
+        <div class="card__foot">
+          <p class="text-xs muted">Destructive controls require a comment and are audited</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="page-foot">
+    <p>Casidra Arrivals &amp; Departures · system settings design prototype</p>
+    <p>Fictional sample data · UI only · no integration is configured or connected</p>
+  </footer>
+</div>
+
+<!-- @include partials/shell-end.html -->
+<!-- @include partials/scripts.html -->
+</body>
+</html>

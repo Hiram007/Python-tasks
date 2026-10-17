@@ -323,19 +323,19 @@
             <ul class="stack-sm mt-6">
               <li class="row row--between">
                 <span class="dept dept--hr"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-briefcase"/></svg></span> HR</span>
-                <span class="pill-count">3 / 6</span>
+                <span class="pill-count" data-dept-count="hr">3 / 6</span>
               </li>
               <li class="row row--between">
                 <span class="dept dept--it"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-monitor"/></svg></span> IT</span>
-                <span class="pill-count">2 / 5</span>
+                <span class="pill-count" data-dept-count="it">2 / 5</span>
               </li>
               <li class="row row--between">
                 <span class="dept dept--facilities"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-building"/></svg></span> Facilities</span>
-                <span class="pill-count">2 / 4</span>
+                <span class="pill-count" data-dept-count="facilities">2 / 4</span>
               </li>
               <li class="row row--between">
                 <span class="dept dept--comms"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-megaphone"/></svg></span> Communications</span>
-                <span class="pill-count">2 / 4</span>
+                <span class="pill-count" data-dept-count="comms">2 / 4</span>
               </li>
             </ul>
           </div>
@@ -815,119 +815,8 @@
   </footer>
 </div>
 
-<!-- Add-task sheet: prefilled with the department whose button was used -->
-<dialog class="sheet" id="sheet-add-task" aria-labelledby="sheet-add-task-title">
-  <form class="sheet__form" data-sheet-form="add-task" novalidate>
-    <div class="sheet__head">
-      <div>
-        <h2 class="sheet__title" id="sheet-add-task-title">Add a checklist task</h2>
-        <p class="sheet__sub">Tasks roll up into the department's progress and the case readiness score.</p>
-      </div>
-      <button class="icon-btn" type="button" data-sheet-close aria-label="Close">
-        <svg class="icon" aria-hidden="true"><use href="#i-close"/></svg>
-      </button>
-    </div>
-
-    <div class="sheet__body">
-      <div class="alert alert--danger" data-form-summary hidden role="alert">
-        <svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg>
-        <div>
-          <p class="alert__title">Check the highlighted fields</p>
-          <p data-form-summary-text>Some fields need attention before you can continue.</p>
-        </div>
-      </div>
-
-      <div class="form-grid mt-4">
-        <div class="field">
-          <label class="field__label" for="task-department">Department<span class="field__req" aria-hidden="true">*</span></label>
-          <select class="select" id="task-department" name="department" required data-validate
-                  data-required-message="Choose the department that owns this task.">
-            <option value="">Select a department</option>
-            <option value="hr">HR</option>
-            <option value="it">IT</option>
-            <option value="facilities">Facilities</option>
-            <option value="comms">Communications</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label class="field__label" for="task-owner">Task owner<span class="field__req" aria-hidden="true">*</span></label>
-          <select class="select" id="task-owner" name="owner" required data-validate
-                  data-required-message="Assign an owner so the task has accountability.">
-            <option value="">Select an owner</option>
-            <option>Aisha Khan</option>
-            <option>Tomás Ferreira</option>
-            <option>Priya Raman</option>
-            <option>Hannah Cole</option>
-            <option>Nadia Haddad</option>
-          </select>
-        </div>
-
-        <div class="field field--full">
-          <label class="field__label" for="task-title">Task title<span class="field__req" aria-hidden="true">*</span></label>
-          <input class="input" id="task-title" name="title" type="text" placeholder="e.g. Studio tour booked"
-                 autocomplete="off" required data-validate
-                 data-required-message="Give the task a short, action-focused title.">
-        </div>
-
-        <div class="field">
-          <label class="field__label" for="task-due">Due date<span class="field__req" aria-hidden="true">*</span></label>
-          <input class="input" id="task-due" name="due" type="date" min="2026-10-17"
-                 data-validate data-min-date="2026-10-17" required
-                 data-required-message="Choose a due date so overdue work is visible.">
-          <p class="field__hint">Must fall before the start date of 3 Nov 2026.</p>
-        </div>
-
-        <div class="field">
-          <label class="field__label" for="task-status">Starting status</label>
-          <select class="select" id="task-status" name="status">
-            <option>Not started</option>
-            <option>In progress</option>
-            <option>Blocked</option>
-          </select>
-        </div>
-
-        <div class="field field--full">
-          <label class="field__label" for="task-notes">Description</label>
-          <textarea class="textarea" id="task-notes" name="notes" rows="3"
-                    placeholder="What does done look like for this task?"></textarea>
-        </div>
-      </div>
-    </div>
-
-    <div class="sheet__foot">
-      <p class="text-xs muted">Nothing is saved in this prototype.</p>
-      <div class="sheet__foot-actions">
-        <button class="btn btn--secondary" type="button" data-sheet-close>Cancel</button>
-        <button class="btn btn--primary" type="submit">Add task</button>
-      </div>
-    </div>
-  </form>
-</dialog>
-
-<!-- Template cloned when a task is added, so the checklist component stays in one place -->
-<template id="task-template">
-  <li class="task" data-task-row>
-    <span class="task__check">
-      <input class="task__box" type="checkbox" id="__ID__" data-task>
-    </span>
-    <div class="task__main">
-      <p class="task__title"><label for="__ID__">__TITLE__</label></p>
-      <p class="task__desc">__DESC__</p>
-      <p class="task__meta">
-        <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> __OWNER__</span>
-        <span class="task__meta-item due"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Due __DUE__</span>
-        <span class="task__meta-item dept __DEPT_CLASS__">
-          <span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#__DEPT_ICON__"/></svg></span>
-          __DEPT_LABEL__
-        </span>
-      </p>
-    </div>
-    <div class="task__aside">
-      <span class="badge" data-task-status><span class="badge__dot"></span>Not started</span>
-    </div>
-  </li>
-</template>
+<!-- Add-task sheet, shared with the departure case file -->
+<!-- @include partials/sheet-add-task.html -->
 
 <!-- @include partials/shell-end.html -->
 <!-- @include partials/scripts.html -->

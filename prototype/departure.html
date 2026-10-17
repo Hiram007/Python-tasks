@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Helena Marsh · Departure case DEP-2026-0031 · Casidra</title>
+<meta name="description" content="Offboarding case file: clearance stages, departmental clearance checklists, asset returns, approvals and final clearance summary.">
+<!-- @include partials/head-assets.html -->
+</head>
+<body class="app" data-page="departure">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- @include partials/icons.html -->
+<!-- @include partials/sidebar.html -->
+
+<div class="app__body">
+  <!-- @include partials/topbar.html -->
+
+  <main class="content" id="main">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Dashboard</a>
+      <span class="breadcrumb__sep" aria-hidden="true">/</span>
+      <a href="offboarding.html">Departure cases</a>
+      <span class="breadcrumb__sep" aria-hidden="true">/</span>
+      <span aria-current="page">Helena Marsh</span>
+    </nav>
+
+    <div class="page-head">
+      <div>
+        <div class="row row--wrap">
+          <span class="avatar avatar--xl avatar--rose" aria-hidden="true">HM</span>
+          <div>
+            <h1 class="page-head__title">Helena Marsh</h1>
+            <p class="page-head__sub">Finance Business Partner · Finance · Departure case DEP-2026-0031</p>
+          </div>
+        </div>
+        <div class="chip-row mt-4">
+          <span class="badge badge--warn"><span class="badge__dot"></span>At risk</span>
+          <span class="tag tag--quiet">Last working day Fri 30 Oct 2026</span>
+          <span class="tag tag--quiet">Reason: resignation</span>
+          <span class="tag tag--quiet">Coordinator: Rosa Bell</span>
+          <span class="tag tag--quiet">Manager: Yusuf Adeyemi</span>
+        </div>
+      </div>
+      <div class="page-head__actions">
+        <button class="btn btn--secondary" type="button" data-confirm
+                data-confirm-title="Notify the departments?"
+                data-confirm-sub="In production this sends a clearance reminder to each open action owner."
+                data-confirm-body="HR, IT, Facilities and Communications would receive a reminder for the 7 actions still open on DEP-2026-0031."
+                data-confirm-label="Send reminder"
+                data-confirm-icon="i-bell"
+                data-confirm-toast="Reminder prepared"
+                data-confirm-toast-message="Email delivery is not implemented in this prototype — no message was sent."
+                data-confirm-toast-tone="info">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-bell"/></svg>
+          Remind open actions
+        </button>
+        <button class="btn btn--primary" type="button" data-mark-clear>
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-check-circle"/></svg>
+          Record final clearance
+        </button>
+      </div>
+    </div>
+
+    <!-- Clearance stage strip -->
+    <section class="card" aria-labelledby="stages-title">
+      <div class="card__body card__body--pad">
+        <div class="row row--between row--wrap">
+          <div>
+            <h2 class="card__title" id="stages-title">Clearance stage</h2>
+            <p class="card__sub">Stage 3 of 6 — departmental clearance is in progress, one approval is waiting.</p>
+          </div>
+          <span class="badge badge--warn"><span class="badge__dot"></span>7 actions outstanding</span>
+        </div>
+        <ol class="steps mt-6" aria-label="Departure stages">
+          <li class="step step--done">
+            <span class="step__marker"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg></span>
+            <span class="step__label">Notice received</span>
+          </li>
+          <li class="step step--done">
+            <span class="step__marker"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg></span>
+            <span class="step__label">Authorised</span>
+          </li>
+          <li class="step step--active" aria-current="step">
+            <span class="step__marker">3</span>
+            <span class="step__label">Departmental clearance</span>
+          </li>
+          <li class="step">
+            <span class="step__marker">4</span>
+            <span class="step__label">Asset returns</span>
+          </li>
+          <li class="step">
+            <span class="step__marker">5</span>
+            <span class="step__label">Access removal</span>
+          </li>
+          <li class="step">
+            <span class="step__marker">6</span>
+            <span class="step__label">Final clearance</span>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <div class="grid grid--detail mt-6">
+      <div class="stack-lg">
+        <!-- Case summary -->
+        <section class="card" aria-labelledby="summary-title">
+          <div class="card__head">
+            <div>
+              <h2 class="card__title" id="summary-title">Case summary</h2>
+              <p class="card__sub">Opened 6 Oct 2026 by Rosa Bell · People Operations</p>
+            </div>
+            <span class="tag">Departure</span>
+          </div>
+          <div class="card__body">
+            <div class="meta-grid">
+              <div>
+                <p class="meta__label">Last working day</p>
+                <p class="meta__value">Fri 30 Oct 2026</p>
+              </div>
+              <div>
+                <p class="meta__label">Notice received</p>
+                <p class="meta__value">Thu 2 Oct 2026 · 4 weeks</p>
+              </div>
+              <div>
+                <p class="meta__label">Reason for leaving</p>
+                <p class="meta__value">Resignation — relocation</p>
+              </div>
+              <div>
+                <p class="meta__label">Authorised by</p>
+                <p class="meta__value">Aisha Khan · 2 Oct 2026</p>
+              </div>
+              <div>
+                <p class="meta__label">Line manager</p>
+                <p class="meta__value">Yusuf Adeyemi</p>
+              </div>
+              <div>
+                <p class="meta__label">Coordinator</p>
+                <p class="meta__value">Rosa Bell</p>
+              </div>
+              <div>
+                <p class="meta__label">Clearance template</p>
+                <p class="meta__value">Departure — voluntary (v2)</p>
+              </div>
+              <div>
+                <p class="meta__label">Knowledge handover owner</p>
+                <p class="meta__value">Chen Wei · appointed 14 Oct 2026</p>
+              </div>
+              <div>
+                <p class="meta__label">Assets in custody</p>
+                <p class="meta__value">3 items · £4,120</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Clearance timeline -->
+        <section class="card" aria-labelledby="timeline-title">
+          <div class="card__head">
+            <div>
+              <h2 class="card__title" id="timeline-title">Clearance timeline</h2>
+              <p class="card__sub">
+                Completed actions, actioned work and actions that are merely requested are shown differently.
+              </p>
+            </div>
+            <span class="badge badge--outline">3 of 8 recorded</span>
+          </div>
+          <div class="card__body">
+            <ol class="timeline">
+              <li class="timeline__item timeline__item--done">
+                <div class="timeline__rail">
+                  <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
+                  <span class="timeline__line"></span>
+                </div>
+                <div class="timeline__body">
+                  <p class="timeline__title">Resignation received</p>
+                  <p class="timeline__meta">
+                    <span>2 Oct 2026</span>
+                    <span class="badge badge--ok"><span class="badge__dot"></span>Completed</span>
+                    <span class="dept dept--hr"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-briefcase"/></svg></span> HR</span>
+                  </p>
+                </div>
+              </li>
+              <li class="timeline__item timeline__item--done">
+                <div class="timeline__rail">
+                  <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
+                  <span class="timeline__line"></span>
+                </div>
+                <div class="timeline__body">
+                  <p class="timeline__title">Departure authorised</p>
+                  <p class="timeline__meta">
+                    <span>2 Oct 2026 · Aisha Khan</span>
+                    <span class="badge badge--ok"><span class="badge__dot"></span>Approved</span>
+                    <span class="dept dept--hr"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-briefcase"/></svg></span> HR</span>
+                  </p>
+                </div>
+              </li>
+              <li class="timeline__item timeline__item--done">
+                <div class="timeline__rail">
+                  <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
+                  <span class="timeline__line"></span>
+                </div>
+                <div class="timeline__body">
+                  <p class="timeline__title">Building access card deactivated</p>
+                  <p class="timeline__meta">
+                    <span>20 Oct 2026 · Priya Raman</span>
+                    <span class="badge badge--ok"><span class="badge__dot"></span>Completed</span>
+                    <span class="dept dept--facilities"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-building"/></svg></span> Facilities</span>
+                  </p>
+                </div>
+              </li>
+              <li class="timeline__item timeline__item--active">
+                <div class="timeline__rail">
+                  <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-clock"/></svg></span>
+                  <span class="timeline__line"></span>
+                </div>
+                <div class="timeline__body">
+                  <p class="timeline__title">Departmental clearance actions</p>
+                  <p class="timeline__meta">
+                    <span>Due 30 Oct 2026</span>
+                    <span class="badge badge--info"><span class="badge__dot"></span>4 in progress</span>
+                    <span>HR · IT · Facilities · Communications</span>
+                  </p>
+                </div>
+              </li>
+              <li class="timeline__item timeline__item--requested">
+                <div class="timeline__rail">
+                  <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-more"/></svg></span>
+                  <span class="timeline__line"></span>
+                </div>
+                <div class="timeline__body">
+                  <p class="timeline__title">Email retention exception (14 days)</p>
+                  <p class="timeline__meta">
+                    <span>Requested 14 Oct 2026 by Tomás Ferreira</span>
+                    <span class="badge badge--warn"><span class="badge__dot"></span>Requested — not approved</span>
+                    <a href="approvals.html">Open approval</a>
+                  </p>
+                </div>
+              </li>
+              <li class="timeline__item timeline__item--requested">
+                <div class="timeline__rail">
+                  <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-more"/></svg></span>
+                  <span class="timeline__line"></span>
+                </div>
+                <div class="timeline__body">
+                  <p class="timeline__title">Asset returns</p>
+                  <p class="timeline__meta">
+                    <span>Due 30 Oct 2026</span>
+                    <span class="badge"><span class="badge__dot"></span>Requested — nothing returned yet</span>
+                    <span>IT · 3 items</span>
+                  </p>
+                </div>
+              </li>
+              <li class="timeline__item">
+                <div class="timeline__rail">
+                  <span class="timeline__dot" aria-hidden="true"></span>
+                  <span class="timeline__line"></span>
+                </div>
+                <div class="timeline__body">
+                  <p class="timeline__title">Access removal</p>
+                  <p class="timeline__meta">
+                    <span>Scheduled 30 Oct 2026</span>
+                    <span class="dept dept--it"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-monitor"/></svg></span> IT</span>
+                  </p>
+                </div>
+              </li>
+              <li class="timeline__item">
+                <div class="timeline__rail">
+                  <span class="timeline__dot" aria-hidden="true"></span>
+                  <span class="timeline__line"></span>
+                </div>
+                <div class="timeline__body">
+                  <p class="timeline__title">Final clearance recorded</p>
+                  <p class="timeline__meta">
+                    <span>Blocked until all actions are complete</span>
+                    <span class="dept"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-user"/></svg></span> Coordinator sign-off</span>
+                  </p>
+                </div>
+              </li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- Asset returns -->
+        <section class="card" id="asset-returns" aria-labelledby="assets-title">
+          <div class="card__head">
+            <div>
+              <h2 class="card__title" id="assets-title">Asset returns</h2>
+              <p class="card__sub">Equipment in the leaver's custody, and whether it has actually come back.</p>
+            </div>
+            <span class="badge badge--danger"><span class="badge__dot"></span>3 outstanding</span>
+          </div>
+          <div class="table-wrap">
+            <table class="table table--stack">
+              <caption class="sr-only">Assets held by Helena Marsh and their return state</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Asset</th>
+                  <th scope="col">Identifier</th>
+                  <th scope="col">Return due</th>
+                  <th scope="col">State</th>
+                  <th scope="col" class="table__actions"><span class="sr-only">Actions</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-label="Asset">
+                    <span class="table__primary">Laptop · 14" MacBook Pro</span>
+                    <br><span class="text-xs muted">In Helena's custody · recorded value £2,640</span>
+                  </td>
+                  <td data-label="Identifier"><span class="numeric">AST-1042</span></td>
+                  <td data-label="Return due">30 Oct 2026</td>
+                  <td data-label="State" data-row-status><span class="badge badge--danger"><span class="badge__dot"></span>Return outstanding</span></td>
+                  <td data-label="" class="table__actions">
+                    <button class="btn btn--primary btn--sm" type="button" data-confirm
+                            data-confirm-title="Record the laptop return?"
+                            data-confirm-sub="A returned asset is released from the leaver's custody."
+                            data-confirm-body="AST-1042 · 14&quot; MacBook Pro · serial number C02XK1LJK9. Only IT can receive equipment."
+                            data-confirm-label="Record return"
+                            data-confirm-icon="i-check-circle"
+                            data-confirm-status="Returned 29 Oct 2026|ok"
+                            data-confirm-hide
+                            data-confirm-toast="Return recorded">
+                      Record return
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td data-label="Asset">
+                    <span class="table__primary">Mobile phone · iPhone 16</span>
+                    <br><span class="text-xs muted">Finance SIM to be cancelled on return</span>
+                  </td>
+                  <td data-label="Identifier"><span class="numeric">AST-1043</span></td>
+                  <td data-label="Return due">30 Oct 2026</td>
+                  <td data-label="State" data-row-status><span class="badge badge--danger"><span class="badge__dot"></span>Return outstanding</span></td>
+                  <td data-label="" class="table__actions">
+                    <button class="btn btn--primary btn--sm" type="button" data-confirm
+                            data-confirm-title="Record the phone return?"
+                            data-confirm-sub="The SIM is cancelled when the handset is received."
+                            data-confirm-body="AST-1043 · iPhone 16 · SIM 447700900412. Only IT can receive equipment."
+                            data-confirm-label="Record return"
+                            data-confirm-icon="i-check-circle"
+                            data-confirm-status="Returned 29 Oct 2026|ok"
+                            data-confirm-hide
+                            data-confirm-toast="Return recorded">
+                      Record return
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td data-label="Asset">
+                    <span class="table__primary">Monitor · Dell U2723QE</span>
+                    <br><span class="text-xs muted">Collected by IT at the Leeds office</span>
+                  </td>
+                  <td data-label="Identifier"><span class="numeric">AST-0777</span></td>
+                  <td data-label="Return due">22 Oct 2026</td>
+                  <td data-label="State"><span class="badge badge--ok"><span class="badge__dot"></span>Returned 20 Oct 2026</span></td>
+                  <td data-label="" class="table__actions"><span class="text-xs muted">No action needed</span></td>
+                </tr>
+                <tr>
+                  <td data-label="Asset">
+                    <span class="table__primary">Docking station · CalDigit TS4</span>
+                    <br><span class="text-xs muted">Desk kit still on her desk</span>
+                  </td>
+                  <td data-label="Identifier"><span class="numeric">AST-1180</span></td>
+                  <td data-label="Return due">30 Oct 2026</td>
+                  <td data-label="State" data-row-status><span class="badge badge--warn"><span class="badge__dot"></span>Recall requested</span></td>
+                  <td data-label="" class="table__actions">
+                    <button class="btn btn--primary btn--sm" type="button" data-confirm
+                            data-confirm-title="Record the dock return?"
+                            data-confirm-sub="Requested is not the same as returned."
+                            data-confirm-body="AST-1180 · CalDigit TS4 docking station. Recording the return clears the Facilities desk check."
+                            data-confirm-label="Record return"
+                            data-confirm-icon="i-check-circle"
+                            data-confirm-status="Returned 29 Oct 2026|ok"
+                            data-confirm-hide
+                            data-confirm-toast="Return recorded">
+                      Record return
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td data-label="Asset">
+                    <span class="table__primary">Headset · Jabra Evolve2</span>
+                    <br><span class="text-xs muted">Handed back during the exit interview</span>
+                  </td>
+                  <td data-label="Identifier"><span class="numeric">AST-1204</span></td>
+                  <td data-label="Return due">29 Oct 2026</td>
+                  <td data-label="State"><span class="badge badge--ok"><span class="badge__dot"></span>Returned 29 Oct 2026</span></td>
+                  <td data-label="" class="table__actions"><span class="text-xs muted">No action needed</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card__foot">
+            <p>Returns feed the equipment register and the case clearance score</p>
+            <a class="btn btn--link text-sm" href="equipment.html#handover">Open handover &amp; returns</a>
+          </div>
+        </section>
+
+        <!-- Recent activity -->
+        <section class="card" aria-labelledby="activity-title">
+          <div class="card__head">
+            <div>
+              <h2 class="card__title" id="activity-title">Case activity</h2>
+              <p class="card__sub">Shown for design review — no events are recorded by this prototype.</p>
+            </div>
+            <a class="btn btn--secondary btn--sm" href="audit.html">Full audit trail</a>
+          </div>
+          <div class="list">
+            <article class="list__item">
+              <span class="avatar avatar--sm avatar--amber" aria-hidden="true">TF</span>
+              <div class="list__main">
+                <p class="list__title">Tomás Ferreira requested an email retention exception</p>
+                <p class="list__meta">IT · 14 Oct 2026, 09:32 · awaiting approval from Nadia Haddad</p>
+              </div>
+              <div class="list__aside"><span class="badge badge--warn"><span class="badge__dot"></span>Pending</span></div>
+            </article>
+            <article class="list__item">
+              <span class="avatar avatar--sm avatar--slate" aria-hidden="true">AK</span>
+              <div class="list__main">
+                <p class="list__title">Aisha Khan completed “Final payroll &amp; pension settlement”</p>
+                <p class="list__meta">HR · 16 Oct 2026, 15:08 · evidence attached</p>
+              </div>
+              <div class="list__aside"><span class="badge badge--ok"><span class="badge__dot"></span>Completed</span></div>
+            </article>
+            <article class="list__item">
+              <span class="avatar avatar--sm avatar--rose" aria-hidden="true">PR</span>
+              <div class="list__main">
+                <p class="list__title">Priya Raman deactivated the building access card</p>
+                <p class="list__meta">Facilities · 20 Oct 2026, 11:20</p>
+              </div>
+              <div class="list__aside"><span class="badge badge--ok"><span class="badge__dot"></span>Completed</span></div>
+            </article>
+            <article class="list__item">
+              <span class="avatar avatar--sm avatar--teal" aria-hidden="true">HC</span>
+              <div class="list__main">
+                <p class="list__title">Hannah Cole removed the directory and org chart entry</p>
+                <p class="list__meta">Communications · 15 Oct 2026, 16:04</p>
+              </div>
+              <div class="list__aside"><span class="badge badge--ok"><span class="badge__dot"></span>Completed</span></div>
+            </article>
+          </div>
+        </section>
+      </div>
+
+      <aside class="stack-lg" aria-label="Clearance summary and approvals">
+        <!-- Final clearance summary -->
+        <section class="card" aria-labelledby="clearance-summary-title">
+          <div class="card__head">
+            <div>
+              <h2 class="card__title" id="clearance-summary-title">Final clearance summary</h2>
+              <p class="card__sub">Derived from the four departmental clearance checklists.</p>
+            </div>
+          </div>
+          <div class="card__body">
+            <div class="row">
+              <span class="donut-wrap">
+                <svg class="donut" viewBox="0 0 44 44" role="img" aria-label="46% of clearance tasks complete"
+                     data-overall-donut-svg>
+                  <circle class="donut__track" cx="22" cy="22" r="18"></circle>
+                  <circle class="donut__value" cx="22" cy="22" r="18" data-overall-donut
+                          stroke-dasharray="113.1" stroke-dashoffset="61.1"></circle>
+                </svg>
+                <span class="donut-wrap__label" aria-hidden="true" data-overall-value>46%</span>
+              </span>
+              <div>
+                <p class="strong" data-overall-count>6 of 13 tasks complete</p>
+                <p class="text-xs muted mt-2">7 actions remain. Final clearance cannot be recorded until they are complete.</p>
+              </div>
+            </div>
+
+            <div class="progress mt-6">
+              <span class="progress__track"><span class="progress__fill progress__fill--warn" style="width:46%" data-overall-fill></span></span>
+            </div>
+
+            <ul class="stack-sm mt-6">
+              <li class="row row--between">
+                <span class="dept dept--hr"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-briefcase"/></svg></span> HR</span>
+                <span class="pill-count" data-dept-count="hr">2 / 4</span>
+              </li>
+              <li class="row row--between">
+                <span class="dept dept--it"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-monitor"/></svg></span> IT</span>
+                <span class="pill-count" data-dept-count="it">1 / 4</span>
+              </li>
+              <li class="row row--between">
+                <span class="dept dept--facilities"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-building"/></svg></span> Facilities</span>
+                <span class="pill-count" data-dept-count="facilities">2 / 3</span>
+              </li>
+              <li class="row row--between">
+                <span class="dept dept--comms"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-megaphone"/></svg></span> Communications</span>
+                <span class="pill-count" data-dept-count="comms">1 / 2</span>
+              </li>
+            </ul>
+
+            <div class="alert alert--warn mt-6" role="note">
+              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg>
+              <div>
+                <p class="alert__title">Outstanding before final clearance</p>
+                <p>7 clearance actions · 3 assets still in custody · 1 approval pending</p>
+              </div>
+            </div>
+          </div>
+          <div class="card__foot">
+            <p>Recording clearance closes the case and stops access checks</p>
+            <a class="btn btn--link text-sm" href="#clearance">Review clearance actions</a>
+          </div>
+        </section>
+
+        <!-- Approval status -->
+        <section class="card" aria-labelledby="approvals-title">
+          <div class="card__head">
+            <div>
+              <h2 class="card__title" id="approvals-title">Approval status</h2>
+              <p class="card__sub">Decisions this case depends on.</p>
+            </div>
+          </div>
+          <div class="list">
+            <article class="list__item" data-decision-item>
+              <span class="notif__icon notif__icon--ok" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-check-circle"/></svg></span>
+              <div class="list__main">
+                <p class="list__title">Departure authorisation</p>
+                <p class="list__meta">Approved 2 Oct 2026 by Aisha Khan · notice period confirmed</p>
+              </div>
+            </article>
+            <article class="list__item" data-decision-item>
+              <span class="notif__icon notif__icon--warn" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-shield"/></svg></span>
+              <div class="list__main">
+                <p class="list__title">Email retention exception</p>
+                <p class="list__meta">Requested 14 Oct 2026 by Tomás Ferreira · waiting 3 days</p>
+              </div>
+              <div class="list__aside" data-decision-target>
+                <div class="row">
+                  <button class="btn btn--primary btn--sm" type="button" data-decision="approve"
+                          data-request-title="Email retention exception"
+                          data-request-meta="Helena Marsh · IT · mailbox kept 14 days">Approve</button>
+                </div>
+              </div>
+            </article>
+            <article class="list__item">
+              <span class="notif__icon notif__icon--warn" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-monitor"/></svg></span>
+              <div class="list__main">
+                <p class="list__title">Access removal scheduled</p>
+                <p class="list__meta">Awaiting IT confirmation that the deactivation window is set</p>
+              </div>
+              <div class="list__aside"><span class="badge badge--warn"><span class="badge__dot"></span>Pending</span></div>
+            </article>
+          </div>
+          <div class="card__foot">
+            <p>1 decision outstanding</p>
+            <a class="btn btn--link text-sm" href="approvals.html">Open approval inbox</a>
+          </div>
+        </section>
+
+        <!-- Clearance documents -->
+        <section class="card" aria-labelledby="documents-title">
+          <div class="card__head">
+            <div>
+              <h2 class="card__title" id="documents-title">Clearance evidence</h2>
+              <p class="card__sub">Signed handover, equipment receipts and the exit interview record.</p>
+            </div>
+            <span class="badge badge--outline">2 files</span>
+          </div>
+          <div class="list">
+            <article class="list__item">
+              <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-file"/></svg></span>
+              <div class="list__main">
+                <p class="list__title">Handover pack (draft)</p>
+                <p class="list__meta">PDF · 16 Oct 2026 · Finance and HR</p>
+              </div>
+            </article>
+            <article class="list__item">
+              <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-file"/></svg></span>
+              <div class="list__main">
+                <p class="list__title">Monitor return receipt</p>
+                <p class="list__meta">PDF · 20 Oct 2026 · IT</p>
+              </div>
+            </article>
+          </div>
+          <div class="card__foot">
+            <p class="text-xs muted">Uploads and storage are not part of this prototype</p>
+          </div>
+        </section>
+      </aside>
+    </div>
+
+    <!-- Departmental clearance checklists -->
+    <section id="clearance" class="mt-6" aria-labelledby="clearance-title">
+      <div class="section-head">
+        <div>
+          <h2 class="section-head__title" id="clearance-title">Departmental clearance actions</h2>
+          <p class="text-sm muted mt-2">
+            Each department owns its clearance actions. Ticking a box records completion in the browser only;
+            in production each action carries evidence and an audit entry.
+          </p>
+        </div>
+        <div class="legend" role="list">
+          <span class="legend__item"><span class="legend__swatch" style="background:var(--ok-600)"></span> Complete</span>
+          <span class="legend__item"><span class="legend__swatch" style="background:var(--info-600)"></span> In progress</span>
+          <span class="legend__item"><span class="legend__swatch" style="background:var(--warn-600)"></span> Awaiting approval / requested</span>
+          <span class="legend__item"><span class="legend__swatch" style="background:var(--border-strong)"></span> Not started</span>
+        </div>
+      </div>
+
+      <div class="stack-lg">
+        <!-- HR clearance -->
+        <section class="card" data-checklist data-department="hr" aria-labelledby="hr-clear-title">
+          <div class="section-head" style="border-bottom:1px solid var(--border); background:var(--surface-2);">
+            <span class="section-head__icon section-head__icon--hr" aria-hidden="true"><svg class="icon"><use href="#i-briefcase"/></svg></span>
+            <div class="section-head__text">
+              <h3 class="card__title" id="hr-clear-title">Human Resources clearance</h3>
+              <p class="section-head__sub">Owner Aisha Khan · <span data-section-count>2 of 4 complete</span></p>
+            </div>
+            <div class="section-head__progress">
+              <span class="progress">
+                <span class="progress__track"><span class="progress__fill" style="width:50%" data-section-fill></span></span>
+                <span class="progress__value" data-section-value>50%</span>
+              </span>
+              <button class="btn btn--secondary btn--sm" type="button" data-sheet-open="sheet-add-task"
+                      data-department="hr" aria-haspopup="dialog">
+                <svg class="icon icon--sm" aria-hidden="true"><use href="#i-plus"/></svg>
+                Add action
+              </button>
+            </div>
+          </div>
+          <ul class="checklist">
+            <li class="task is-done" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="hrc-notice" data-task checked>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="hrc-notice">Resignation letter &amp; notice period confirmed</label></p>
+                <p class="task__desc">Four weeks' notice accepted; last working day agreed with the manager.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Aisha Khan</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Completed 2 Oct 2026</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge badge--ok" data-task-status><span class="badge__dot"></span>Complete</span>
+              </div>
+            </li>
+            <li class="task is-done" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="hrc-payroll" data-task checked>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="hrc-payroll">Final payroll &amp; pension settlement prepared</label></p>
+                <p class="task__desc">Accrued leave, pension and benefits calculated for the November run.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Aisha Khan</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check-circle"/></svg> Approved 16 Oct 2026</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge badge--ok" data-task-status><span class="badge__dot"></span>Complete</span>
+              </div>
+            </li>
+            <li class="task" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="hrc-handover" data-task>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="hrc-handover">Knowledge transfer document signed off</label></p>
+                <p class="task__desc">Customer accounts and supplier reviews handed to Chen Wei.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Rosa Bell</span>
+                  <span class="task__meta-item due"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Due 29 Oct 2026</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge badge--info" data-task-status><span class="badge__dot"></span>In progress</span>
+              </div>
+            </li>
+            <li class="task" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="hrc-exit" data-task>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="hrc-exit">Exit interview completed</label></p>
+                <p class="task__desc">Structured exit interview, with retention insight returned to People.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Rosa Bell</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Due 29 Oct 2026</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg> Restricted outcome</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge" data-task-status><span class="badge__dot"></span>Not started</span>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <!-- IT clearance -->
+        <section class="card" data-checklist data-department="it" aria-labelledby="it-clear-title">
+          <div class="section-head" style="border-bottom:1px solid var(--border); background:var(--surface-2);">
+            <span class="section-head__icon section-head__icon--it" aria-hidden="true"><svg class="icon"><use href="#i-monitor"/></svg></span>
+            <div class="section-head__text">
+              <h3 class="card__title" id="it-clear-title">IT clearance</h3>
+              <p class="section-head__sub">Owner Tomás Ferreira · <span data-section-count>1 of 4 complete</span></p>
+            </div>
+            <div class="section-head__progress">
+              <span class="progress">
+                <span class="progress__track"><span class="progress__fill" style="width:25%" data-section-fill></span></span>
+                <span class="progress__value" data-section-value>25%</span>
+              </span>
+              <button class="btn btn--secondary btn--sm" type="button" data-sheet-open="sheet-add-task"
+                      data-department="it" aria-haspopup="dialog">
+                <svg class="icon icon--sm" aria-hidden="true"><use href="#i-plus"/></svg>
+                Add action
+              </button>
+            </div>
+          </div>
+          <ul class="checklist">
+            <li class="task is-done" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="itc-inventory" data-task checked>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="itc-inventory">Equipment inventory confirmed</label></p>
+                <p class="task__desc">Three items recorded as held: laptop, phone and docking station.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Tomás Ferreira</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Completed 14 Oct 2026</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge badge--ok" data-task-status><span class="badge__dot"></span>Complete</span>
+              </div>
+            </li>
+            <li class="task" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="itc-email" data-task>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="itc-email">Accounts &amp; email deactivation</label></p>
+                <p class="task__desc">Entra ID account disabled at 17:00 on the last working day; mailbox kept 14 days.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Tomás Ferreira</span>
+                  <span class="task__meta-item due due--soon"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Due 30 Oct 2026</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg> Awaiting approval</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge badge--warn" data-task-status><span class="badge__dot"></span>Awaiting approval</span>
+                <button class="btn btn--primary btn--sm" type="button" data-task-approve>Approve</button>
+                <button class="btn btn--ghost btn--sm" type="button" data-task-request-changes>Request changes</button>
+              </div>
+            </li>
+            <li class="task" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="itc-access" data-task>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="itc-access">Access groups, VPN &amp; privileged accounts removed</label></p>
+                <p class="task__desc">Finance reporting group, VPN profile and two production roles revoked.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Tomás Ferreira</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Due 30 Oct 2026</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge" data-task-status><span class="badge__dot"></span>Not started</span>
+              </div>
+            </li>
+            <li class="task" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="itc-mfa" data-task>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="itc-mfa">MFA device &amp; hardware key recovered</label></p>
+                <p class="task__desc">Authenticator removed from the tenant and the physical key returned to IT.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Tomás Ferreira</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Due 30 Oct 2026</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge" data-task-status><span class="badge__dot"></span>Not started</span>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <!-- Facilities clearance -->
+        <section class="card" data-checklist data-department="facilities" aria-labelledby="fac-clear-title">
+          <div class="section-head" style="border-bottom:1px solid var(--border); background:var(--surface-2);">
+            <span class="section-head__icon section-head__icon--facilities" aria-hidden="true"><svg class="icon"><use href="#i-building"/></svg></span>
+            <div class="section-head__text">
+              <h3 class="card__title" id="fac-clear-title">Facilities clearance</h3>
+              <p class="section-head__sub">Owner Priya Raman · <span data-section-count>2 of 3 complete</span></p>
+            </div>
+            <div class="section-head__progress">
+              <span class="progress">
+                <span class="progress__track"><span class="progress__fill" style="width:67%" data-section-fill></span></span>
+                <span class="progress__value" data-section-value>67%</span>
+              </span>
+              <button class="btn btn--secondary btn--sm" type="button" data-sheet-open="sheet-add-task"
+                      data-department="facilities" aria-haspopup="dialog">
+                <svg class="icon icon--sm" aria-hidden="true"><use href="#i-plus"/></svg>
+                Add action
+              </button>
+            </div>
+          </div>
+          <ul class="checklist">
+            <li class="task is-done" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="facc-card" data-task checked>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="facc-card">Building access card deactivated</label></p>
+                <p class="task__desc">Card cancelled in the access system; the physical pass is still on site.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Priya Raman</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Completed 20 Oct 2026</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge badge--ok" data-task-status><span class="badge__dot"></span>Complete</span>
+              </div>
+            </li>
+            <li class="task is-done" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="facc-desk" data-task checked>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="facc-desk">Desk &amp; locker cleared</label></p>
+                <p class="task__desc">Leeds floor 2 workstation released and the locker emptied.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Priya Raman</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Completed 22 Oct 2026</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge badge--ok" data-task-status><span class="badge__dot"></span>Complete</span>
+              </div>
+            </li>
+            <li class="task" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="facc-parking" data-task>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="facc-parking">Parking permit returned</label></p>
+                <p class="task__desc">Leeds car park permit to be returned before the last working day.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Priya Raman</span>
+                  <span class="task__meta-item due due--soon"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Due 28 Oct 2026</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge badge--info" data-task-status><span class="badge__dot"></span>In progress</span>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <!-- Communications clearance -->
+        <section class="card" data-checklist data-department="comms" aria-labelledby="comms-clear-title">
+          <div class="section-head" style="border-bottom:1px solid var(--border); background:var(--surface-2);">
+            <span class="section-head__icon section-head__icon--comms" aria-hidden="true"><svg class="icon"><use href="#i-megaphone"/></svg></span>
+            <div class="section-head__text">
+              <h3 class="card__title" id="comms-clear-title">Communications clearance</h3>
+              <p class="section-head__sub">Owner Hannah Cole · <span data-section-count>1 of 2 complete</span></p>
+            </div>
+            <div class="section-head__progress">
+              <span class="progress">
+                <span class="progress__track"><span class="progress__fill" style="width:50%" data-section-fill></span></span>
+                <span class="progress__value" data-section-value>50%</span>
+              </span>
+              <button class="btn btn--secondary btn--sm" type="button" data-sheet-open="sheet-add-task"
+                      data-department="comms" aria-haspopup="dialog">
+                <svg class="icon icon--sm" aria-hidden="true"><use href="#i-plus"/></svg>
+                Add action
+              </button>
+            </div>
+          </div>
+          <ul class="checklist">
+            <li class="task is-done" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="comc-directory" data-task checked>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="comc-directory">Directory &amp; org chart entry removed</label></p>
+                <p class="task__desc">Profile unpublished and reporting line closed in the staff directory.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Hannah Cole</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Completed 15 Oct 2026</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge badge--ok" data-task-status><span class="badge__dot"></span>Complete</span>
+              </div>
+            </li>
+            <li class="task" data-task-row>
+              <span class="task__check">
+                <input class="task__box" type="checkbox" id="comc-farewell" data-task>
+              </span>
+              <div class="task__main">
+                <p class="task__title"><label for="comc-farewell">Farewell announcement published</label></p>
+                <p class="task__desc">Team announcement scheduled for the last working day, on approval.</p>
+                <p class="task__meta">
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Hannah Cole</span>
+                  <span class="task__meta-item due"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg> Due 29 Oct 2026</span>
+                  <span class="task__meta-item"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg> Awaiting approval</span>
+                </p>
+              </div>
+              <div class="task__aside">
+                <span class="badge badge--warn" data-task-status><span class="badge__dot"></span>Awaiting approval</span>
+                <button class="btn btn--primary btn--sm" type="button" data-task-approve>Approve</button>
+                <button class="btn btn--ghost btn--sm" type="button" data-task-request-changes>Request changes</button>
+              </div>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-foot">
+    <p>Casidra Arrivals &amp; Departures · departure case DEP-2026-0031</p>
+    <p>Fictional sample data · UI only · approvals, access removal and email delivery are not implemented</p>
+  </footer>
+</div>
+
+<!-- @include partials/shell-end.html -->
+<!-- @include partials/sheet-add-task.html -->
+<!-- @include partials/scripts.html -->
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!-- Initiate-departure sheet (`new-departure` handler in app.js). -->
+<dialog class="sheet" id="sheet-new-departure" aria-labelledby="sheet-new-departure-title">
+  <form class="sheet__form" data-sheet-form="new-departure" novalidate>
+    <div class="sheet__head">
+      <div>
+        <h2 class="sheet__title" id="sheet-new-departure-title">Initiate a departure</h2>
+        <p class="sheet__sub">Opens an offboarding case, assigns the clearance checklists and notifies the departments.</p>
+      </div>
+      <button class="icon-btn" type="button" data-sheet-close aria-label="Close">
+        <svg class="icon" aria-hidden="true"><use href="#i-close"/></svg>
+      </button>
+    </div>
+
+    <div class="sheet__body">
+      <div class="alert alert--danger" data-form-summary hidden role="alert">
+        <svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg>
+        <div>
+          <p class="alert__title">Check the highlighted fields</p>
+          <p data-form-summary-text>Some fields need attention before you can continue.</p>
+        </div>
+      </div>
+
+      <div class="alert alert--info mt-4" role="note">
+        <svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg>
+        <div>
+          <p class="alert__title">Authorisation is required before clearance starts</p>
+          <p>Departure cases are only opened once the leaver's manager or an HR administrator has authorised the
+            notice. Approval is enforced by the Django backend, not by this screen.</p>
+        </div>
+      </div>
+
+      <div class="form-grid mt-4">
+        <div class="field field--full">
+          <label class="field__label" for="departure-employee">Employee<span class="field__req" aria-hidden="true">*</span></label>
+          <select class="select" id="departure-employee" name="employee" required data-validate
+                  data-required-message="Select the employee this departure belongs to.">
+            <option value="">Select an employee</option>
+            <option>Helena Marsh · Finance Business Partner</option>
+            <option>Raj Patel · Senior Data Engineer</option>
+            <option>Chiara Rossi · Office Manager</option>
+            <option>Michael Osei · Warehouse Operative</option>
+            <option>Yuki Tanaka · Marketing Executive</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="departure-last-day">Last working day<span class="field__req" aria-hidden="true">*</span></label>
+          <input class="input" id="departure-last-day" name="last-day" type="date" min="2026-10-17"
+                 data-validate data-min-date="2026-10-17" required
+                 data-required-message="Set the last working day — clearance deadlines derive from it.">
+          <p class="field__hint">Departure actions are scheduled backwards from this date.</p>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="departure-reason">Reason<span class="field__req" aria-hidden="true">*</span></label>
+          <select class="select" id="departure-reason" name="reason" required data-validate
+                  data-required-message="Record the reason so the correct checklist is applied.">
+            <option value="">Select a reason</option>
+            <option>Resignation</option>
+            <option>End of fixed-term contract</option>
+            <option>Retirement</option>
+            <option>Internal transfer</option>
+            <option>Dismissal</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="departure-notice">Notice received<span class="field__req" aria-hidden="true">*</span></label>
+          <input class="input" id="departure-notice" name="notice" type="date" min="2026-10-01"
+                 data-validate data-min-date="2026-10-01" required
+                 data-required-message="Record the date notice was received.">
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="departure-manager">Authorising manager</label>
+          <select class="select" id="departure-manager" name="manager">
+            <option>Yusuf Adeyemi · Finance Director</option>
+            <option>Daniel Okonkwo · Engineering Manager</option>
+            <option>Owen Blackwood · Operations Manager</option>
+            <option>Hannah Cole · Internal Communications Manager</option>
+            <option>Ines Duarte · Chief Operating Officer</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="departure-template">Clearance template<span class="field__req" aria-hidden="true">*</span></label>
+          <select class="select" id="departure-template" name="template" required data-validate
+                  data-required-message="Choose the clearance template that matches the reason.">
+            <option value="">Select a template</option>
+            <option>Departure — voluntary (v2, active)</option>
+            <option>Departure — end of fixed-term contract (v1, active)</option>
+            <option>Departure — retirement (v2, draft)</option>
+          </select>
+        </div>
+
+        <div class="field field--full">
+          <label class="field__label" for="departure-notes">Handover notes</label>
+          <textarea class="textarea" id="departure-notes" name="notes" rows="3"
+                    placeholder="Knowledge transfer, key contacts and anything the departments must know."></textarea>
+          <p class="field__hint">Visible on the case file to HR, IT, Facilities, Communications and the line manager.</p>
+        </div>
+      </div>
+
+      <div class="field mt-4">
+        <label class="check">
+          <input type="checkbox" checked required data-validate
+                 data-required-message="Confirm the notice has been authorised before opening the case.">
+          <span class="check__text">
+            I confirm the notice was authorised by the manager named above and that the leaver has been informed
+            that departmental clearance will start.
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <div class="sheet__foot">
+      <p class="text-xs muted">Nothing is saved in this prototype.</p>
+      <div class="sheet__foot-actions">
+        <button class="btn btn--secondary" type="button" data-sheet-close>Cancel</button>
+        <button class="btn btn--primary" type="submit">Open departure case</button>
+      </div>
+    </div>
+  </form>
+</dialog>

@@ -473,6 +473,317 @@
         <p class="text-xs muted">Approvals and completions are shown for design review — nothing is saved.</p>
       </div>
     </section>
+
+    <!-- 2: my tasks and the departmental queues -->
+    <section class="mt-6" id="my-tasks" aria-labelledby="my-tasks-title">
+      <div class="section-head">
+        <div>
+          <h2 class="section-head__title" id="my-tasks-title">My tasks</h2>
+          <p class="text-sm muted mt-2">
+            Only the actions assigned to the signed-in user, in the department they belong to. Use the role
+            switcher to see the queue each department owner works from.
+          </p>
+        </div>
+        <span class="tag tag--quiet">Role-scoped</span>
+      </div>
+
+      <div class="card" data-roles="it" aria-labelledby="queue-it-title">
+        <div class="section-head" style="border-bottom:1px solid var(--border); background:var(--surface-2);">
+          <span class="section-head__icon section-head__icon--it" aria-hidden="true"><svg class="icon"><use href="#i-monitor"/></svg></span>
+          <div class="section-head__text">
+            <h3 class="card__title" id="queue-it-title">My tasks · IT</h3>
+            <p class="section-head__sub">Tomás Ferreira · IT Services Lead · 5 open actions</p>
+          </div>
+        </div>
+        <div class="list">
+          <article class="list__item">
+            <span class="notif__icon notif__icon--warn" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-monitor"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">Laptop build · Daniel Whitfield</p>
+              <p class="list__meta">ONB-2026-0142 · due 17 Oct 2026 · overdue · image pending the security baseline</p>
+            </div>
+            <div class="list__aside" data-row-status><span class="badge badge--danger"><span class="badge__dot"></span>Overdue</span></div>
+          </article>
+          <article class="list__item">
+            <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-shield"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">Access groups &amp; VPN · Amara Okafor</p>
+              <p class="list__meta">ONB-2026-0148 · due 24 Oct 2026 · blocked on manager approval</p>
+            </div>
+            <div class="list__aside" data-row-status><span class="badge badge--danger"><span class="badge__dot"></span>Blocked</span></div>
+          </article>
+          <article class="list__item">
+            <span class="notif__icon notif__icon--warn" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-shield"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">Accounts &amp; email deactivation · Helena Marsh</p>
+              <p class="list__meta">DEP-2026-0031 · due 30 Oct 2026 · awaiting approval</p>
+            </div>
+            <div class="list__aside" data-row-status><span class="badge badge--warn"><span class="badge__dot"></span>Awaiting approval</span></div>
+          </article>
+          <article class="list__item">
+            <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-check-list"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">Asset returns · Helena Marsh</p>
+              <p class="list__meta">DEP-2026-0031 · 3 items outstanding · laptop, phone and docking station</p>
+            </div>
+            <div class="list__aside" data-row-status><span class="badge badge--warn"><span class="badge__dot"></span>Outstanding</span></div>
+          </article>
+        </div>
+        <div class="card__foot">
+          <p>Complete an action here or on the case file</p>
+          <a class="btn btn--link text-sm" href="departure.html#clearance">Open the departure case</a>
+        </div>
+      </div>
+
+      <div class="card mt-4" data-roles="hr" aria-labelledby="queue-hr-title">
+        <div class="section-head" style="border-bottom:1px solid var(--border); background:var(--surface-2);">
+          <span class="section-head__icon section-head__icon--hr" aria-hidden="true"><svg class="icon"><use href="#i-briefcase"/></svg></span>
+          <div class="section-head__text">
+            <h3 class="card__title" id="queue-hr-title">My tasks · HR</h3>
+            <p class="section-head__sub">Rosa Bell · People Operations Lead · 4 open actions</p>
+          </div>
+        </div>
+        <div class="list">
+          <article class="list__item">
+            <span class="notif__icon notif__icon--warn" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-alert"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">Payroll enrolment · Chen Wei</p>
+              <p class="list__meta">ONB-2026-0155 · missed the October payroll cut-off · 3 days overdue</p>
+            </div>
+            <div class="list__aside" data-row-status><span class="badge badge--danger"><span class="badge__dot"></span>Overdue</span></div>
+          </article>
+          <article class="list__item">
+            <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-file"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">Knowledge transfer sign-off · Helena Marsh</p>
+              <p class="list__meta">DEP-2026-0031 · due 29 Oct 2026 · successor Chen Wei appointed</p>
+            </div>
+            <div class="list__aside" data-row-status><span class="badge badge--info"><span class="badge__dot"></span>In progress</span></div>
+          </article>
+          <article class="list__item">
+            <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-calendar"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">Exit interview · Helena Marsh</p>
+              <p class="list__meta">DEP-2026-0031 · scheduled 29 Oct 2026 · restricted outcome</p>
+            </div>
+            <div class="list__aside" data-row-status><span class="badge"><span class="badge__dot"></span>Not started</span></div>
+          </article>
+          <article class="list__item">
+            <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-users"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">Coordinator assignment · Fatima Zahra</p>
+              <p class="list__meta">Record incomplete · starts 1 Dec 2026 · case cannot be opened</p>
+            </div>
+            <div class="list__aside" data-row-status><span class="badge badge--warn"><span class="badge__dot"></span>Needs data</span></div>
+          </article>
+        </div>
+        <div class="card__foot">
+          <p>HR owns onboarding administration and departure clearance</p>
+          <a class="btn btn--link text-sm" href="directory.html">Employee directory</a>
+        </div>
+      </div>
+
+      <div class="card mt-4" data-roles="facilities" aria-labelledby="queue-facilities-title">
+        <div class="section-head" style="border-bottom:1px solid var(--border); background:var(--surface-2);">
+          <span class="section-head__icon section-head__icon--facilities" aria-hidden="true"><svg class="icon"><use href="#i-building"/></svg></span>
+          <div class="section-head__text">
+            <h3 class="card__title" id="queue-facilities-title">My tasks · Facilities</h3>
+            <p class="section-head__sub">Priya Raman · Facilities Coordinator · 4 open actions</p>
+          </div>
+        </div>
+        <div class="list">
+          <article class="list__item">
+            <span class="notif__icon notif__icon--warn" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-alert"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">Building access card · Sofia Almeida</p>
+              <p class="list__meta">ONB-2026-0152 · print queue delayed at the Lisbon office · 1 day overdue</p>
+            </div>
+            <div class="list__aside" data-row-status><span class="badge badge--danger"><span class="badge__dot"></span>Overdue</span></div>
+          </article>
+          <article class="list__item">
+            <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-building"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">Parking permit return · Helena Marsh</p>
+              <p class="list__meta">DEP-2026-0031 · due 28 Oct 2026 · Leeds car park</p>
+            </div>
+            <div class="list__aside" data-row-status><span class="badge badge--info"><span class="badge__dot"></span>In progress</span></div>
+          </article>
+          <article class="list__item">
+            <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-tasks"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">Vehicle &amp; radio return · Michael Osei</p>
+              <p class="list__meta">DEP-2026-0036 · Sheffield depot · recall requested</p>
+            </div>
+            <div class="list__aside" data-row-status><span class="badge badge--warn"><span class="badge__dot"></span>Requested</span></div>
+          </article>
+          <article class="list__item">
+            <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-monitor"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">Write-off request · desk phone AST-0455</p>
+              <p class="list__meta">Awaiting approval · beyond economic repair</p>
+            </div>
+            <div class="list__aside" data-row-status><span class="badge badge--warn"><span class="badge__dot"></span>Awaiting approval</span></div>
+          </article>
+        </div>
+        <div class="card__foot">
+          <p>Facilities owns desks, buildings, passes and vehicles</p>
+          <a class="btn btn--link text-sm" href="equipment.html#handover">Handover &amp; returns</a>
+        </div>
+      </div>
+
+      <div class="card mt-4" data-roles="comms" aria-labelledby="queue-comms-title">
+        <div class="section-head" style="border-bottom:1px solid var(--border); background:var(--surface-2);">
+          <span class="section-head__icon section-head__icon--comms" aria-hidden="true"><svg class="icon"><use href="#i-megaphone"/></svg></span>
+          <div class="section-head__text">
+            <h3 class="card__title" id="queue-comms-title">My tasks · Communications</h3>
+            <p class="section-head__sub">Hannah Cole · Internal Communications · 3 open actions</p>
+          </div>
+        </div>
+        <div class="list">
+          <article class="list__item">
+            <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-megaphone"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">Welcome announcement · Amara Okafor</p>
+              <p class="list__meta">ONB-2026-0148 · draft approved, scheduled for the first Monday</p>
+            </div>
+            <div class="list__aside" data-row-status><span class="badge badge--info"><span class="badge__dot"></span>In progress</span></div>
+          </article>
+          <article class="list__item">
+            <span class="notif__icon notif__icon--brand" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-file"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">First-week newsletter feature</p>
+              <p class="list__meta">ONB-2026-0148 · due 31 Oct 2026</p>
+            </div>
+            <div class="list__aside" data-row-status><span class="badge"><span class="badge__dot"></span>Not started</span></div>
+          </article>
+          <article class="list__item">
+            <span class="notif__icon notif__icon--warn" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-shield"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">Farewell announcement · Helena Marsh</p>
+              <p class="list__meta">DEP-2026-0031 · due 29 Oct 2026 · awaiting HR approval</p>
+            </div>
+            <div class="list__aside" data-row-status><span class="badge badge--warn"><span class="badge__dot"></span>Awaiting approval</span></div>
+          </article>
+        </div>
+        <div class="card__foot">
+          <p>Communications publishes announcements and keeps the directory current</p>
+          <a class="btn btn--link text-sm" href="directory.html">Staff directory</a>
+        </div>
+      </div>
+
+      <div class="card mt-4" data-roles-except="it,hr,facilities,comms" aria-labelledby="queue-other-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="queue-other-title">Departmental queues</h2>
+            <p class="card__sub">
+              Work is routed to HR, IT, Facilities and Communications. A personal queue appears here for the
+              departmental task owner role — switch role to review one.
+            </p>
+          </div>
+          <a class="btn btn--secondary btn--sm" href="#department-queues">Queue summary</a>
+        </div>
+        <div class="card__body">
+          <div class="chip-row">
+            <span class="tag tag--quiet"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-briefcase"/></svg> HR · 14 accounts · 9 open</span>
+            <span class="tag tag--quiet"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-monitor"/></svg> IT · 8 open</span>
+            <span class="tag tag--quiet"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-building"/></svg> Facilities · 6 open</span>
+            <span class="tag tag--quiet"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-megaphone"/></svg> Communications · 4 open</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3: department queue summary -->
+    <section class="card mt-6" id="department-queues" aria-labelledby="department-queues-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="department-queues-title">Department queues</h2>
+          <p class="card__sub">Workload across every department, including work nobody has claimed yet.</p>
+        </div>
+        <a class="btn btn--secondary btn--sm" href="reports.html">Performance report</a>
+      </div>
+
+      <div class="table-wrap">
+        <table class="table table--stack">
+          <caption class="sr-only">Open work by department, with overdue, blocked and unassigned counts</caption>
+          <thead>
+            <tr>
+              <th scope="col">Department</th>
+              <th scope="col">Open actions</th>
+              <th scope="col">Overdue</th>
+              <th scope="col">Blocked</th>
+              <th scope="col">Unassigned</th>
+              <th scope="col">Oldest due date</th>
+              <th scope="col">Lead</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="Department">
+                <span class="dept dept--hr"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-briefcase"/></svg></span> HR</span>
+              </td>
+              <td data-label="Open actions" class="table__num">9</td>
+              <td data-label="Overdue"><span class="badge badge--danger"><span class="badge__dot"></span>2</span></td>
+              <td data-label="Blocked"><span class="badge badge--warn"><span class="badge__dot"></span>1</span></td>
+              <td data-label="Unassigned" class="table__num">1</td>
+              <td data-label="Oldest due date"><span class="due due--overdue"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg> 14 Oct 2026</span></td>
+              <td data-label="Lead">Aisha Khan</td>
+            </tr>
+            <tr>
+              <td data-label="Department">
+                <span class="dept dept--it"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-monitor"/></svg></span> IT</span>
+              </td>
+              <td data-label="Open actions" class="table__num">8</td>
+              <td data-label="Overdue"><span class="badge badge--danger"><span class="badge__dot"></span>2</span></td>
+              <td data-label="Blocked"><span class="badge badge--warn"><span class="badge__dot"></span>1</span></td>
+              <td data-label="Unassigned" class="table__num">0</td>
+              <td data-label="Oldest due date"><span class="due due--overdue"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg> 17 Oct 2026</span></td>
+              <td data-label="Lead">Tomás Ferreira</td>
+            </tr>
+            <tr>
+              <td data-label="Department">
+                <span class="dept dept--facilities"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-building"/></svg></span> Facilities</span>
+              </td>
+              <td data-label="Open actions" class="table__num">6</td>
+              <td data-label="Overdue"><span class="badge badge--danger"><span class="badge__dot"></span>1</span></td>
+              <td data-label="Blocked"><span class="badge badge--warn"><span class="badge__dot"></span>0</span></td>
+              <td data-label="Unassigned" class="table__num">2</td>
+              <td data-label="Oldest due date"><span class="due due--overdue"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg> 16 Oct 2026</span></td>
+              <td data-label="Lead">Priya Raman</td>
+            </tr>
+            <tr>
+              <td data-label="Department">
+                <span class="dept dept--comms"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-megaphone"/></svg></span> Communications</span>
+              </td>
+              <td data-label="Open actions" class="table__num">4</td>
+              <td data-label="Overdue"><span class="badge badge--warn"><span class="badge__dot"></span>0</span></td>
+              <td data-label="Blocked"><span class="badge badge--warn"><span class="badge__dot"></span>0</span></td>
+              <td data-label="Unassigned" class="table__num">0</td>
+              <td data-label="Oldest due date">27 Oct 2026</td>
+              <td data-label="Lead">Hannah Cole</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card__body">
+        <div class="alert alert--warn" role="note">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg>
+          <div>
+            <p class="alert__title">3 actions have nobody assigned</p>
+            <p>
+              Unassigned work escalates to the departmental lead after two days. Assignment is a departmental
+              decision — HR administrators can reassign, but the department owns the outcome.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card__foot">
+        <p>Counts cover both arrivals and departures</p>
+        <p class="text-xs muted">Task ownership is audited when it changes</p>
+      </div>
+    </section>
   </main>
 
   <footer class="page-foot">

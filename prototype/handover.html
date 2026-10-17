@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Django handover · Casidra</title>
+<meta name="description" content="Implementation handover: pages and navigation created, reusable components, workflows demonstrated, simulated behaviour, outstanding items and the path into the existing Django application.">
+<!-- @include partials/head-assets.html -->
+</head>
+<body class="app" data-page="handover">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- @include partials/icons.html -->
+<!-- @include partials/sidebar.html -->
+
+<div class="app__body">
+  <!-- @include partials/topbar.html -->
+
+  <main class="content" id="main">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Dashboard</a>
+      <span class="breadcrumb__sep" aria-hidden="true">/</span>
+      <span aria-current="page">Django handover</span>
+    </nav>
+
+    <div class="page-head">
+      <div>
+        <p class="eyebrow">Workspace</p>
+        <h1 class="page-head__title">Implementation handover</h1>
+        <p class="page-head__sub">
+          What this design contains, how it maps onto the existing Casidra Django application, which parts are
+          simulated, and what is still outstanding.
+        </p>
+      </div>
+      <div class="page-head__actions">
+        <a class="btn btn--secondary" href="design-system.html">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-palette"/></svg>
+          Design system
+        </a>
+      </div>
+    </div>
+
+    <div class="notice" role="note">
+      <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
+      <p>
+        <strong>Design prototype, not a replacement system.</strong> The existing Django application remains the
+        production system of record. This prototype exists to agree the interface and the workflow states before
+        they are implemented in Python, and it never calls Base44 services at runtime.
+      </p>
+    </div>
+
+    <!-- 1: navigation and pages -->
+    <section class="card mt-6" id="pages" aria-labelledby="pages-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="pages-title">Navigation &amp; pages created</h2>
+          <p class="card__sub">
+            Flat HTML files with no build step. Each maps onto one Django template; the suggested names follow the
+            existing application's conventions.
+          </p>
+        </div>
+        <span class="badge badge--outline">18 pages</span>
+      </div>
+
+      <div class="table-wrap">
+        <table class="table table--stack">
+          <caption class="sr-only">Pages in the prototype with their route, purpose and suggested Django template</caption>
+          <thead>
+            <tr>
+              <th scope="col">Module</th>
+              <th scope="col">Page</th>
+              <th scope="col">File</th>
+              <th scope="col">Suggested template</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="Module">A · Executive &amp; operational dashboard</td>
+              <td data-label="Page"><a href="index.html">Dashboard</a> — role-specific panels for management, HR, departmental owners, managers and employees</td>
+              <td data-label="File"><span class="code">index.html</span></td>
+              <td data-label="Suggested template"><span class="code">a_d/dashboard.html</span></td>
+            </tr>
+            <tr>
+              <td data-label="Module">B · Directory &amp; profiles</td>
+              <td data-label="Page"><a href="directory.html">Employee directory</a> · <a href="employee.html">Lifecycle record</a> with restricted information separated</td>
+              <td data-label="File"><span class="code">directory.html</span> · <span class="code">employee.html</span></td>
+              <td data-label="Suggested template"><span class="code">people/directory.html</span> · <span class="code">people/employee_detail.html</span></td>
+            </tr>
+            <tr>
+              <td data-label="Module">C · Onboarding</td>
+              <td data-label="Page"><a href="cases.html">Case list</a> · <a href="case.html">Case file</a> with stage strip, timeline and four departmental checklists</td>
+              <td data-label="File"><span class="code">cases.html</span> · <span class="code">case.html</span></td>
+              <td data-label="Suggested template"><span class="code">arrivals/case_list.html</span> · <span class="code">arrivals/case_detail.html</span></td>
+            </tr>
+            <tr>
+              <td data-label="Module">D · Offboarding</td>
+              <td data-label="Page"><a href="offboarding.html">Departure cases</a> · <a href="departure.html">Clearance case file</a> with asset returns and final clearance summary</td>
+              <td data-label="File"><span class="code">offboarding.html</span> · <span class="code">departure.html</span></td>
+              <td data-label="Suggested template"><span class="code">departures/case_list.html</span> · <span class="code">departures/case_detail.html</span></td>
+            </tr>
+            <tr>
+              <td data-label="Module">E · Workflow administration</td>
+              <td data-label="Page"><a href="workflows.html">Template library</a>, task sequence, transitions, escalation and versioning</td>
+              <td data-label="File"><span class="code">workflows.html</span></td>
+              <td data-label="Suggested template"><span class="code">workflow/template_list.html</span> · <span class="code">workflow/template_detail.html</span></td>
+            </tr>
+            <tr>
+              <td data-label="Module">F · Departmental task management</td>
+              <td data-label="Page"><a href="tasks.html">Task queues</a> — my tasks and the four departmental queues, task queue table</td>
+              <td data-label="File"><span class="code">tasks.html</span></td>
+              <td data-label="Suggested template"><span class="code">tasks/queue.html</span></td>
+            </tr>
+            <tr>
+              <td data-label="Module">G · Approvals</td>
+              <td data-label="Page"><a href="approvals.html">Approval inbox</a> — pending queue, decision detail, delegation and approval history</td>
+              <td data-label="File"><span class="code">approvals.html</span></td>
+              <td data-label="Suggested template"><span class="code">approvals/inbox.html</span> · <span class="code">approvals/detail.html</span></td>
+            </tr>
+            <tr>
+              <td data-label="Module">H · Equipment &amp; assets</td>
+              <td data-label="Page"><a href="equipment.html">Asset register</a>, handover and returns, asset history</td>
+              <td data-label="File"><span class="code">equipment.html</span></td>
+              <td data-label="Suggested template"><span class="code">assets/register.html</span> · <span class="code">assets/handover.html</span></td>
+            </tr>
+            <tr>
+              <td data-label="Module">I · Notifications</td>
+              <td data-label="Page"><a href="notifications.html">Notification centre</a>, preferences and administrative delivery configuration</td>
+              <td data-label="File"><span class="code">notifications.html</span></td>
+              <td data-label="Suggested template"><span class="code">notifications/centre.html</span> · <span class="code">notifications/settings.html</span></td>
+            </tr>
+            <tr>
+              <td data-label="Module">J · Audit &amp; reporting</td>
+              <td data-label="Page"><a href="reports.html">Reports &amp; exports</a> · <a href="audit.html">Audit trail</a></td>
+              <td data-label="File"><span class="code">reports.html</span> · <span class="code">audit.html</span></td>
+              <td data-label="Suggested template"><span class="code">reporting/index.html</span> · <span class="code">reporting/audit.html</span></td>
+            </tr>
+            <tr>
+              <td data-label="Module">K · User &amp; system administration</td>
+              <td data-label="Page"><a href="admin-users.html">Users &amp; roles</a> · <a href="admin-system.html">System settings</a> with Entra ID and MFA</td>
+              <td data-label="File"><span class="code">admin-users.html</span> · <span class="code">admin-system.html</span></td>
+              <td data-label="Suggested template"><span class="code">accounts/users.html</span> · <span class="code">core/settings.html</span></td>
+            </tr>
+            <tr>
+              <td data-label="Module">Reference</td>
+              <td data-label="Page"><a href="design-system.html">Design system</a> (tokens, components, accessibility) · handover notes</td>
+              <td data-label="File"><span class="code">design-system.html</span> · <span class="code">handover.html</span></td>
+              <td data-label="Suggested template"><span class="code">docs/*</span> — internal reference, not shipped</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card__foot">
+        <p>Navigation is one partial with role gating: <span class="code">partials/sidebar.html</span></p>
+        <p class="text-xs muted">In Django this becomes one <span class="code">{% include "partials/sidebar.html" %}</span> with <span class="code">{% if perms %}</span> per group</p>
+      </div>
+    </section>
+
+    <!-- 2: components -->
+    <section class="card mt-6" id="components" aria-labelledby="components-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="components-title">Reusable design components</h2>
+          <p class="card__sub">
+            Every screen is assembled from these. Class names are the contract; the same markup becomes a Django
+            template partial or an inclusion tag.
+          </p>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="table table--stack">
+          <caption class="sr-only">Reusable components with their classes and behaviour</caption>
+          <thead>
+            <tr>
+              <th scope="col">Component</th>
+              <th scope="col">Classes / data attributes</th>
+              <th scope="col">Used by</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="Component"><span class="table__primary">App shell</span><br><span class="text-xs muted">Sidebar, topbar, drawer, content column</span></td>
+              <td data-label="Classes / data attributes"><span class="code">.app .sidebar .topbar .content</span></td>
+              <td data-label="Used by">Every page</td>
+            </tr>
+            <tr>
+              <td data-label="Component"><span class="table__primary">Role switcher</span><br><span class="text-xs muted">Changes navigation, dashboard panels and actions for review</span></td>
+              <td data-label="Classes / data attributes"><span class="code">[data-role-set]</span> · <span class="code">[data-roles]</span> · <span class="code">[data-roles-except]</span></td>
+              <td data-label="Used by">All pages (topbar partial)</td>
+            </tr>
+            <tr>
+              <td data-label="Component"><span class="table__primary">KPI card</span><br><span class="text-xs muted">Figure, trend, sparkline and drill-through link</span></td>
+              <td data-label="Classes / data attributes"><span class="code">.kpi .kpi__value .kpi__meta .delta .kpi__spark</span></td>
+              <td data-label="Used by">Dashboard, directory, departures, approvals, equipment, reports</td>
+            </tr>
+            <tr>
+              <td data-label="Component"><span class="table__primary">Filterable table</span><br><span class="text-xs muted">Search, selects, urgency tabs, count line, stacked on small screens</span></td>
+              <td data-label="Classes / data attributes"><span class="code">[data-table-region]</span> · <span class="code">.table--stack</span> · <span class="code">.segmented</span></td>
+              <td data-label="Used by">Every list screen</td>
+            </tr>
+            <tr>
+              <td data-label="Component"><span class="table__primary">Status badges</span><br><span class="text-xs muted">Pending, in progress, overdue, blocked, rejected, approved, completed</span></td>
+              <td data-label="Classes / data attributes"><span class="code">.badge--ok|warn|danger|info|brand|outline</span></td>
+              <td data-label="Used by">Everywhere · status text always accompanies the colour</td>
+            </tr>
+            <tr>
+              <td data-label="Component"><span class="table__primary">Checklist section</span><br><span class="text-xs muted">Department block with per-section and case-level progress</span></td>
+              <td data-label="Classes / data attributes"><span class="code">[data-checklist]</span> · <span class="code">[data-task-row]</span> · <span class="code">.checklist .task</span></td>
+              <td data-label="Used by">Onboarding case, departure clearance</td>
+            </tr>
+            <tr>
+              <td data-label="Component"><span class="table__primary">Stage strip &amp; timeline</span><br><span class="text-xs muted">Lifecycle stages; completed, active, requested and blocked states</span></td>
+              <td data-label="Classes / data attributes"><span class="code">.steps .step--done|--active</span> · <span class="code">.timeline__item--done|--active|--requested|--blocked</span></td>
+              <td data-label="Used by">Case files, lifecycle record, asset history, audit</td>
+            </tr>
+            <tr>
+              <td data-label="Component"><span class="table__primary">Confirmation dialog</span><br><span class="text-xs muted">Approve, reject, return, destructive and guarded actions; mandatory comment support</span></td>
+              <td data-label="Classes / data attributes"><span class="code">[data-confirm]</span> · <span class="code">[data-decision]</span> · <span class="code">window.casidraPrototype.confirm()</span></td>
+              <td data-label="Used by">Every consequential action</td>
+            </tr>
+            <tr>
+              <td data-label="Component"><span class="table__primary">Sheets (forms)</span><br><span class="text-xs muted">New onboarding case, new departure, add checklist task, with validation</span></td>
+              <td data-label="Classes / data attributes"><span class="code">.sheet</span> · <span class="code">[data-sheet-open]</span> · <span class="code">[data-validate]</span></td>
+              <td data-label="Used by">Cases, case files, departures</td>
+            </tr>
+            <tr>
+              <td data-label="Component"><span class="table__primary">Charts</span><br><span class="text-xs muted">Volume bars and horizontal comparison bars, no charting dependency</span></td>
+              <td data-label="Classes / data attributes"><span class="code">.bars .bars__col</span> · <span class="code">.hbars .hbar</span></td>
+              <td data-label="Used by">Reports, directory, departures, equipment</td>
+            </tr>
+            <tr>
+              <td data-label="Component"><span class="table__primary">Configuration rows</span><br><span class="text-xs muted">Settings lists with permission and configuration indicators</span></td>
+              <td data-label="Classes / data attributes"><span class="code">.def-list .def-row</span> · <span class="code">.permit--yes|--no|--limited</span></td>
+              <td data-label="Used by">Workflow admin, users &amp; roles, system settings</td>
+            </tr>
+            <tr>
+              <td data-label="Component"><span class="table__primary">States</span><br><span class="text-xs muted">Empty, loading (skeleton-free: server-rendered), validation feedback and errors</span></td>
+              <td data-label="Classes / data attributes"><span class="code">.empty</span> · <span class="code">.alert--info|--warn|--danger</span> · <span class="code">.field.has-error</span></td>
+              <td data-label="Used by">Every list and form</td>
+            </tr>
+            <tr>
+              <td data-label="Component"><span class="table__primary">"Design only" marker</span><br><span class="text-xs muted">Marks an integration that is described but not configured</span></td>
+              <td data-label="Classes / data attributes"><span class="code">.simulated</span></td>
+              <td data-label="Used by">Notifications, system settings, identity mapping</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card__foot">
+        <p>Tokens live in one file: <span class="code">assets/css/tokens.css</span></p>
+        <a class="btn btn--link text-sm" href="design-system.html">See every component in use</a>
+      </div>
+    </section>
+
+    <!-- 3: workflows demonstrated -->
+    <section class="card mt-6" id="workflows" aria-labelledby="workflows-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="workflows-title">Workflows demonstrated</h2>
+          <p class="card__sub">Each journey below is walked end to end in the prototype with fictional data.</p>
+        </div>
+        <span class="badge badge--outline">10 journeys</span>
+      </div>
+
+      <div class="card__body">
+        <ol class="timeline">
+          <li class="timeline__item timeline__item--done">
+            <div class="timeline__rail"><span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span><span class="timeline__line"></span></div>
+            <div class="timeline__body">
+              <p class="timeline__title">1 · Create an onboarding case</p>
+              <p class="timeline__meta"><span>Dashboard → <em>New onboarding case</em> → validation → confirmation</span><span>19 checklist actions assigned to four departments</span></p>
+            </div>
+          </li>
+          <li class="timeline__item timeline__item--done">
+            <div class="timeline__rail"><span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span><span class="timeline__line"></span></div>
+            <div class="timeline__body">
+              <p class="timeline__title">2 · See the departmental tasks the case created</p>
+              <p class="timeline__meta"><span>Case file → HR, IT, Facilities and Communications checklists with owners and due dates</span></p>
+            </div>
+          </li>
+          <li class="timeline__item timeline__item--done">
+            <div class="timeline__rail"><span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span><span class="timeline__line"></span></div>
+            <div class="timeline__body">
+              <p class="timeline__title">3 · Departmental owners work their tasks</p>
+              <p class="timeline__meta"><span>Task queues → my tasks and department views → complete, reassign or flag blocked</span></p>
+            </div>
+          </li>
+          <li class="timeline__item timeline__item--done">
+            <div class="timeline__rail"><span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span><span class="timeline__line"></span></div>
+            <div class="timeline__body">
+              <p class="timeline__title">4 · An approver records a decision</p>
+              <p class="timeline__meta"><span>Approval inbox → approve, reject or return → mandatory comment on rejection → history entry</span></p>
+            </div>
+          </li>
+          <li class="timeline__item timeline__item--done">
+            <div class="timeline__rail"><span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span><span class="timeline__line"></span></div>
+            <div class="timeline__body">
+              <p class="timeline__title">5 · The dashboard reflects the new state</p>
+              <p class="timeline__meta"><span>Checklist progress, readiness percentage, outstanding actions and overdue counts all move</span></p>
+            </div>
+          </li>
+          <li class="timeline__item timeline__item--active">
+            <div class="timeline__rail"><span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-door"/></svg></span><span class="timeline__line"></span></div>
+            <div class="timeline__body">
+              <p class="timeline__title">6 · Initiate a departure</p>
+              <p class="timeline__meta"><span>Departure cases → <em>Initiate departure</em> → reason, last working day, clearance template, authorisation</span></p>
+            </div>
+          </li>
+          <li class="timeline__item timeline__item--done">
+            <div class="timeline__rail"><span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span><span class="timeline__line"></span></div>
+            <div class="timeline__body">
+              <p class="timeline__title">7 · Track clearance actions and asset returns</p>
+              <p class="timeline__meta"><span>Clearance checklists, return checklist, assets that are requested versus actually received</span></p>
+            </div>
+          </li>
+          <li class="timeline__item timeline__item--active">
+            <div class="timeline__rail"><span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-clock"/></svg></span><span class="timeline__line"></span></div>
+            <div class="timeline__body">
+              <p class="timeline__title">8 · Review final clearance</p>
+              <p class="timeline__meta"><span>Final clearance summary → blocked while actions and assets are open → guarded confirmation</span></p>
+            </div>
+          </li>
+          <li class="timeline__item timeline__item--done">
+            <div class="timeline__rail"><span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span><span class="timeline__line"></span></div>
+            <div class="timeline__body">
+              <p class="timeline__title">9 · Manager reviews performance and overdue work</p>
+              <p class="timeline__meta"><span>Reports → case volume, departmental on-time completion, overdue actions, asset clearance</span></p>
+            </div>
+          </li>
+          <li class="timeline__item timeline__item--done">
+            <div class="timeline__rail"><span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span><span class="timeline__line"></span></div>
+            <div class="timeline__body">
+              <p class="timeline__title">10 · Administrator reviews configuration and audit</p>
+              <p class="timeline__meta"><span>Templates, transitions, escalation, notification status, identity settings and the admin audit trail</span></p>
+            </div>
+          </li>
+        </ol>
+      </div>
+      <div class="card__foot">
+        <p>Start at the dashboard and move left to right through the navigation</p>
+        <a class="btn btn--link text-sm" href="index.html">Open the dashboard</a>
+      </div>
+    </section>
+
+    <!-- 4: role views -->
+    <section class="card mt-6" id="roles" aria-labelledby="roles-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="roles-title">Role-based views</h2>
+          <p class="card__sub">
+            Use the role switcher in the top bar to review each user group. Switching changes the signed-in
+            sample user, the navigation, the dashboard panels and the actions offered.
+          </p>
+        </div>
+        <span class="badge badge--warn"><span class="badge__dot"></span>Visibility only</span>
+      </div>
+      <div class="table-wrap">
+        <table class="table table--stack">
+          <caption class="sr-only">Roles in the prototype and what each sees</caption>
+          <thead>
+            <tr>
+              <th scope="col">Role</th>
+              <th scope="col">Sample user</th>
+              <th scope="col">Designed experience</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="Role"><span class="table__primary">Executive / management</span></td>
+              <td data-label="Sample user">Ines Duarte</td>
+              <td data-label="Designed experience">Portfolio KPIs, exceptions, reports and audit summaries. No case editing.</td>
+            </tr>
+            <tr>
+              <td data-label="Role"><span class="table__primary">HR administrator</span></td>
+              <td data-label="Sample user">Rosa Bell</td>
+              <td data-label="Designed experience">Full arrivals and departures, people records, approvals, workflow templates, restricted information.</td>
+            </tr>
+            <tr>
+              <td data-label="Role"><span class="table__primary">IT task owner</span></td>
+              <td data-label="Sample user">Tomás Ferreira</td>
+              <td data-label="Designed experience">IT queue, accounts and access recovery, equipment, return recording.</td>
+            </tr>
+            <tr>
+              <td data-label="Role"><span class="table__primary">Facilities task owner</span></td>
+              <td data-label="Sample user">Priya Raman</td>
+              <td data-label="Designed experience">Facilities queue, desks and buildings, access passes, vehicle returns.</td>
+            </tr>
+            <tr>
+              <td data-label="Role"><span class="table__primary">Communications task owner</span></td>
+              <td data-label="Sample user">Hannah Cole</td>
+              <td data-label="Designed experience">Announcements, directory and org chart changes, publication approvals.</td>
+            </tr>
+            <tr>
+              <td data-label="Role"><span class="table__primary">Line manager / approver</span></td>
+              <td data-label="Sample user">Nadia Haddad</td>
+              <td data-label="Designed experience">Their team's arrivals and departures, the approvals waiting on them, no organisation-wide data.</td>
+            </tr>
+            <tr>
+              <td data-label="Role"><span class="table__primary">Employee / coordinator</span></td>
+              <td data-label="Sample user">Amara Okafor</td>
+              <td data-label="Designed experience">Own record and the requests they raised. No departmental queues.</td>
+            </tr>
+            <tr>
+              <td data-label="Role"><span class="table__primary">System administrator</span></td>
+              <td data-label="Sample user">Dev Sharma</td>
+              <td data-label="Designed experience">Users, roles, workflow templates, identity and system settings, notification configuration, audit trail.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card__foot">
+        <p>Hiding a control in the interface is never a security control</p>
+        <p class="text-xs muted">Authorisation must be enforced by the Django backend on every request</p>
+      </div>
+    </section>
+
+    <!-- 5: simulated vs connected -->
+    <div class="grid grid--halves mt-6">
+      <section class="card" aria-labelledby="simulated-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="simulated-title">Simulated in this prototype</h2>
+            <p class="card__sub">Works in the browser, but nothing is stored, sent or enforced.</p>
+          </div>
+          <span class="simulated">Not implemented</span>
+        </div>
+        <div class="card__body">
+          <ul class="stack-sm text-sm">
+            <li><strong class="strong">No persistence.</strong> Every form, approval, completion and clearance is held in the page and lost on reload.</li>
+            <li><strong class="strong">No authentication.</strong> The role switcher changes what is shown; there is no sign-in, session or identity check.</li>
+            <li><strong class="strong">No authorisation.</strong> Approval buttons and restricted panels are hidden or shown by role for review only.</li>
+            <li><strong class="strong">No email or notifications.</strong> Reminders, digests and delivery history are described, never sent.</li>
+            <li><strong class="strong">No Microsoft 365 or Entra ID.</strong> SSO, MFA, group mapping and provisioning are shown as unconfigured.</li>
+            <li><strong class="strong">No file storage.</strong> Document and evidence uploads are represented by empty states.</li>
+            <li><strong class="strong">No scheduling.</strong> Due-date reminders, overdue escalations and weekly summaries are not scheduled.</li>
+            <li><strong class="strong">No exports.</strong> Export controls explain the permission and confidentiality rules; no file is generated.</li>
+            <li><strong class="strong">No audit writes.</strong> Audit entries illustrate the intended record, but no event is stored.</li>
+            <li><strong class="strong">No database.</strong> The prototype has no database, cache or queue of any kind.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="connected-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="connected-title">Real and working in the prototype</h2>
+            <p class="card__sub">Behaviour the Django implementation must reproduce exactly.</p>
+          </div>
+          <span class="badge badge--ok"><span class="badge__dot"></span>Working here</span>
+        </div>
+        <div class="card__body">
+          <ul class="stack-sm text-sm">
+            <li><strong class="strong">Table filtering, sorting tabs and empty states</strong> across every list screen.</li>
+            <li><strong class="strong">Form validation</strong> with inline errors, an error summary and accessible error wiring.</li>
+            <li><strong class="strong">Checklist progress arithmetic</strong> — section and case-level progress derived from the rendered rows.</li>
+            <li><strong class="strong">Confirmation dialogs</strong> for approvals, rejections, returns, destructive actions and guarded actions.</li>
+            <li><strong class="strong">Mandatory comments</strong> on rejection, return and administrative change decisions.</li>
+            <li><strong class="strong">Guard rules</strong> — a case cannot be marked ready while tasks are open, and clearance cannot be recorded while actions and assets are outstanding.</li>
+            <li><strong class="strong">Role-based visibility</strong> of navigation, dashboard panels and restricted information panels.</li>
+            <li><strong class="strong">Responsive layout</strong> from wide desktop down to tablet and phone, with tables stacking and the sidebar becoming a drawer.</li>
+            <li><strong class="strong">Accessibility basics</strong> — skip link, visible labels, focus handling, <span class="code">aria-current</span>, status text beside every status colour.</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+
+    <!-- 6: outstanding -->
+    <section class="card mt-6" id="outstanding" aria-labelledby="outstanding-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="outstanding-title">Still outstanding</h2>
+          <p class="card__sub">Known gaps in this design, in the order they should be resolved.</p>
+        </div>
+        <span class="badge badge--warn"><span class="badge__dot"></span>9 items</span>
+      </div>
+
+      <div class="table-wrap">
+        <table class="table table--stack">
+          <caption class="sr-only">Outstanding design work</caption>
+          <thead>
+            <tr>
+              <th scope="col">Item</th>
+              <th scope="col">Why it matters</th>
+              <th scope="col">Suggested next step</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="Item"><span class="table__primary">Create-case and initiate-departure forms are not persisted</span></td>
+              <td data-label="Why it matters">The two entry points into the whole system</td>
+              <td data-label="Suggested next step">Agree the Django form fields and wire the sheets to the real endpoints first</td>
+            </tr>
+            <tr>
+              <td data-label="Item"><span class="table__primary">Edit and reassignment flows</span></td>
+              <td data-label="Why it matters">Owners need to change due dates, owners and priorities in bulk</td>
+              <td data-label="Suggested next step">Design a row-level edit pattern and a bulk reassignment bar for the task queues</td>
+            </tr>
+            <tr>
+              <td data-label="Item"><span class="table__primary">Evidence and document handling</span></td>
+              <td data-label="Why it matters">Completion evidence and signed documents are referenced but never shown</td>
+              <td data-label="Suggested next step">Agree storage, virus scanning and retention, then design the upload and preview states</td>
+            </tr>
+            <tr>
+              <td data-label="Item"><span class="table__primary">Loading and long-running states</span></td>
+              <td data-label="Why it matters">Server-rendered pages still block on report generation and provisioning</td>
+              <td data-label="Suggested next step">Design progress and partial-result states for report runs and bulk actions</td>
+            </tr>
+            <tr>
+              <td data-label="Item"><span class="table__primary">Error and offline states</span></td>
+              <td data-label="Why it matters">Internal network interruptions must not look like data loss</td>
+              <td data-label="Suggested next step">Design the 500, permission-denied and stale-session screens</td>
+            </tr>
+            <tr>
+              <td data-label="Item"><span class="table__primary">Employee self-service screens</span></td>
+              <td data-label="Why it matters">Employees see only a placeholder view today</td>
+              <td data-label="Suggested next step">Design the leaver's own checklist, equipment return confirmation and policy acknowledgement</td>
+            </tr>
+            <tr>
+              <td data-label="Item"><span class="table__primary">Bulk and scheduled actions</span></td>
+              <td data-label="Why it matters">Month-end clearance and reporting are currently one task at a time</td>
+              <td data-label="Suggested next step">Design bulk status change, bulk reassignment and scheduled export patterns</td>
+            </tr>
+            <tr>
+              <td data-label="Item"><span class="table__primary">Mobile parity for case files</span></td>
+              <td data-label="Why it matters">Facilities and warehouse staff work from phones</td>
+              <td data-label="Suggested next step">Validate the checklist and asset-return flows on a phone-sized viewport and add a sticky action bar</td>
+            </tr>
+            <tr>
+              <td data-label="Item"><span class="table__primary">Onboarding, help and support content</span></td>
+              <td data-label="Why it matters">First-time users need in-product guidance per role</td>
+              <td data-label="Suggested next step">Write short role-specific guidance and design the contextual help pattern</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 7: preview and implementation -->
+    <section class="card mt-6" id="implementation" aria-labelledby="implementation-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="implementation-title">Preview and implementation notes</h2>
+          <p class="card__sub">Where the prototype lives, how to hand it over, and how it maps onto Django.</p>
+        </div>
+      </div>
+      <div class="card__body">
+        <div class="meta-grid">
+          <div>
+            <p class="meta__label">Preview</p>
+            <p class="meta__value">The running prototype on port 3000, live-reloading as files change</p>
+          </div>
+          <div>
+            <p class="meta__label">Source</p>
+            <p class="meta__value">The <span class="code">prototype/</span> directory of this repository — plain HTML, CSS and vanilla JavaScript</p>
+          </div>
+          <div>
+            <p class="meta__label">Handover options</p>
+            <p class="meta__value">Copy the folder into the Django project as templates and static files, or open a pull request to review it before merging</p>
+          </div>
+          <div>
+            <p class="meta__label">Runtime dependency on Base44</p>
+            <p class="meta__value">None — no SDK, no backend call and no external request anywhere in the prototype</p>
+          </div>
+          <div>
+            <p class="meta__label">Local dev server</p>
+            <p class="meta__value"><span class="code">prototype/server.py</span> — standard library only; expands include comments and reloads on change</p>
+          </div>
+          <div>
+            <p class="meta__label">Automated tests</p>
+            <p class="meta__value">None in this repository; the prototype was verified by hand and with browser automation</p>
+          </div>
+        </div>
+
+        <p class="meta__label mt-6">Template inheritance</p>
+        <p class="text-sm muted mt-2">
+          Each page currently repeats the shell around a single include. That maps one-to-one onto a Django base
+          template, so the conversion is mechanical:
+        </p>
+        <span class="code-block">{% comment %} prototype/partials/sidebar.html becomes one include {% endcomment %}
+{% extends "a_d/base.html" %}
+{% block title %}Departure cases{% endblock %}
+{% block body_class %}app{% endblock %}
+
+{% block content %}
+  {% include "partials/sidebar.html" %}   {# role-gated navigation groups #}
+  {% include "partials/topbar.html" %}     {# role switcher becomes the signed-in user #}
+
+  {% for case in departure_cases %}
+    {% include "partials/case_row.html" with case=case %}
+  {% empty %}
+    {% include "partials/empty_state.html" with noun="departure cases" %}
+  {% endfor %}
+{% endblock %}</span>
+
+        <div class="alert alert--info mt-6" role="note">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
+          <div>
+            <p class="alert__title">Implementation order that keeps the production system safe</p>
+            <p>
+              Port the design system first (tokens and components as static files), then the read-only screens
+              (dashboard, directory, case lists and case files, reports), then replace the prototype's
+              show-and-tell interactions with real POST endpoints one journey at a time. Every screen in this
+              prototype is a rendering of data the Django application already owns; nothing here requires a new
+              data model to be invented.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="card__foot">
+        <p>Verification: every page renders, navigation matches the role, and the core journeys were exercised in a browser</p>
+        <a class="btn btn--link text-sm" href="design-system.html">Design system reference</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-foot">
+    <p>Casidra Arrivals &amp; Departures · implementation handover</p>
+    <p>Design prototype · fictional sample data · nothing is stored, sent or enforced</p>
+  </footer>
+</div>
+
+<!-- @include partials/shell-end.html -->
+<!-- @include partials/scripts.html -->
+</body>
+</html>

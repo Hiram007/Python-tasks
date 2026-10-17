@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Approval inbox · Casidra</title>
+<meta name="description" content="Unified approval inbox: pending decisions, evidence, requester and approver separation, and approval history.">
+<!-- @include partials/head-assets.html -->
+</head>
+<body class="app" data-page="approvals">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- @include partials/icons.html -->
+<!-- @include partials/sidebar.html -->
+
+<div class="app__body">
+  <!-- @include partials/topbar.html -->
+
+  <main class="content" id="main">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Dashboard</a>
+      <span class="breadcrumb__sep" aria-hidden="true">/</span>
+      <span aria-current="page">Approval inbox</span>
+    </nav>
+
+    <div class="page-head">
+      <div>
+        <p class="eyebrow">Authorisation</p>
+        <h1 class="page-head__title">Approval inbox</h1>
+        <p class="page-head__sub">
+          Every decision waiting on an authorised approver, across onboarding, departures, equipment and
+          workflow administration. Approve, reject or return for correction — rejections and returns require a
+          reason.
+        </p>
+      </div>
+      <div class="page-head__actions">
+        <button class="btn btn--secondary" type="button"
+                data-toast="Digest queued"
+                data-toast-message="Email digests are not implemented in this prototype."
+                data-toast-tone="info">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-mail"/></svg>
+          Email digest
+        </button>
+        <button class="btn btn--secondary" type="button"
+                data-toast="Inbox refreshed" data-toast-message="Decisions are held in the browser only — nothing is saved.">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-refresh"/></svg>
+          Refresh
+        </button>
+      </div>
+    </div>
+
+    <div class="notice" role="note">
+      <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
+      <p>
+        <strong>Design prototype.</strong> Decisions update this page only. In production the Django backend
+        records the decision, the comment, the approver and the timestamp, and enforces who may approve which
+        request — an approval button hidden for one role is not a security control.
+      </p>
+    </div>
+
+    <!-- 1: approval figures -->
+    <section class="grid grid--kpis mt-6" aria-label="Approval figures">
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Awaiting a decision</p>
+            <p class="kpi__value tnum mt-2">9</p>
+          </div>
+          <span class="kpi__icon kpi__icon--warn" aria-hidden="true"><svg class="icon"><use href="#i-inbox"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--flat">4 block a case from closing</span></div>
+        <p class="text-xs muted mt-4">3 sit with HR sign-off, 2 with IT</p>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Oldest request</p>
+            <p class="kpi__value mt-2">5 days</p>
+          </div>
+          <span class="kpi__icon kpi__icon--danger" aria-hidden="true"><svg class="icon"><use href="#i-clock"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--down">Departure authorisation · Helena Marsh</span></div>
+        <a class="kpi__link" href="#queue">
+          Review the oldest
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Decided this month</p>
+            <p class="kpi__value tnum mt-2">34</p>
+          </div>
+          <span class="kpi__icon kpi__icon--ok" aria-hidden="true"><svg class="icon"><use href="#i-check-circle"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--up">Median decision time 9 hours</span></div>
+        <a class="kpi__link" href="#history">
+          Approval history
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Rejected or returned</p>
+            <p class="kpi__value tnum mt-2">6</p>
+          </div>
+          <span class="kpi__icon" aria-hidden="true"><svg class="icon"><use href="#i-refresh"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--flat">4 returned for correction</span><span>2 rejected</span></div>
+        <p class="text-xs muted mt-4">Every rejection and return carries a mandatory comment</p>
+      </article>
+    </section>
+
+    <!-- 2: pending queue -->
+    <section class="card mt-6" id="queue" data-table-region data-count-noun="requests" aria-labelledby="queue-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="queue-title">Pending decisions</h2>
+          <p class="card__sub">Oldest first. Decide inside the row; consequential decisions ask for confirmation.</p>
+        </div>
+        <div class="segmented" role="tablist" aria-label="Filter requests by state" data-table-group>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="true" data-group-value="all">
+            All waiting <span class="segmented__count">9</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="overdue">
+            Waiting 4+ days <span class="segmented__count">2</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="recent">
+            Under 4 days <span class="segmented__count">7</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="toolbar__search input-wrap">
+          <label class="sr-only" for="appr-search">Search requests by person, case or requester</label>
+          <svg class="icon icon--sm input-wrap__icon" aria-hidden="true"><use href="#i-search"/></svg>
+          <input class="input input--icon" id="appr-search" type="search" placeholder="Search person, case or requester…"
+                 autocomplete="off" data-table-search>
+        </div>
+        <div class="input-wrap">
+          <label class="sr-only" for="appr-type">Request type</label>
+          <select class="select" id="appr-type" data-table-filter="type">
+            <option value="">All request types</option>
+            <option value="access">Access &amp; accounts</option>
+            <option value="equipment">Equipment &amp; spend</option>
+            <option value="departure">Departure authorisation</option>
+            <option value="comms">Communications</option>
+            <option value="workflow">Workflow configuration</option>
+            <option value="report">Report export</option>
+          </select>
+        </div>
+        <div class="input-wrap">
+          <label class="sr-only" for="appr-dept">Department</label>
+          <select class="select" id="appr-dept" data-table-filter="department">
+            <option value="">All departments</option>
+            <option value="hr">HR</option>
+            <option value="it">IT</option>
+            <option value="facilities">Facilities</option>
+            <option value="comms">Communications</option>
+            <option value="management">Management</option>
+          </select>
+        </div>
+        <button class="btn btn--ghost btn--sm" type="button" data-table-reset>
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-refresh"/></svg>
+          Reset
+        </button>
+      </div>
+
+      <div class="table-wrap" data-table-wrap>
+        <table class="table table--stack">
+          <caption class="sr-only">Requests awaiting a decision</caption>
+          <thead>
+            <tr>
+              <th scope="col">Request</th>
+              <th scope="col">Person / case</th>
+              <th scope="col">Department</th>
+              <th scope="col">Requested by</th>
+              <th scope="col">Waiting</th>
+              <th scope="col">State</th>
+              <th scope="col" class="table__actions"><span class="sr-only">Decision</span></th>
+            </tr>
+          </thead>
+          <tbody data-table-rows>
+            <tr data-search="departure authorisation helena marsh resignation aisha khan" data-type="departure"
+                data-department="hr" data-group="overdue">
+              <td data-label="Request">
+                <span class="table__primary">Departure authorisation</span>
+                <br><span class="text-xs muted">Resignation accepted · last working day 30 Oct 2026</span>
+              </td>
+              <td data-label="Person / case">
+                <a class="person" href="departure.html">
+                  <span class="avatar avatar--sm avatar--rose" aria-hidden="true">HM</span>
+                  <span><span class="person__name">Helena Marsh</span><span class="person__meta">DEP-2026-0031</span></span>
+                </a>
+              </td>
+              <td data-label="Department">
+                <span class="dept dept--hr"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-briefcase"/></svg></span> HR</span>
+              </td>
+              <td data-label="Requested by">Aisha Khan</td>
+              <td data-label="Waiting"><span class="due due--overdue"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg> 5 days</span></td>
+              <td data-label="State" data-row-status><span class="badge badge--warn"><span class="badge__dot"></span>Pending</span></td>
+              <td data-label="" class="table__actions" data-decision-actions>
+                <button class="btn btn--primary btn--sm" type="button" data-decision="approve"
+                        data-request-title="Departure authorisation"
+                        data-request-meta="Helena Marsh · DEP-2026-0031">Approve</button>
+                <button class="btn btn--ghost btn--sm" type="button" data-decision="return"
+                        data-request-title="Departure authorisation"
+                        data-request-meta="Helena Marsh · DEP-2026-0031">Return</button>
+              </td>
+            </tr>
+
+            <tr data-search="equipment spend standing desk monitor arm marcus bennett priya raman" data-type="equipment"
+                data-department="facilities" data-group="overdue">
+              <td data-label="Request">
+                <span class="table__primary">Equipment spend · £480</span>
+                <br><span class="text-xs muted">Monitor arm and standing desk for the Leeds workstation</span>
+              </td>
+              <td data-label="Person / case">
+                <a class="person" href="case.html">
+                  <span class="avatar avatar--sm avatar--teal" aria-hidden="true">MB</span>
+                  <span><span class="person__name">Marcus Bennett</span><span class="person__meta">ONB-2026-0151</span></span>
+                </a>
+              </td>
+              <td data-label="Department">
+                <span class="dept dept--facilities"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-building"/></svg></span> Facilities</span>
+              </td>
+              <td data-label="Requested by">Priya Raman</td>
+              <td data-label="Waiting"><span class="due due--overdue"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg> 4 days</span></td>
+              <td data-label="State" data-row-status><span class="badge badge--warn"><span class="badge__dot"></span>Pending</span></td>
+              <td data-label="" class="table__actions" data-decision-actions>
+                <button class="btn btn--primary btn--sm" type="button" data-decision="approve"
+                        data-request-title="Equipment spend of £480"
+                        data-request-meta="Marcus Bennett · Leeds">Approve</button>
+                <button class="btn btn--ghost btn--sm" type="button" data-decision="reject"
+                        data-request-title="Equipment spend of £480"
+                        data-request-meta="Marcus Bennett · Leeds">Reject</button>
+              </td>
+            </tr>
+
+            <tr data-search="email retention exception chiara rossi tomas ferreira" data-type="access"
+                data-department="it" data-group="recent">
+              <td data-label="Request">
+                <span class="table__primary">Email retention exception</span>
+                <br><span class="text-xs muted">Mailbox kept 14 days past the last working day</span>
+              </td>
+              <td data-label="Person / case">
+                <a class="person" href="offboarding.html">
+                  <span class="avatar avatar--sm avatar--teal" aria-hidden="true">CR</span>
+                  <span><span class="person__name">Chiara Rossi</span><span class="person__meta">DEP-2026-0035</span></span>
+                </a>
+              </td>
+              <td data-label="Department">
+                <span class="dept dept--it"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-monitor"/></svg></span> IT</span>
+              </td>
+              <td data-label="Requested by">Tomás Ferreira</td>
+              <td data-label="Waiting">3 days</td>
+              <td data-label="State" data-row-status><span class="badge badge--warn"><span class="badge__dot"></span>Pending</span></td>
+              <td data-label="" class="table__actions" data-decision-actions>
+                <button class="btn btn--primary btn--sm" type="button" data-decision="approve"
+                        data-request-title="Email retention exception"
+                        data-request-meta="Chiara Rossi · DEP-2026-0035">Approve</button>
+                <button class="btn btn--ghost btn--sm" type="button" data-decision="reject"
+                        data-request-title="Email retention exception"
+                        data-request-meta="Chiara Rossi · DEP-2026-0035">Reject</button>
+              </td>
+            </tr>
+
+            <tr data-search="entra id access groups amara okafor tomas ferreira elevated production access" data-type="access"
+                data-department="it" data-group="recent">
+              <td data-label="Request">
+                <span class="table__primary">Entra ID access groups · elevated</span>
+                <br><span class="text-xs muted">Design repository and staging access · privileged group</span>
+              </td>
+              <td data-label="Person / case">
+                <a class="person" href="case.html">
+                  <span class="avatar" aria-hidden="true">AO</span>
+                  <span><span class="person__name">Amara Okafor</span><span class="person__meta">ONB-2026-0148</span></span>
+                </a>
+              </td>
+              <td data-label="Department">
+                <span class="dept dept--it"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-monitor"/></svg></span> IT</span>
+              </td>
+              <td data-label="Requested by">Tomás Ferreira</td>
+              <td data-label="Waiting">2 days</td>
+              <td data-label="State" data-row-status><span class="badge badge--warn"><span class="badge__dot"></span>Pending</span></td>
+              <td data-label="" class="table__actions" data-decision-actions>
+                <button class="btn btn--primary btn--sm" type="button" data-decision="approve"
+                        data-request-title="Elevated Entra ID access groups"
+                        data-request-meta="Amara Okafor · ONB-2026-0148">Approve</button>
+                <button class="btn btn--ghost btn--sm" type="button" data-decision="return"
+                        data-request-title="Elevated Entra ID access groups"
+                        data-request-meta="Amara Okafor · ONB-2026-0148">Return</button>
+              </td>
+            </tr>
+
+            <tr data-search="welcome announcement communications amara okafor hannah cole" data-type="comms"
+                data-department="comms" data-group="recent">
+              <td data-label="Request">
+                <span class="table__primary">Welcome announcement schedule</span>
+                <br><span class="text-xs muted">Studio-wide announcement for the first Monday</span>
+              </td>
+              <td data-label="Person / case">
+                <a class="person" href="case.html">
+                  <span class="avatar" aria-hidden="true">AO</span>
+                  <span><span class="person__name">Amara Okafor</span><span class="person__meta">ONB-2026-0148</span></span>
+                </a>
+              </td>
+              <td data-label="Department">
+                <span class="dept dept--comms"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-megaphone"/></svg></span> Communications</span>
+              </td>
+              <td data-label="Requested by">Hannah Cole</td>
+              <td data-label="Waiting">1 day</td>
+              <td data-label="State" data-row-status><span class="badge badge--warn"><span class="badge__dot"></span>Pending</span></td>
+              <td data-label="" class="table__actions" data-decision-actions>
+                <button class="btn btn--primary btn--sm" type="button" data-decision="approve"
+                        data-request-title="Welcome announcement schedule"
+                        data-request-meta="Amara Okafor · Communications">Approve</button>
+                <button class="btn btn--ghost btn--sm" type="button" data-decision="return"
+                        data-request-title="Welcome announcement schedule"
+                        data-request-meta="Amara Okafor · Communications">Return</button>
+              </td>
+            </tr>
+
+            <tr data-search="workflow template activation fixed term field operations rosa bell" data-type="workflow"
+                data-department="management" data-group="recent">
+              <td data-label="Request">
+                <span class="table__primary">Workflow template activation</span>
+                <br><span class="text-xs muted">Arrival — fixed term (field operations) v3</span>
+              </td>
+              <td data-label="Person / case">
+                <span class="table__primary">Template review</span>
+                <br><span class="text-xs muted">Applies to 6 future cases</span>
+              </td>
+              <td data-label="Department">
+                <span class="dept dept--hr"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-briefcase"/></svg></span> HR</span>
+              </td>
+              <td data-label="Requested by">Rosa Bell</td>
+              <td data-label="Waiting">2 days</td>
+              <td data-label="State" data-row-status><span class="badge badge--warn"><span class="badge__dot"></span>Pending</span></td>
+              <td data-label="" class="table__actions" data-decision-actions>
+                <button class="btn btn--primary btn--sm" type="button" data-decision="approve"
+                        data-request-title="Activate template v3 (fixed term, field operations)"
+                        data-request-meta="Workflow configuration · 6 future cases">Approve</button>
+                <button class="btn btn--ghost btn--sm" type="button" data-decision="return"
+                        data-request-title="Activate template v3 (fixed term, field operations)"
+                        data-request-meta="Workflow configuration">Return</button>
+              </td>
+            </tr>
+
+            <tr data-search="clearance report export confidential nadia haddad" data-type="report"
+                data-department="management" data-group="recent">
+              <td data-label="Request">
+                <span class="table__primary">Report export · confidential</span>
+                <br><span class="text-xs muted">Departure clearance report with restricted fields</span>
+              </td>
+              <td data-label="Person / case">
+                <span class="table__primary">Company-wide</span>
+                <br><span class="text-xs muted">Includes restricted employee information</span>
+              </td>
+              <td data-label="Department">
+                <span class="dept dept--hr"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-briefcase"/></svg></span> HR</span>
+              </td>
+              <td data-label="Requested by">Nadia Haddad</td>
+              <td data-label="Waiting">1 day</td>
+              <td data-label="State" data-row-status><span class="badge badge--warn"><span class="badge__dot"></span>Pending</span></td>
+              <td data-label="" class="table__actions" data-decision-actions>
+                <button class="btn btn--primary btn--sm" type="button" data-decision="approve"
+                        data-request-title="Confidential clearance report export"
+                        data-request-meta="Requested by Nadia Haddad">Approve</button>
+                <button class="btn btn--ghost btn--sm" type="button" data-decision="reject"
+                        data-request-title="Confidential clearance report export"
+                        data-request-meta="Requested by Nadia Haddad">Reject</button>
+              </td>
+            </tr>
+
+            <tr data-search="asset write off desk phone priya raman facilities" data-type="equipment"
+                data-department="facilities" data-group="recent">
+              <td data-label="Request">
+                <span class="table__primary">Asset write-off · AST-0455</span>
+                <br><span class="text-xs muted">Desk phone beyond economic repair</span>
+              </td>
+              <td data-label="Person / case">
+                <span class="table__primary">Equipment register</span>
+                <br><span class="text-xs muted">Recorded value £60</span>
+              </td>
+              <td data-label="Department">
+                <span class="dept dept--facilities"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-building"/></svg></span> Facilities</span>
+              </td>
+              <td data-label="Requested by">Priya Raman</td>
+              <td data-label="Waiting">2 days</td>
+              <td data-label="State" data-row-status><span class="badge badge--warn"><span class="badge__dot"></span>Pending</span></td>
+              <td data-label="" class="table__actions" data-decision-actions>
+                <button class="btn btn--primary btn--sm" type="button" data-decision="approve"
+                        data-request-title="Write off asset AST-0455"
+                        data-request-meta="Desk phone · £60">Approve</button>
+                <button class="btn btn--ghost btn--sm" type="button" data-decision="return"
+                        data-request-title="Write off asset AST-0455"
+                        data-request-meta="Desk phone · £60">Return</button>
+              </td>
+            </tr>
+
+            <tr data-search="contract end confirmation raj patel rosa bell" data-type="departure"
+                data-department="hr" data-group="recent">
+              <td data-label="Request">
+                <span class="table__primary">Fixed-term contract end confirmation</span>
+                <br><span class="text-xs muted">Contract ends 6 Nov 2026, no renewal</span>
+              </td>
+              <td data-label="Person / case">
+                <a class="person" href="offboarding.html">
+                  <span class="avatar avatar--sm avatar--slate" aria-hidden="true">RP</span>
+                  <span><span class="person__name">Raj Patel</span><span class="person__meta">DEP-2026-0033</span></span>
+                </a>
+              </td>
+              <td data-label="Department">
+                <span class="dept dept--hr"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-briefcase"/></svg></span> HR</span>
+              </td>
+              <td data-label="Requested by">Rosa Bell</td>
+              <td data-label="Waiting">1 day</td>
+              <td data-label="State" data-row-status><span class="badge badge--warn"><span class="badge__dot"></span>Pending</span></td>
+              <td data-label="" class="table__actions" data-decision-actions>
+                <button class="btn btn--primary btn--sm" type="button" data-decision="approve"
+                        data-request-title="Fixed-term contract end confirmation"
+                        data-request-meta="Raj Patel · DEP-2026-0033">Approve</button>
+                <button class="btn btn--ghost btn--sm" type="button" data-decision="return"
+                        data-request-title="Fixed-term contract end confirmation"
+                        data-request-meta="Raj Patel · DEP-2026-0033">Return</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="empty" data-table-empty hidden>
+        <span class="empty__art" aria-hidden="true"><svg class="icon icon--lg"><use href="#i-check-circle"/></svg></span>
+        <h3 class="empty__title">Nothing is waiting on you here</h3>
+        <p class="empty__text">
+          No request matches the filters you selected. Clear them to see the whole inbox, or open a case to see
+          what it is waiting for.
+        </p>
+        <div class="empty__actions">
+          <button class="btn btn--secondary" type="button" data-table-reset>Clear filters</button>
+          <a class="btn btn--primary" href="cases.html">Browse cases</a>
+        </div>
+      </div>
+
+      <div class="card__foot">
+        <p data-table-count>Showing all 9 requests</p>
+        <p class="text-xs muted">Rejections and returns require a comment</p>
+      </div>
+    </section>
+
+    <!-- 3: decision detail -->
+    <div class="grid grid--halves mt-6">
+      <section class="card" aria-labelledby="detail-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="detail-title">Decision detail · departure authorisation</h2>
+            <p class="card__sub">The evidence an approver reviews before recording a decision.</p>
+          </div>
+          <span class="badge badge--warn"><span class="badge__dot"></span>Waiting 5 days</span>
+        </div>
+        <div class="card__body">
+          <div class="meta-grid">
+            <div>
+              <p class="meta__label">Employee</p>
+              <p class="meta__value">Helena Marsh · EMP-100190</p>
+            </div>
+            <div>
+              <p class="meta__label">Case</p>
+              <p class="meta__value">DEP-2026-0031 · departure</p>
+            </div>
+            <div>
+              <p class="meta__label">Requested by</p>
+              <p class="meta__value">Aisha Khan · People Partner</p>
+            </div>
+            <div>
+              <p class="meta__label">Required approver</p>
+              <p class="meta__value">Yusuf Adeyemi · Finance Director</p>
+            </div>
+            <div>
+              <p class="meta__label">Last working day</p>
+              <p class="meta__value">Fri 30 Oct 2026</p>
+            </div>
+            <div>
+              <p class="meta__label">Reason</p>
+              <p class="meta__value">Resignation — relocation</p>
+            </div>
+          </div>
+
+          <p class="meta__label mt-6">Supporting evidence</p>
+          <div class="chip-row mt-2">
+            <span class="tag tag--quiet"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-file"/></svg> Resignation letter · 2 Oct 2026</span>
+            <span class="tag tag--quiet"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-file"/></svg> Notice period calculation</span>
+            <span class="tag tag--quiet"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg> Restricted: exit interview scope</span>
+          </div>
+
+          <div class="alert alert--info mt-6" role="note">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
+            <div>
+              <p class="alert__title">Separation of duties</p>
+              <p>
+                Aisha Khan raised this request, so she cannot decide it. Approvers, requesters and
+                administrators are separate roles in the production system.
+              </p>
+            </div>
+          </div>
+
+          <div class="row row--wrap mt-6">
+            <button class="btn btn--primary" type="button" data-decision="approve"
+                    data-request-title="Departure authorisation"
+                    data-request-meta="Helena Marsh · DEP-2026-0031"
+                    data-decision-body="Approving authorises the clearance actions already scheduled against DEP-2026-0031. Nothing is saved in this design prototype.">
+              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-check-circle"/></svg>
+              Approve
+            </button>
+            <button class="btn btn--secondary" type="button" data-decision="return"
+                    data-request-title="Departure authorisation"
+                    data-request-meta="Helena Marsh · DEP-2026-0031">
+              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-refresh"/></svg>
+              Return for correction
+            </button>
+            <button class="btn btn--danger" type="button" data-decision="reject"
+                    data-request-title="Departure authorisation"
+                    data-request-meta="Helena Marsh · DEP-2026-0031">
+              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg>
+              Reject
+            </button>
+          </div>
+        </div>
+        <div class="card__foot">
+          <p class="text-xs muted">Decisions are confirmed in a dialog before they are recorded</p>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="delegation-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="delegation-title">Delegation and escalation</h2>
+            <p class="card__sub">Who decides when the named approver is away.</p>
+          </div>
+        </div>
+        <div class="card__body">
+          <div class="def-list">
+            <div class="def-row">
+              <span class="def-row__label">Delegated approver</span>
+              <span class="def-row__value">Ines Duarte · Chief Operating Officer</span>
+              <span class="def-row__action"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Active</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Escalation after</span>
+              <span class="def-row__value">3 working days without a decision</span>
+              <span class="def-row__action"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-clock"/></svg> Reminder sent</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Second escalation</span>
+              <span class="def-row__value">HR administrator, after 5 working days</span>
+              <span class="def-row__action"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Configured</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Out-of-hours decisions</span>
+              <span class="def-row__value">Not permitted for departure authorisation</span>
+              <span class="def-row__action"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> Blocked</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="card__foot">
+          <p>Escalation rules are configured on the workflow template</p>
+          <a class="btn btn--link text-sm" href="workflows.html#escalation">Workflow escalation settings</a>
+        </div>
+      </section>
+    </div>
+
+    <!-- 4: approval history -->
+    <section class="card mt-6" id="history" data-table-region data-count-noun="decisions" aria-labelledby="history-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="history-title">Approval history</h2>
+          <p class="card__sub">Who decided what, when, and with which comment.</p>
+        </div>
+        <a class="btn btn--secondary btn--sm" href="audit.html">Full audit trail</a>
+      </div>
+
+      <div class="toolbar">
+        <div class="toolbar__search input-wrap">
+          <label class="sr-only" for="hist-search">Search approval history</label>
+          <svg class="icon icon--sm input-wrap__icon" aria-hidden="true"><use href="#i-search"/></svg>
+          <input class="input input--icon" id="hist-search" type="search" placeholder="Search decision or decision-maker…"
+                 autocomplete="off" data-table-search>
+        </div>
+        <div class="input-wrap">
+          <label class="sr-only" for="hist-decision">Decision</label>
+          <select class="select" id="hist-decision" data-table-filter="decision">
+            <option value="">Any decision</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+            <option value="returned">Returned</option>
+          </select>
+        </div>
+        <button class="btn btn--ghost btn--sm" type="button" data-table-reset>
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-refresh"/></svg>
+          Reset
+        </button>
+      </div>
+
+      <div class="table-wrap" data-table-wrap>
+        <table class="table table--stack">
+          <caption class="sr-only">Approval history with decision-maker, timestamp and comment</caption>
+          <thead>
+            <tr>
+              <th scope="col">Decision</th>
+              <th scope="col">Case / request</th>
+              <th scope="col">Decided by</th>
+              <th scope="col">Decided</th>
+              <th scope="col">Comment</th>
+            </tr>
+          </thead>
+          <tbody data-table-rows>
+            <tr data-search="approved departure authorisation helena marsh aisha khan" data-decision="approved">
+              <td data-label="Decision"><span class="badge badge--ok"><span class="badge__dot"></span>Approved</span></td>
+              <td data-label="Case / request">DEP-2026-0031 · Departure authorisation</td>
+              <td data-label="Decided by">Aisha Khan · People Partner</td>
+              <td data-label="Decided">16 Oct 2026, 11:02</td>
+              <td data-label="Comment">Notice period confirmed with the manager; clearance to start.</td>
+            </tr>
+            <tr data-search="returned equipment spend marcus bennett nadia haddad" data-decision="returned">
+              <td data-label="Decision"><span class="badge badge--warn"><span class="badge__dot"></span>Returned</span></td>
+              <td data-label="Case / request">ONB-2026-0151 · Equipment spend</td>
+              <td data-label="Decided by">Nadia Haddad · Head of Design</td>
+              <td data-label="Decided">15 Oct 2026, 09:20</td>
+              <td data-label="Comment">Attach the supplier quote before this can be approved.</td>
+            </tr>
+            <tr data-search="rejected elevated access grace sullivan tomas ferreira" data-decision="rejected">
+              <td data-label="Decision"><span class="badge badge--danger"><span class="badge__dot"></span>Rejected</span></td>
+              <td data-label="Case / request">ONB-2026-0144 · Elevated access</td>
+              <td data-label="Decided by">Tomás Ferreira · IT Services Lead</td>
+              <td data-label="Decided">14 Oct 2026, 16:45</td>
+              <td data-label="Comment">Not required for this role; standard access is sufficient.</td>
+            </tr>
+            <tr data-search="approved right to work marcus bennett aisha khan" data-decision="approved">
+              <td data-label="Decision"><span class="badge badge--ok"><span class="badge__dot"></span>Approved</span></td>
+              <td data-label="Case / request">ONB-2026-0151 · Right to work verification</td>
+              <td data-label="Decided by">Aisha Khan · People Partner</td>
+              <td data-label="Decided">16 Oct 2026, 10:12</td>
+              <td data-label="Comment">Passport and visa evidence checked and filed.</td>
+            </tr>
+            <tr data-search="approved template activation arrival standard v4 rosa bell" data-decision="approved">
+              <td data-label="Decision"><span class="badge badge--ok"><span class="badge__dot"></span>Approved</span></td>
+              <td data-label="Case / request">Workflow · Arrival standard v4</td>
+              <td data-label="Decided by">Dev Sharma · Systems Administrator</td>
+              <td data-label="Decided">13 Oct 2026, 14:30</td>
+              <td data-label="Comment">Reviewed against the departmental schedule; activated.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card__foot">
+        <p data-table-count>Showing all 5 decisions</p>
+        <p class="text-xs muted">Approval history is retained for 7 years in production</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-foot">
+    <p>Casidra Arrivals &amp; Departures · approval inbox design prototype</p>
+    <p>Fictional sample data · UI only · no decision is recorded anywhere</p>
+  </footer>
+</div>
+
+<!-- @include partials/shell-end.html -->
+<!-- @include partials/scripts.html -->
+</body>
+</html>

@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reports &amp; exports · Casidra</title>
+<meta name="description" content="Onboarding, offboarding, overdue action, asset clearance and departmental performance reporting with permission and confidentiality indicators.">
+<!-- @include partials/head-assets.html -->
+</head>
+<body class="app" data-page="reports">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- @include partials/icons.html -->
+<!-- @include partials/sidebar.html -->
+
+<div class="app__body">
+  <!-- @include partials/topbar.html -->
+
+  <main class="content" id="main">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Dashboard</a>
+      <span class="breadcrumb__sep" aria-hidden="true">/</span>
+      <span aria-current="page">Reports &amp; exports</span>
+    </nav>
+
+    <div class="page-head">
+      <div>
+        <p class="eyebrow">Insight</p>
+        <h1 class="page-head__title">Reports &amp; exports</h1>
+        <p class="page-head__sub">
+          Onboarding, offboarding, outstanding action, asset clearance and departmental performance reporting
+          for HR, management and system administrators.
+        </p>
+      </div>
+      <div class="page-head__actions">
+        <a class="btn btn--secondary" href="audit.html">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg>
+          Audit trail
+        </a>
+        <button class="btn btn--primary" type="button" data-confirm
+                data-confirm-title="Run the operations report?"
+                data-confirm-sub="Every report run is recorded against your user account."
+                data-confirm-body="The report covers 12 open arrivals, 5 departures and 27 outstanding clearance actions across all departments. Nothing is generated in this prototype."
+                data-confirm-label="Run report"
+                data-confirm-icon="i-trend-up"
+                data-confirm-toast="Report run prepared"
+                data-confirm-toast-tone="info">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-download"/></svg>
+          Run operations report
+        </button>
+      </div>
+    </div>
+
+    <div class="notice" role="note">
+      <svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg>
+      <p>
+        <strong>Confidentiality.</strong> Reports containing restricted employee information require an
+        authorised reason and administrator approval before export, and every export is written to the
+        administrative audit trail. Figures on this page are fictional sample data.
+      </p>
+    </div>
+
+    <!-- 1: headline figures -->
+    <section class="grid grid--kpis mt-6" aria-label="Headline performance figures">
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Day-one readiness on time</p>
+            <p class="kpi__value tnum mt-2">92%</p>
+          </div>
+          <span class="kpi__icon kpi__icon--ok" aria-hidden="true"><svg class="icon"><use href="#i-check-circle"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--up">4 points better than last quarter</span></div>
+        <div class="row row--between">
+          <p class="text-xs muted">1 of 12 open cases is at risk</p>
+          <svg class="kpi__spark kpi__spark--ok" viewBox="0 0 88 30" fill="none" aria-hidden="true">
+            <path d="M1 22l13-3 12 2 12-5 12 1 12-4 12-2 13-6" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Median onboarding lead time</p>
+            <p class="kpi__value mt-2">18 days</p>
+          </div>
+          <span class="kpi__icon" aria-hidden="true"><svg class="icon"><use href="#i-clock"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--flat">Offer accepted → ready for day one</span></div>
+        <p class="text-xs muted mt-4">Longest case: 31 days (Finance, payroll cut-off)</p>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Median clearance time</p>
+            <p class="kpi__value mt-2">11 days</p>
+          </div>
+          <span class="kpi__icon kpi__icon--ok" aria-hidden="true"><svg class="icon"><use href="#i-door"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--up">2 days faster than last quarter</span></div>
+        <p class="text-xs muted mt-4">Measured from notice to recorded final clearance</p>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Outstanding actions</p>
+            <p class="kpi__value tnum mt-2">33</p>
+          </div>
+          <span class="kpi__icon kpi__icon--danger" aria-hidden="true"><svg class="icon"><use href="#i-alert"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--down">11 overdue</span><span>across 17 cases</span></div>
+        <a class="kpi__link" href="tasks.html">
+          Open task queues
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </article>
+    </section>
+
+    <!-- 2: charts -->
+    <div class="grid grid--split mt-6">
+      <section class="card" aria-labelledby="volume-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="volume-title">Case volume</h2>
+            <p class="card__sub">Arrivals and departures opened each month.</p>
+          </div>
+          <div class="legend" role="list">
+            <span class="legend__item"><span class="legend__swatch" style="background:var(--brand-500)"></span> Arrivals</span>
+            <span class="legend__item"><span class="legend__swatch" style="background:var(--warn-600)"></span> Departures</span>
+          </div>
+        </div>
+        <div class="card__body">
+          <div class="bars" role="img"
+               aria-label="July: 9 arrivals and 3 departures. August: 11 and 4. September: 14 and 5. October: 12 and 5.">
+            <div class="bars__col">
+              <span class="bars__value">12</span>
+              <span class="bars__stack">
+                <span class="bars__seg bars__seg--warn" style="height:29%" title="3 departures"></span>
+                <span class="bars__seg" style="height:71%" title="9 arrivals"></span>
+              </span>
+              <span class="bars__label">Jul</span>
+            </div>
+            <div class="bars__col">
+              <span class="bars__value">15</span>
+              <span class="bars__stack">
+                <span class="bars__seg bars__seg--warn" style="height:27%" title="4 departures"></span>
+                <span class="bars__seg" style="height:73%" title="11 arrivals"></span>
+              </span>
+              <span class="bars__label">Aug</span>
+            </div>
+            <div class="bars__col">
+              <span class="bars__value">19</span>
+              <span class="bars__stack">
+                <span class="bars__seg bars__seg--warn" style="height:26%" title="5 departures"></span>
+                <span class="bars__seg" style="height:74%" title="14 arrivals"></span>
+              </span>
+              <span class="bars__label">Sep</span>
+            </div>
+            <div class="bars__col">
+              <span class="bars__value">17</span>
+              <span class="bars__stack">
+                <span class="bars__seg bars__seg--warn" style="height:29%" title="5 departures"></span>
+                <span class="bars__seg" style="height:71%" title="12 arrivals"></span>
+              </span>
+              <span class="bars__label">Oct</span>
+            </div>
+          </div>
+        </div>
+        <div class="card__foot">
+          <p>October is month to date · 12 arrivals open, 5 departures in clearance</p>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="dept-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="dept-title">Departmental performance</h2>
+            <p class="card__sub">Actions completed on or before their due date.</p>
+          </div>
+        </div>
+        <div class="card__body">
+          <div class="hbars">
+            <div class="hbar">
+              <span class="hbar__label">HR</span>
+              <span class="hbar__track"><span class="hbar__fill hbar__fill--ok" style="width:93%"></span></span>
+              <span class="hbar__value">93%</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar__label">Communications</span>
+              <span class="hbar__track"><span class="hbar__fill hbar__fill--ok" style="width:91%"></span></span>
+              <span class="hbar__value">91%</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar__label">Facilities</span>
+              <span class="hbar__track"><span class="hbar__fill" style="width:84%"></span></span>
+              <span class="hbar__value">84%</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar__label">IT</span>
+              <span class="hbar__track"><span class="hbar__fill hbar__fill--warn" style="width:76%"></span></span>
+              <span class="hbar__value">76%</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar__label">Finance</span>
+              <span class="hbar__track"><span class="hbar__fill hbar__fill--warn" style="width:71%"></span></span>
+              <span class="hbar__value">71%</span>
+            </div>
+          </div>
+          <div class="alert alert--warn mt-6" role="note">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg>
+            <div>
+              <p class="alert__title">IT is the slowest department this month</p>
+              <p>Access provisioning and equipment returns account for most late actions. Both are dependency-heavy
+                steps in the arrival and departure templates.</p>
+            </div>
+          </div>
+        </div>
+        <div class="card__foot">
+          <p>Based on 412 completed actions in the last 90 days</p>
+          <a class="btn btn--link text-sm" href="workflows.html">Review template due-date rules</a>
+        </div>
+      </section>
+    </div>
+
+    <!-- 3: onboarding performance -->
+    <section class="card mt-6" data-table-region data-count-noun="departments" aria-labelledby="onboarding-perf-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="onboarding-perf-title">Onboarding performance by department</h2>
+          <p class="card__sub">Open arrivals, readiness and overdue actions.</p>
+        </div>
+        <div class="segmented" role="tablist" aria-label="Filter performance by risk" data-table-group>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="true" data-group-value="all">
+            All <span class="segmented__count">6</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="risk">
+            With overdue work <span class="segmented__count">3</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="table-wrap" data-table-wrap>
+        <table class="table table--stack">
+          <caption class="sr-only">Onboarding performance by department</caption>
+          <thead>
+            <tr>
+              <th scope="col">Department</th>
+              <th scope="col">Open arrivals</th>
+              <th scope="col">Mean readiness</th>
+              <th scope="col">Median lead time</th>
+              <th scope="col">Overdue actions</th>
+              <th scope="col">On-time completion</th>
+            </tr>
+          </thead>
+          <tbody data-table-rows>
+            <tr data-search="design product designer arrivals readiness" data-group="all">
+              <td data-label="Department"><span class="table__primary">Design</span></td>
+              <td data-label="Open arrivals" class="table__num">1</td>
+              <td data-label="Mean readiness">47%</td>
+              <td data-label="Median lead time">16 days</td>
+              <td data-label="Overdue actions"><span class="badge badge--warn"><span class="badge__dot"></span>0</span></td>
+              <td data-label="On-time completion">94%</td>
+            </tr>
+            <tr data-search="technology engineering arrivals readiness overdue" data-group="risk">
+              <td data-label="Department"><span class="table__primary">Technology</span></td>
+              <td data-label="Open arrivals" class="table__num">3</td>
+              <td data-label="Mean readiness">68%</td>
+              <td data-label="Median lead time">21 days</td>
+              <td data-label="Overdue actions"><span class="badge badge--danger"><span class="badge__dot"></span>2</span></td>
+              <td data-label="On-time completion">76%</td>
+            </tr>
+            <tr data-search="finance arrivals payroll readiness overdue" data-group="risk">
+              <td data-label="Department"><span class="table__primary">Finance</span></td>
+              <td data-label="Open arrivals" class="table__num">2</td>
+              <td data-label="Mean readiness">55%</td>
+              <td data-label="Median lead time">31 days</td>
+              <td data-label="Overdue actions"><span class="badge badge--danger"><span class="badge__dot"></span>2</span></td>
+              <td data-label="On-time completion">71%</td>
+            </tr>
+            <tr data-search="facilities arrivals supervisor readiness" data-group="all">
+              <td data-label="Department"><span class="table__primary">Facilities</span></td>
+              <td data-label="Open arrivals" class="table__num">1</td>
+              <td data-label="Mean readiness">96%</td>
+              <td data-label="Median lead time">14 days</td>
+              <td data-label="Overdue actions"><span class="badge badge--warn"><span class="badge__dot"></span>0</span></td>
+              <td data-label="On-time completion">84%</td>
+            </tr>
+            <tr data-search="marketing arrivals manager readiness at risk" data-group="risk">
+              <td data-label="Department"><span class="table__primary">Marketing</span></td>
+              <td data-label="Open arrivals" class="table__num">2</td>
+              <td data-label="Mean readiness">41%</td>
+              <td data-label="Median lead time">24 days</td>
+              <td data-label="Overdue actions"><span class="badge badge--danger"><span class="badge__dot"></span>1</span></td>
+              <td data-label="On-time completion">88%</td>
+            </tr>
+            <tr data-search="people hr arrivals business partner readiness" data-group="all">
+              <td data-label="Department"><span class="table__primary">People</span></td>
+              <td data-label="Open arrivals" class="table__num">2</td>
+              <td data-label="Mean readiness">12%</td>
+              <td data-label="Median lead time">9 days</td>
+              <td data-label="Overdue actions"><span class="badge badge--warn"><span class="badge__dot"></span>1</span></td>
+              <td data-label="On-time completion">93%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="empty" data-table-empty hidden>
+        <span class="empty__art" aria-hidden="true"><svg class="icon icon--lg"><use href="#i-trend-up"/></svg></span>
+        <h3 class="empty__title">Nothing in this filter</h3>
+        <p class="empty__text">No department matches this view. Clear the filter to see the full performance table.</p>
+        <div class="empty__actions">
+          <button class="btn btn--secondary" type="button" data-table-reset>Clear filters</button>
+        </div>
+      </div>
+
+      <div class="card__foot">
+        <p data-table-count>Showing all 6 departments</p>
+        <p class="text-xs muted">Readiness is derived from the departmental checklists on each open case</p>
+      </div>
+    </section>
+
+    <!-- 4: clearance and outstanding work -->
+    <div class="grid grid--halves mt-6">
+      <section class="card" aria-labelledby="clearance-report-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="clearance-report-title">Asset clearance</h2>
+            <p class="card__sub">Assets still with leavers, by department and value.</p>
+          </div>
+          <span class="badge badge--danger"><span class="badge__dot"></span>9 outstanding</span>
+        </div>
+        <div class="table-wrap">
+          <table class="table table--stack">
+            <caption class="sr-only">Outstanding asset returns by department</caption>
+            <thead>
+              <tr>
+                <th scope="col">Department</th>
+                <th scope="col">Assets</th>
+                <th scope="col">Value</th>
+                <th scope="col">Oldest return date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-label="Department">Technology</td>
+                <td data-label="Assets" class="table__num">4</td>
+                <td data-label="Value" class="table__num">£5,610</td>
+                <td data-label="Oldest return date"><span class="due due--overdue"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg> 24 Oct 2026</span></td>
+              </tr>
+              <tr>
+                <td data-label="Department">Finance</td>
+                <td data-label="Assets" class="table__num">3</td>
+                <td data-label="Value" class="table__num">£3,760</td>
+                <td data-label="Oldest return date">30 Oct 2026</td>
+              </tr>
+              <tr>
+                <td data-label="Department">Operations</td>
+                <td data-label="Assets" class="table__num">2</td>
+                <td data-label="Value" class="table__num">£18,590</td>
+                <td data-label="Oldest return date">13 Nov 2026</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card__foot">
+          <p>3 assets are past their return date</p>
+          <a class="btn btn--link text-sm" href="equipment.html#handover">Handover &amp; returns</a>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="overdue-report-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="overdue-report-title">Overdue actions</h2>
+            <p class="card__sub">What is late, who owns it and which case it blocks.</p>
+          </div>
+        </div>
+        <div class="list">
+          <article class="list__item">
+            <span class="notif__icon notif__icon--warn" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-briefcase"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">Payroll enrolment · HR · 3 days late</p>
+              <p class="list__meta">Chen Wei · ONB-2026-0155 · blocks day-one readiness</p>
+            </div>
+            <div class="list__aside"><span class="badge badge--danger"><span class="badge__dot"></span>Overdue</span></div>
+          </article>
+          <article class="list__item">
+            <span class="notif__icon notif__icon--warn" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-building"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">Building access card · Facilities · 1 day late</p>
+              <p class="list__meta">Sofia Almeida · ONB-2026-0152 · Lisbon print queue</p>
+            </div>
+            <div class="list__aside"><span class="badge badge--danger"><span class="badge__dot"></span>Overdue</span></div>
+          </article>
+          <article class="list__item">
+            <span class="notif__icon notif__icon--warn" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-monitor"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">Laptop build · IT · today</p>
+              <p class="list__meta">Daniel Whitfield · ONB-2026-0142 · starts 27 Oct 2026</p>
+            </div>
+            <div class="list__aside"><span class="badge badge--danger"><span class="badge__dot"></span>Overdue</span></div>
+          </article>
+          <article class="list__item">
+            <span class="notif__icon notif__icon--warn" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-monitor"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">Vehicle &amp; radio return · IT/Facilities · 2 days late</p>
+              <p class="list__meta">Michael Osei · DEP-2026-0036 · clearance 18%</p>
+            </div>
+            <div class="list__aside"><span class="badge badge--danger"><span class="badge__dot"></span>Overdue</span></div>
+          </article>
+        </div>
+        <div class="card__foot">
+          <p>11 overdue actions in total</p>
+          <a class="btn btn--link text-sm" href="tasks.html">Task queues</a>
+        </div>
+      </section>
+    </div>
+
+    <!-- 5: report catalogue and export controls -->
+    <section class="card mt-6" aria-labelledby="catalogue-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="catalogue-title">Report catalogue &amp; export controls</h2>
+          <p class="card__sub">What can be produced, who may run it, and what the export contains.</p>
+        </div>
+        <span class="tag tag--quiet">Permission indicators shown for design review</span>
+      </div>
+
+      <div class="table-wrap">
+        <table class="table table--stack">
+          <caption class="sr-only">Available reports with permission and confidentiality indicators</caption>
+          <thead>
+            <tr>
+              <th scope="col">Report</th>
+              <th scope="col">Scope</th>
+              <th scope="col">Permission required</th>
+              <th scope="col">Confidentiality</th>
+              <th scope="col">Formats</th>
+              <th scope="col" class="table__actions"><span class="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="Report">
+                <span class="table__primary">Onboarding status</span>
+                <br><span class="text-xs muted">Open arrivals, readiness and overdue actions</span>
+              </td>
+              <td data-label="Scope">All departments</td>
+              <td data-label="Permission required"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> HR, management</span></td>
+              <td data-label="Confidentiality"><span class="badge badge--ok"><span class="badge__dot"></span>Internal</span></td>
+              <td data-label="Formats">PDF · CSV</td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-confirm
+                        data-confirm-title="Export the onboarding status report?"
+                        data-confirm-sub="Internal report · no restricted employee information."
+                        data-confirm-body="12 open arrivals with readiness percentages, coordinators and overdue actions. Nothing is generated in this prototype."
+                        data-confirm-label="Export"
+                        data-confirm-icon="i-download"
+                        data-confirm-toast="Export prepared"
+                        data-confirm-toast-tone="info">
+                  Export
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td data-label="Report">
+                <span class="table__primary">Offboarding clearance</span>
+                <br><span class="text-xs muted">Clearance progress, outstanding actions and asset returns</span>
+              </td>
+              <td data-label="Scope">All departments</td>
+              <td data-label="Permission required"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> HR, management</span></td>
+              <td data-label="Confidentiality"><span class="badge badge--ok"><span class="badge__dot"></span>Internal</span></td>
+              <td data-label="Formats">PDF · CSV</td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-confirm
+                        data-confirm-title="Export the clearance report?"
+                        data-confirm-sub="Internal report · no restricted employee information."
+                        data-confirm-body="5 departure cases with clearance percentages, blockers and asset returns. Nothing is generated in this prototype."
+                        data-confirm-label="Export"
+                        data-confirm-icon="i-download"
+                        data-confirm-toast="Export prepared"
+                        data-confirm-toast-tone="info">
+                  Export
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td data-label="Report">
+                <span class="table__primary">Outstanding and overdue actions</span>
+                <br><span class="text-xs muted">Every late or blocked action with its owner</span>
+              </td>
+              <td data-label="Scope">All departments</td>
+              <td data-label="Permission required"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> HR, IT, Facilities, Communications, management</span></td>
+              <td data-label="Confidentiality"><span class="badge badge--ok"><span class="badge__dot"></span>Internal</span></td>
+              <td data-label="Formats">PDF · CSV</td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-confirm
+                        data-confirm-title="Export the overdue action report?"
+                        data-confirm-sub="Internal report · no restricted employee information."
+                        data-confirm-body="11 overdue actions across 17 cases, with owners, due dates and blocking dependencies. Nothing is generated in this prototype."
+                        data-confirm-label="Export"
+                        data-confirm-icon="i-download"
+                        data-confirm-toast="Export prepared"
+                        data-confirm-toast-tone="info">
+                  Export
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td data-label="Report">
+                <span class="table__primary">Employee lifecycle record</span>
+                <br><span class="text-xs muted">Full history for one employee, including restricted fields</span>
+              </td>
+              <td data-label="Scope">Single employee</td>
+              <td data-label="Permission required"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg> HR administrator</span></td>
+              <td data-label="Confidentiality"><span class="badge badge--danger"><span class="badge__dot"></span>Restricted</span></td>
+              <td data-label="Formats">PDF</td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-confirm
+                        data-confirm-title="Export a restricted lifecycle record?"
+                        data-confirm-sub="This export contains restricted employee information and is audited."
+                        data-confirm-body="Right-to-work evidence, personal contact details and occupational health information would be included. An authorised reason and administrator approval are required."
+                        data-confirm-label="Request approval"
+                        data-confirm-icon="i-shield"
+                        data-confirm-comment="Purpose of the export"
+                        data-confirm-require-comment
+                        data-confirm-toast="Approval requested"
+                        data-confirm-toast-message="Restricted exports are not implemented in this prototype."
+                        data-confirm-toast-tone="warn">
+                  Request export
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td data-label="Report">
+                <span class="table__primary">Administrative activity</span>
+                <br><span class="text-xs muted">Configuration changes, role changes and exports</span>
+              </td>
+              <td data-label="Scope">System-wide</td>
+              <td data-label="Permission required"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-key"/></svg> System administrator</span></td>
+              <td data-label="Confidentiality"><span class="badge badge--warn"><span class="badge__dot"></span>Sensitive</span></td>
+              <td data-label="Formats">CSV</td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="audit.html">Open audit</a>
+              </td>
+            </tr>
+            <tr>
+              <td data-label="Report">
+                <span class="table__primary">Asset clearance and valuation</span>
+                <br><span class="text-xs muted">Assets with leavers, values and outstanding balances</span>
+              </td>
+              <td data-label="Scope">All locations</td>
+              <td data-label="Permission required"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> IT, Facilities, management</span></td>
+              <td data-label="Confidentiality"><span class="badge badge--ok"><span class="badge__dot"></span>Internal</span></td>
+              <td data-label="Formats">CSV</td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="equipment.html">Open register</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card__foot">
+        <p>Every export is recorded in the audit trail with the reason and the requester</p>
+        <a class="btn btn--link text-sm" href="audit.html">Administrative audit trail</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-foot">
+    <p>Casidra Arrivals &amp; Departures · reporting design prototype</p>
+    <p>Fictional sample data · UI only · nothing is exported or generated</p>
+  </footer>
+</div>
+
+<!-- @include partials/shell-end.html -->
+<!-- @include partials/scripts.html -->
+</body>
+</html>

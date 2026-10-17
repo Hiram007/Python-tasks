@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Audit trail · Casidra</title>
+<meta name="description" content="Audit trail: employee lifecycle history, workflow and approval decisions, task assignment and completion history, and administrative activity.">
+<!-- @include partials/head-assets.html -->
+</head>
+<body class="app" data-page="audit">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- @include partials/icons.html -->
+<!-- @include partials/sidebar.html -->
+
+<div class="app__body">
+  <!-- @include partials/topbar.html -->
+
+  <main class="content" id="main">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Dashboard</a>
+      <span class="breadcrumb__sep" aria-hidden="true">/</span>
+      <span aria-current="page">Audit trail</span>
+    </nav>
+
+    <div class="page-head">
+      <div>
+        <p class="eyebrow">Insight</p>
+        <h1 class="page-head__title">Audit trail</h1>
+        <p class="page-head__sub">
+          The record of what happened, who did it and when: lifecycle events, workflow and approval decisions,
+          task assignment and completion, and administrative activity.
+        </p>
+      </div>
+      <div class="page-head__actions">
+        <a class="btn btn--secondary" href="reports.html">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-trend-up"/></svg>
+          Reports
+        </a>
+        <button class="btn btn--secondary" type="button" data-confirm
+                data-confirm-title="Export the audit extract?"
+                data-confirm-sub="Sensitive extract · available to HR and system administrators."
+                data-confirm-body="The extract contains actor names, decisions, comments and configuration changes for the selected period."
+                data-confirm-label="Export extract"
+                data-confirm-icon="i-download"
+                data-confirm-comment="Purpose of the export"
+                data-confirm-require-comment
+                data-confirm-toast="Export prepared"
+                data-confirm-toast-message="Nothing is exported from this prototype."
+                data-confirm-toast-tone="warn">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-download"/></svg>
+          Export extract
+        </button>
+      </div>
+    </div>
+
+    <div class="alert alert--info" role="note">
+      <svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg>
+      <div>
+        <p class="alert__title">Audit records are read-only</p>
+        <p>
+          Entries cannot be edited or deleted, and every read of a restricted record is itself audited. In
+          production the Django application writes these entries inside the same transaction as the change they
+          describe. This prototype records nothing.
+        </p>
+      </div>
+    </div>
+
+    <!-- 1: audit summary -->
+    <section class="grid grid--kpis mt-6" aria-label="Audit activity summary">
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Events in the last 30 days</p>
+            <p class="kpi__value tnum mt-2">1,284</p>
+          </div>
+          <span class="kpi__icon" aria-hidden="true"><svg class="icon"><use href="#i-file"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--up">112 more than the previous month</span></div>
+        <p class="text-xs muted mt-4">Driven by 17 open lifecycle cases</p>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Decisions recorded</p>
+            <p class="kpi__value tnum mt-2">40</p>
+          </div>
+          <span class="kpi__icon kpi__icon--ok" aria-hidden="true"><svg class="icon"><use href="#i-check-circle"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--flat">34 approved · 4 returned · 2 rejected</span></div>
+        <a class="kpi__link" href="approvals.html#history">
+          Approval history
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Administrative changes</p>
+            <p class="kpi__value tnum mt-2">18</p>
+          </div>
+          <span class="kpi__icon" aria-hidden="true"><svg class="icon"><use href="#i-key"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--flat">Templates, roles and configuration</span></div>
+        <a class="kpi__link" href="admin-system.html">
+          System settings
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Exports requested</p>
+            <p class="kpi__value tnum mt-2">7</p>
+          </div>
+          <span class="kpi__icon kpi__icon--warn" aria-hidden="true"><svg class="icon"><use href="#i-download"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--flat">2 contained restricted fields</span></div>
+        <p class="text-xs muted mt-4">Each export records its purpose and approver</p>
+      </article>
+    </section>
+
+    <!-- 2: audit trail -->
+    <section class="card mt-6" data-table-region data-count-noun="events" aria-labelledby="trail-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="trail-title">Audit events</h2>
+          <p class="card__sub">Newest first. Every entry names the actor, the record and the action.</p>
+        </div>
+        <div class="segmented" role="tablist" aria-label="Filter audit events by category" data-table-group>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="true" data-group-value="all">
+            All <span class="segmented__count">12</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="lifecycle">
+            Lifecycle <span class="segmented__count">3</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="approval">
+            Approvals <span class="segmented__count">3</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="task">
+            Tasks <span class="segmented__count">3</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="admin">
+            Administration <span class="segmented__count">3</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="toolbar__search input-wrap">
+          <label class="sr-only" for="audit-search">Search audit events</label>
+          <svg class="icon icon--sm input-wrap__icon" aria-hidden="true"><use href="#i-search"/></svg>
+          <input class="input input--icon" id="audit-search" type="search" placeholder="Search actor, record or action…"
+                 autocomplete="off" data-table-search>
+        </div>
+        <div class="input-wrap">
+          <label class="sr-only" for="audit-actor">Actor</label>
+          <select class="select" id="audit-actor" data-table-filter="actor">
+            <option value="">Any actor</option>
+            <option value="rosa">Rosa Bell</option>
+            <option value="aisha">Aisha Khan</option>
+            <option value="tomas">Tomás Ferreira</option>
+            <option value="priya">Priya Raman</option>
+            <option value="hannah">Hannah Cole</option>
+            <option value="nadia">Nadia Haddad</option>
+            <option value="dev">Dev Sharma</option>
+            <option value="system">System</option>
+          </select>
+        </div>
+        <div class="input-wrap">
+          <label class="sr-only" for="audit-department">Department</label>
+          <select class="select" id="audit-department" data-table-filter="department">
+            <option value="">All departments</option>
+            <option value="hr">HR</option>
+            <option value="it">IT</option>
+            <option value="facilities">Facilities</option>
+            <option value="comms">Communications</option>
+            <option value="management">Management</option>
+            <option value="system">System</option>
+          </select>
+        </div>
+        <button class="btn btn--ghost btn--sm" type="button" data-table-reset>
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-refresh"/></svg>
+          Reset
+        </button>
+      </div>
+
+      <div class="table-wrap" data-table-wrap>
+        <table class="table table--stack">
+          <caption class="sr-only">Audit events with timestamp, category, actor, action and record</caption>
+          <thead>
+            <tr>
+              <th scope="col">When</th>
+              <th scope="col">Category</th>
+              <th scope="col">Actor</th>
+              <th scope="col">Action</th>
+              <th scope="col">Record</th>
+            </tr>
+          </thead>
+          <tbody data-table-rows>
+            <tr data-search="priya raman facilities access card deactivated departure" data-actor="priya"
+                data-department="facilities" data-group="task">
+              <td data-label="When"><span class="numeric">22 Oct 2026, 10:14</span></td>
+              <td data-label="Category">Task completion</td>
+              <td data-label="Actor">Priya Raman · Facilities Coordinator</td>
+              <td data-label="Action">Completed “Desk &amp; locker cleared”</td>
+              <td data-label="Record"><a href="departure.html#clearance">DEP-2026-0031 · Helena Marsh</a></td>
+            </tr>
+            <tr data-search="priya raman facilities building access card deactivated" data-actor="priya"
+                data-department="facilities" data-group="task">
+              <td data-label="When"><span class="numeric">20 Oct 2026, 11:20</span></td>
+              <td data-label="Category">Task completion</td>
+              <td data-label="Actor">Priya Raman · Facilities Coordinator</td>
+              <td data-label="Action">Completed “Building access card deactivated”</td>
+              <td data-label="Record"><a href="departure.html#clearance">DEP-2026-0031 · Helena Marsh</a></td>
+            </tr>
+            <tr data-search="system overdue escalation payroll chen wei" data-actor="system"
+                data-department="system" data-group="task">
+              <td data-label="When"><span class="numeric">20 Oct 2026, 07:00</span></td>
+              <td data-label="Category">Escalation (automated)</td>
+              <td data-label="Actor">System · reminder job</td>
+              <td data-label="Action">Escalated overdue action to the departmental lead</td>
+              <td data-label="Record">Task · Payroll enrolment · Chen Wei</td>
+            </tr>
+            <tr data-search="rosa bell lifecycle departure case opened helena marsh" data-actor="rosa"
+                data-department="hr" data-group="lifecycle">
+              <td data-label="When"><span class="numeric">6 Oct 2026, 09:12</span></td>
+              <td data-label="Category">Lifecycle</td>
+              <td data-label="Actor">Rosa Bell · People Operations Lead</td>
+              <td data-label="Action">Opened departure case DEP-2026-0031</td>
+              <td data-label="Record"><a href="employee.html">EMP-100190 · Helena Marsh</a></td>
+            </tr>
+            <tr data-search="aisha khan approval departure authorisation approved" data-actor="aisha"
+                data-department="hr" data-group="approval">
+              <td data-label="When"><span class="numeric">2 Oct 2026, 11:02</span></td>
+              <td data-label="Category">Approval</td>
+              <td data-label="Actor">Aisha Khan · People Partner</td>
+              <td data-label="Action">Approved “Departure authorisation”</td>
+              <td data-label="Record"><a href="approvals.html#history">DEP-2026-0031 · Helena Marsh</a></td>
+            </tr>
+            <tr data-search="nadia haddad returned equipment spend marcus bennett" data-actor="nadia"
+                data-department="management" data-group="approval">
+              <td data-label="When"><span class="numeric">15 Oct 2026, 09:20</span></td>
+              <td data-label="Category">Approval</td>
+              <td data-label="Actor">Nadia Haddad · Head of Design</td>
+              <td data-label="Action">Returned “Equipment spend” for correction — “Attach the supplier quote.”</td>
+              <td data-label="Record"><a href="approvals.html#history">ONB-2026-0151 · Marcus Bennett</a></td>
+            </tr>
+            <tr data-search="tomas ferreira rejected elevated access grace sullivan" data-actor="tomas"
+                data-department="it" data-group="approval">
+              <td data-label="When"><span class="numeric">14 Oct 2026, 16:45</span></td>
+              <td data-label="Category">Approval</td>
+              <td data-label="Actor">Tomás Ferreira · IT Services Lead</td>
+              <td data-label="Action">Rejected “Elevated access” — “Not required for this role.”</td>
+              <td data-label="Record">ONB-2026-0144 · Grace Sullivan</td>
+            </tr>
+            <tr data-search="hannah cole communications directory entry removed" data-actor="hannah"
+                data-department="comms" data-group="task">
+              <td data-label="When"><span class="numeric">15 Oct 2026, 16:04</span></td>
+              <td data-label="Category">Task completion</td>
+              <td data-label="Actor">Hannah Cole · Internal Communications</td>
+              <td data-label="Action">Completed “Directory &amp; org chart entry removed”</td>
+              <td data-label="Record">DEP-2026-0031 · Helena Marsh</td>
+            </tr>
+            <tr data-search="dev sharma template activated arrival standard v4 admin" data-actor="dev"
+                data-department="system" data-group="admin">
+              <td data-label="When"><span class="numeric">13 Oct 2026, 14:30</span></td>
+              <td data-label="Category">Configuration</td>
+              <td data-label="Actor">Dev Sharma · Systems Administrator</td>
+              <td data-label="Action">Activated template “Arrival — standard v4”</td>
+              <td data-label="Record"><a href="workflows.html">Workflow configuration</a></td>
+            </tr>
+            <tr data-search="dev sharma role granted it task owner admin" data-actor="dev"
+                data-department="system" data-group="admin">
+              <td data-label="When"><span class="numeric">12 Oct 2026, 09:05</span></td>
+              <td data-label="Category">Access control</td>
+              <td data-label="Actor">Dev Sharma · Systems Administrator</td>
+              <td data-label="Action">Granted role “IT task owner” to Tomás Ferreira</td>
+              <td data-label="Record"><a href="admin-users.html">Users &amp; roles</a></td>
+            </tr>
+            <tr data-search="rosa bell export restricted lifecycle record admin" data-actor="rosa"
+                data-department="hr" data-group="admin">
+              <td data-label="When"><span class="numeric">10 Oct 2026, 15:48</span></td>
+              <td data-label="Category">Export</td>
+              <td data-label="Actor">Rosa Bell · People Operations Lead</td>
+              <td data-label="Action">Exported restricted lifecycle record · purpose: pension audit</td>
+              <td data-label="Record">EMP-100158 · Chiara Rossi</td>
+            </tr>
+            <tr data-search="aisha khan lifecycle role change promotion recorded" data-actor="aisha"
+                data-department="hr" data-group="lifecycle">
+              <td data-label="When"><span class="numeric">1 Sep 2023, 12:00</span></td>
+              <td data-label="Category">Lifecycle</td>
+              <td data-label="Actor">Aisha Khan · People Partner</td>
+              <td data-label="Action">Recorded promotion to Finance Business Partner</td>
+              <td data-label="Record"><a href="employee.html">EMP-100190 · Helena Marsh</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="empty" data-table-empty hidden>
+        <span class="empty__art" aria-hidden="true"><svg class="icon icon--lg"><use href="#i-search"/></svg></span>
+        <h3 class="empty__title">No audit events match these filters</h3>
+        <p class="empty__text">
+          Try a different actor, department or category. Audit events appear here as soon as the recorded action
+          is committed in production.
+        </p>
+        <div class="empty__actions">
+          <button class="btn btn--secondary" type="button" data-table-reset>Clear filters</button>
+        </div>
+      </div>
+
+      <div class="card__foot">
+        <p data-table-count>Showing all 12 events</p>
+        <p class="text-xs muted">Retention: 7 years for lifecycle and approval records</p>
+      </div>
+    </section>
+
+    <!-- 3: lifecycle history and retention -->
+    <div class="grid grid--split mt-6">
+      <section class="card" aria-labelledby="lifecycle-audit-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="lifecycle-audit-title">Employee lifecycle history · Helena Marsh</h2>
+            <p class="card__sub">The same events, viewed as one person's journey through the system.</p>
+          </div>
+          <a class="btn btn--secondary btn--sm" href="employee.html">Open lifecycle record</a>
+        </div>
+        <div class="card__body">
+          <ol class="timeline">
+            <li class="timeline__item timeline__item--done">
+              <div class="timeline__rail">
+                <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
+                <span class="timeline__line"></span>
+              </div>
+              <div class="timeline__body">
+                <p class="timeline__title">Arrival case ONB-2019-0210 completed</p>
+                <p class="timeline__meta"><span>4 Mar 2019</span><span>Rosa Bell · 19 of 19 actions complete</span></p>
+              </div>
+            </li>
+            <li class="timeline__item timeline__item--done">
+              <div class="timeline__rail">
+                <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
+                <span class="timeline__line"></span>
+              </div>
+              <div class="timeline__body">
+                <p class="timeline__title">Role change recorded</p>
+                <p class="timeline__meta"><span>1 Apr 2021 · 1 Sep 2023</span><span>Aisha Khan</span></p>
+              </div>
+            </li>
+            <li class="timeline__item timeline__item--done">
+              <div class="timeline__rail">
+                <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
+                <span class="timeline__line"></span>
+              </div>
+              <div class="timeline__body">
+                <p class="timeline__title">Restricted record viewed</p>
+                <p class="timeline__meta"><span>11 Oct 2026, 09:14</span><span>Rosa Bell · right to work evidence</span></p>
+              </div>
+            </li>
+            <li class="timeline__item timeline__item--active">
+              <div class="timeline__rail">
+                <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-clock"/></svg></span>
+                <span class="timeline__line"></span>
+              </div>
+              <div class="timeline__body">
+                <p class="timeline__title">Departure case DEP-2026-0031 in clearance</p>
+                <p class="timeline__meta">
+                  <span>6 Oct 2026 → present</span>
+                  <span class="badge badge--warn"><span class="badge__dot"></span>7 actions outstanding</span>
+                </p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="retention-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="retention-title">Audit access &amp; retention</h2>
+            <p class="card__sub">Who may read the trail, and for how long it is kept.</p>
+          </div>
+        </div>
+        <div class="card__body">
+          <div class="def-list">
+            <div class="def-row">
+              <span class="def-row__label">Who may read</span>
+              <span class="def-row__value">HR administrators and system administrators</span>
+              <span class="def-row__action"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg> Restricted</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Departmental users</span>
+              <span class="def-row__value">See only the history of tasks they own</span>
+              <span class="def-row__action"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Scoped</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Line managers</span>
+              <span class="def-row__value">See lifecycle events for their own team</span>
+              <span class="def-row__action"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Scoped</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Editing or deleting entries</span>
+              <span class="def-row__value">Not possible for any role, including administrators</span>
+              <span class="def-row__action"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> Blocked</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Retention</span>
+              <span class="def-row__value">7 years · lifecycle, approvals and exports</span>
+              <span class="def-row__action"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Configured</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Reads of restricted records</span>
+              <span class="def-row__value">Audited, with the reason where one was required</span>
+              <span class="def-row__action"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Enabled</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="card__foot">
+          <p>Permissions are enforced by the Django backend, not by this screen</p>
+          <a class="btn btn--link text-sm" href="admin-users.html">Roles &amp; permissions</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="page-foot">
+    <p>Casidra Arrivals &amp; Departures · audit design prototype</p>
+    <p>Fictional sample data · UI only · no event is recorded by this prototype</p>
+  </footer>
+</div>
+
+<!-- @include partials/shell-end.html -->
+<!-- @include partials/scripts.html -->
+</body>
+</html>

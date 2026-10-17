@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Employee directory · Casidra</title>
+<meta name="description" content="Casidra employee register: employee numbers, departments, managers, employment status and lifecycle records.">
+<!-- @include partials/head-assets.html -->
+</head>
+<body class="app" data-page="directory">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- @include partials/icons.html -->
+<!-- @include partials/sidebar.html -->
+
+<div class="app__body">
+  <!-- @include partials/topbar.html -->
+
+  <main class="content" id="main">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Dashboard</a>
+      <span class="breadcrumb__sep" aria-hidden="true">/</span>
+      <span aria-current="page">Employee directory</span>
+    </nav>
+
+    <div class="page-head">
+      <div>
+        <p class="eyebrow">People</p>
+        <h1 class="page-head__title">Employee directory</h1>
+        <p class="page-head__sub">
+          The register of every employee, with the employment status that drives arrivals and departures. Open a
+          person to see their lifecycle record, related tasks, approvals and equipment.
+        </p>
+      </div>
+      <div class="page-head__actions">
+        <button class="btn btn--secondary" type="button"
+                data-toast="Export queued" data-toast-message="Exports are part of the production build, not this prototype."
+                data-toast-tone="info">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-download"/></svg>
+          Export register
+        </button>
+        <a class="btn btn--primary" href="cases.html">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-plus"/></svg>
+          New onboarding case
+        </a>
+      </div>
+    </div>
+
+    <div class="notice" role="note">
+      <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
+      <p>
+        <strong>Design prototype.</strong> The register is fictional sample data. Restricted employee information
+        (right-to-work evidence, occupational health, personal contact details) is shown separately on a
+        lifecycle record and is designed to be visible to HR and system administrators only — in production
+        Django enforces that, not this screen.
+      </p>
+    </div>
+
+    <!-- 1: directory figures -->
+    <section class="grid grid--kpis mt-6" aria-label="Directory figures">
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Employees on record</p>
+            <p class="kpi__value tnum mt-2">214</p>
+          </div>
+          <span class="kpi__icon" aria-hidden="true"><svg class="icon"><use href="#i-users"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--flat">Across 8 departments</span><span>and 4 locations</span></div>
+        <p class="text-xs muted mt-4">Register is the source of truth for both arrival and departure cases.</p>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Arriving</p>
+            <p class="kpi__value tnum mt-2">12</p>
+          </div>
+          <span class="kpi__icon kpi__icon--ok" aria-hidden="true"><svg class="icon"><use href="#i-arrow-right"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--up">4 start within 14 days</span></div>
+        <a class="kpi__link" href="cases.html">
+          Open onboarding cases
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Leaving</p>
+            <p class="kpi__value tnum mt-2">5</p>
+          </div>
+          <span class="kpi__icon kpi__icon--warn" aria-hidden="true"><svg class="icon"><use href="#i-door"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--flat">3 depart within 21 days</span></div>
+        <a class="kpi__link" href="offboarding.html">
+          Open departure cases
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Needing attention</p>
+            <p class="kpi__value tnum mt-2">3</p>
+          </div>
+          <span class="kpi__icon kpi__icon--danger" aria-hidden="true"><svg class="icon"><use href="#i-alert"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--down">Missing manager or assignment</span></div>
+        <p class="text-xs muted mt-4">Records without a coordinator or reporting line cannot open a case.</p>
+      </article>
+    </section>
+
+    <!-- 2: register -->
+    <section class="card mt-6" data-table-region data-count-noun="employees" aria-labelledby="register-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="register-title">Employee register</h2>
+          <p class="card__sub">Sorted by employment status, then by department.</p>
+        </div>
+        <div class="segmented" role="tablist" aria-label="Filter employees by status" data-table-group>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="true" data-group-value="all">
+            All <span class="segmented__count">14</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="arriving">
+            Arriving <span class="segmented__count">5</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="leaving">
+            Leaving <span class="segmented__count">5</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="active">
+            Active <span class="segmented__count">4</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="toolbar__search input-wrap">
+          <label class="sr-only" for="dir-search">Search the register by name, number, job title or manager</label>
+          <svg class="icon icon--sm input-wrap__icon" aria-hidden="true"><use href="#i-search"/></svg>
+          <input class="input input--icon" id="dir-search" type="search" placeholder="Search name, number or manager…"
+                 autocomplete="off" data-table-search>
+        </div>
+        <div class="input-wrap">
+          <label class="sr-only" for="dir-department">Department</label>
+          <select class="select" id="dir-department" data-table-filter="department">
+            <option value="">All departments</option>
+            <option value="design">Design</option>
+            <option value="technology">Technology</option>
+            <option value="finance">Finance</option>
+            <option value="facilities">Facilities</option>
+            <option value="marketing">Marketing</option>
+            <option value="operations">Operations</option>
+            <option value="people">People</option>
+            <option value="legal">Legal</option>
+            <option value="revenue">Revenue</option>
+          </select>
+        </div>
+        <div class="input-wrap">
+          <label class="sr-only" for="dir-status">Employment status</label>
+          <select class="select" id="dir-status" data-table-filter="status">
+            <option value="">Any status</option>
+            <option value="active">Active</option>
+            <option value="arriving">Arriving</option>
+            <option value="leaving">Leaving</option>
+            <option value="attention">Needs attention</option>
+          </select>
+        </div>
+        <button class="btn btn--ghost btn--sm" type="button" data-table-reset>
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-refresh"/></svg>
+          Reset
+        </button>
+      </div>
+
+      <div class="table-wrap" data-table-wrap>
+        <table class="table table--stack">
+          <caption class="sr-only">Employee register with employee number, department, job title, manager and employment status</caption>
+          <thead>
+            <tr>
+              <th scope="col">Employee</th>
+              <th scope="col">Number</th>
+              <th scope="col">Department</th>
+              <th scope="col">Job title</th>
+              <th scope="col">Manager</th>
+              <th scope="col">Status</th>
+              <th scope="col">Key date</th>
+              <th scope="col" class="table__actions"><span class="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody data-table-rows>
+            <tr data-search="helena marsh emp-100190 finance finance business partner yusuf adeyemi leaving"
+                data-department="finance" data-status="leaving" data-group="leaving" data-row-href="employee.html">
+              <td data-label="Employee">
+                <a class="person" href="employee.html">
+                  <span class="avatar avatar--rose" aria-hidden="true">HM</span>
+                  <span>
+                    <span class="person__name">Helena Marsh</span>
+                    <span class="person__meta">helena.marsh@casidra.example</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Number"><span class="numeric">EMP-100190</span></td>
+              <td data-label="Department">Finance</td>
+              <td data-label="Job title">Finance Business Partner</td>
+              <td data-label="Manager">Yusuf Adeyemi</td>
+              <td data-label="Status"><span class="badge badge--warn"><span class="badge__dot"></span>Leaving</span></td>
+              <td data-label="Key date">Departs 30 Oct 2026</td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="departure.html">Departure case
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg></a>
+              </td>
+            </tr>
+
+            <tr data-search="chiara rossi emp-100158 facilities office manager ines duarte leaving"
+                data-department="facilities" data-status="leaving" data-group="leaving" data-row-href="employee.html">
+              <td data-label="Employee">
+                <a class="person" href="employee.html">
+                  <span class="avatar avatar--teal" aria-hidden="true">CR</span>
+                  <span>
+                    <span class="person__name">Chiara Rossi</span>
+                    <span class="person__meta">chiara.rossi@casidra.example</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Number"><span class="numeric">EMP-100158</span></td>
+              <td data-label="Department">Facilities</td>
+              <td data-label="Job title">Office Manager</td>
+              <td data-label="Manager">Ines Duarte</td>
+              <td data-label="Status"><span class="badge badge--warn"><span class="badge__dot"></span>Leaving</span></td>
+              <td data-label="Key date">Departs 28 Oct 2026</td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="offboarding.html">Departure case
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg></a>
+              </td>
+            </tr>
+
+            <tr data-search="raj patel emp-100233 technology senior data engineer daniel okonkwo leaving"
+                data-department="technology" data-status="leaving" data-group="leaving" data-row-href="employee.html">
+              <td data-label="Employee">
+                <a class="person" href="employee.html">
+                  <span class="avatar avatar--slate" aria-hidden="true">RP</span>
+                  <span>
+                    <span class="person__name">Raj Patel</span>
+                    <span class="person__meta">raj.patel@casidra.example</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Number"><span class="numeric">EMP-100233</span></td>
+              <td data-label="Department">Technology</td>
+              <td data-label="Job title">Senior Data Engineer</td>
+              <td data-label="Manager">Daniel Okonkwo</td>
+              <td data-label="Status"><span class="badge badge--warn"><span class="badge__dot"></span>Leaving</span></td>
+              <td data-label="Key date">Departs 6 Nov 2026</td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="offboarding.html">Departure case
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg></a>
+              </td>
+            </tr>
+
+            <tr data-search="michael osei emp-100076 operations warehouse operative owen blackwood leaving"
+                data-department="operations" data-status="leaving" data-group="leaving" data-row-href="employee.html">
+              <td data-label="Employee">
+                <a class="person" href="employee.html">
+                  <span class="avatar avatar--amber" aria-hidden="true">MO</span>
+                  <span>
+                    <span class="person__name">Michael Osei</span>
+                    <span class="person__meta">michael.osei@casidra.example</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Number"><span class="numeric">EMP-100076</span></td>
+              <td data-label="Department">Operations</td>
+              <td data-label="Job title">Warehouse Operative</td>
+              <td data-label="Manager">Owen Blackwood</td>
+              <td data-label="Status"><span class="badge badge--warn"><span class="badge__dot"></span>Leaving</span></td>
+              <td data-label="Key date">Departs 13 Nov 2026</td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="offboarding.html">Departure case
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg></a>
+              </td>
+            </tr>
+
+            <tr data-search="yuki tanaka emp-100351 marketing marketing executive hannah cole leaving"
+                data-department="marketing" data-status="leaving" data-group="leaving" data-row-href="employee.html">
+              <td data-label="Employee">
+                <a class="person" href="employee.html">
+                  <span class="avatar avatar--rose" aria-hidden="true">YT</span>
+                  <span>
+                    <span class="person__name">Yuki Tanaka</span>
+                    <span class="person__meta">yuki.tanaka@casidra.example</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Number"><span class="numeric">EMP-100351</span></td>
+              <td data-label="Department">Marketing</td>
+              <td data-label="Job title">Marketing Executive</td>
+              <td data-label="Manager">Hannah Cole</td>
+              <td data-label="Status"><span class="badge badge--warn"><span class="badge__dot"></span>Leaving</span></td>
+              <td data-label="Key date">Departs 20 Nov 2026</td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="offboarding.html">Departure case
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg></a>
+              </td>
+            </tr>
+
+            <tr data-search="amara okafor emp-100482 design product designer nadia haddad arriving"
+                data-department="design" data-status="arriving" data-group="arriving" data-row-href="case.html">
+              <td data-label="Employee">
+                <a class="person" href="case.html">
+                  <span class="avatar" aria-hidden="true">AO</span>
+                  <span>
+                    <span class="person__name">Amara Okafor</span>
+                    <span class="person__meta">amara.okafor@casidra.example</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Number"><span class="numeric">EMP-100482</span></td>
+              <td data-label="Department">Design</td>
+              <td data-label="Job title">Product Designer</td>
+              <td data-label="Manager">Nadia Haddad</td>
+              <td data-label="Status"><span class="badge badge--info"><span class="badge__dot"></span>Arriving</span></td>
+              <td data-label="Key date">Starts 3 Nov 2026</td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="case.html">Case file
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg></a>
+              </td>
+            </tr>
+
+            <tr data-search="daniel whitfield emp-100398 technology site reliability engineer daniel okonkwo arriving"
+                data-department="technology" data-status="arriving" data-group="arriving" data-row-href="case.html">
+              <td data-label="Employee">
+                <a class="person" href="case.html">
+                  <span class="avatar avatar--slate" aria-hidden="true">DW</span>
+                  <span>
+                    <span class="person__name">Daniel Whitfield</span>
+                    <span class="person__meta">daniel.whitfield@casidra.example</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Number"><span class="numeric">EMP-100398</span></td>
+              <td data-label="Department">Technology</td>
+              <td data-label="Job title">Site Reliability Engineer</td>
+              <td data-label="Manager">Daniel Okonkwo</td>
+              <td data-label="Status"><span class="badge badge--info"><span class="badge__dot"></span>Arriving</span></td>
+              <td data-label="Key date">Starts 27 Oct 2026</td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="case.html">Case file
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg></a>
+              </td>
+            </tr>
+
+            <tr data-search="marcus bennett emp-100355 facilities facilities supervisor owen blackwood arriving"
+                data-department="facilities" data-status="arriving" data-group="arriving" data-row-href="case.html">
+              <td data-label="Employee">
+                <a class="person" href="case.html">
+                  <span class="avatar avatar--teal" aria-hidden="true">MB</span>
+                  <span>
+                    <span class="person__name">Marcus Bennett</span>
+                    <span class="person__meta">marcus.bennett@casidra.example</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Number"><span class="numeric">EMP-100355</span></td>
+              <td data-label="Department">Facilities</td>
+              <td data-label="Job title">Facilities Supervisor</td>
+              <td data-label="Manager">Owen Blackwood</td>
+              <td data-label="Status"><span class="badge badge--info"><span class="badge__dot"></span>Arriving</span></td>
+              <td data-label="Key date">Starts 20 Oct 2026</td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="case.html">Case file
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg></a>
+              </td>
+            </tr>
+
+            <tr data-search="sofia almeida emp-100412 marketing marketing manager ines duarte arriving"
+                data-department="marketing" data-status="arriving" data-group="arriving" data-row-href="cases.html">
+              <td data-label="Employee">
+                <a class="person" href="cases.html">
+                  <span class="avatar avatar--rose" aria-hidden="true">SA</span>
+                  <span>
+                    <span class="person__name">Sofia Almeida</span>
+                    <span class="person__meta">sofia.almeida@casidra.example</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Number"><span class="numeric">EMP-100412</span></td>
+              <td data-label="Department">Marketing</td>
+              <td data-label="Job title">Marketing Manager</td>
+              <td data-label="Manager">Ines Duarte</td>
+              <td data-label="Status"><span class="badge badge--info"><span class="badge__dot"></span>Arriving</span></td>
+              <td data-label="Key date">Starts 10 Nov 2026</td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="cases.html">Case file
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg></a>
+              </td>
+            </tr>
+
+            <tr data-search="fatima zahra emp-100430 people hr business partner rosa bell arriving attention"
+                data-department="people" data-status="attention" data-group="arriving" data-row-href="cases.html">
+              <td data-label="Employee">
+                <a class="person" href="cases.html">
+                  <span class="avatar avatar--slate" aria-hidden="true">FZ</span>
+                  <span>
+                    <span class="person__name">Fatima Zahra</span>
+                    <span class="person__meta">fatima.zahra@casidra.example</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Number"><span class="numeric">EMP-100430</span></td>
+              <td data-label="Department">People</td>
+              <td data-label="Job title">HR Business Partner</td>
+              <td data-label="Manager">Rosa Bell</td>
+              <td data-label="Status"><span class="badge badge--danger"><span class="badge__dot"></span>Needs attention</span></td>
+              <td data-label="Key date">Starts 1 Dec 2026</td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="cases.html">Case file
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg></a>
+              </td>
+            </tr>
+
+            <tr data-search="aisha khan emp-100314 people people partner rosa bell active"
+                data-department="people" data-status="active" data-group="active" data-row-href="employee.html">
+              <td data-label="Employee">
+                <a class="person" href="employee.html">
+                  <span class="avatar avatar--slate" aria-hidden="true">AK</span>
+                  <span>
+                    <span class="person__name">Aisha Khan</span>
+                    <span class="person__meta">aisha.khan@casidra.example</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Number"><span class="numeric">EMP-100314</span></td>
+              <td data-label="Department">People</td>
+              <td data-label="Job title">People Partner</td>
+              <td data-label="Manager">Rosa Bell</td>
+              <td data-label="Status"><span class="badge badge--ok"><span class="badge__dot"></span>Active</span></td>
+              <td data-label="Key date">Joined 8 Feb 2021</td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="employee.html">Lifecycle record
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg></a>
+              </td>
+            </tr>
+
+            <tr data-search="tomas ferreira emp-100271 technology it services lead ines duarte active"
+                data-department="technology" data-status="active" data-group="active" data-row-href="employee.html">
+              <td data-label="Employee">
+                <a class="person" href="employee.html">
+                  <span class="avatar avatar--amber" aria-hidden="true">TF</span>
+                  <span>
+                    <span class="person__name">Tomás Ferreira</span>
+                    <span class="person__meta">tomas.ferreira@casidra.example</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Number"><span class="numeric">EMP-100271</span></td>
+              <td data-label="Department">Technology</td>
+              <td data-label="Job title">IT Services Lead</td>
+              <td data-label="Manager">Ines Duarte</td>
+              <td data-label="Status"><span class="badge badge--ok"><span class="badge__dot"></span>Active</span></td>
+              <td data-label="Key date">Joined 3 Sep 2018</td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="employee.html">Lifecycle record
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg></a>
+              </td>
+            </tr>
+
+            <tr data-search="priya raman emp-100288 facilities facilities coordinator owen blackwood active"
+                data-department="facilities" data-status="active" data-group="active" data-row-href="employee.html">
+              <td data-label="Employee">
+                <a class="person" href="employee.html">
+                  <span class="avatar avatar--rose" aria-hidden="true">PR</span>
+                  <span>
+                    <span class="person__name">Priya Raman</span>
+                    <span class="person__meta">priya.raman@casidra.example</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Number"><span class="numeric">EMP-100288</span></td>
+              <td data-label="Department">Facilities</td>
+              <td data-label="Job title">Facilities Coordinator</td>
+              <td data-label="Manager">Owen Blackwood</td>
+              <td data-label="Status"><span class="badge badge--ok"><span class="badge__dot"></span>Active</span></td>
+              <td data-label="Key date">Joined 12 Jul 2020</td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="employee.html">Lifecycle record
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg></a>
+              </td>
+            </tr>
+
+            <tr data-search="hannah cole emp-100295 marketing internal communications manager ines duarte active"
+                data-department="marketing" data-status="active" data-group="active" data-row-href="employee.html">
+              <td data-label="Employee">
+                <a class="person" href="employee.html">
+                  <span class="avatar avatar--teal" aria-hidden="true">HC</span>
+                  <span>
+                    <span class="person__name">Hannah Cole</span>
+                    <span class="person__meta">hannah.cole@casidra.example</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Number"><span class="numeric">EMP-100295</span></td>
+              <td data-label="Department">Marketing</td>
+              <td data-label="Job title">Internal Communications Manager</td>
+              <td data-label="Manager">Ines Duarte</td>
+              <td data-label="Status"><span class="badge badge--ok"><span class="badge__dot"></span>Active</span></td>
+              <td data-label="Key date">Joined 4 Jan 2021</td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="employee.html">Lifecycle record
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="empty" data-table-empty hidden>
+        <span class="empty__art" aria-hidden="true"><svg class="icon icon--lg"><use href="#i-users"/></svg></span>
+        <h3 class="empty__title">No employees match these filters</h3>
+        <p class="empty__text">
+          Try a different name, employee number or department. Employees appear here as soon as their record is
+          created, before an arrival or departure case is opened.
+        </p>
+        <div class="empty__actions">
+          <button class="btn btn--secondary" type="button" data-table-reset>Clear filters</button>
+          <button class="btn btn--primary" type="button" data-sheet-open="sheet-new-case" aria-haspopup="dialog">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-plus"/></svg>
+            New onboarding case
+          </button>
+        </div>
+      </div>
+
+      <div class="card__foot">
+        <p data-table-count>Showing all 14 employees</p>
+        <div class="pager" role="group" aria-label="Register pages">
+          <button class="pager__btn" type="button" disabled aria-label="Previous page">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-left"/></svg>
+          </button>
+          <button class="pager__btn" type="button" aria-current="page">1</button>
+          <button class="pager__btn" type="button">2</button>
+          <button class="pager__btn" type="button">3</button>
+          <button class="pager__btn" type="button" aria-label="Next page">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3: lifecycle at a glance -->
+    <div class="grid grid--halves mt-6">
+      <section class="card" aria-labelledby="deps-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="deps-title">Register by department</h2>
+            <p class="card__sub">Headcount, arrivals and departures per department.</p>
+          </div>
+        </div>
+        <div class="card__body">
+          <div class="hbars">
+            <div class="hbar">
+              <span class="hbar__label">Technology</span>
+              <span class="hbar__track"><span class="hbar__fill" style="width:100%"></span></span>
+              <span class="hbar__value">61</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar__label">Operations</span>
+              <span class="hbar__track"><span class="hbar__fill" style="width:74%"></span></span>
+              <span class="hbar__value">45</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar__label">Finance</span>
+              <span class="hbar__track"><span class="hbar__fill" style="width:44%"></span></span>
+              <span class="hbar__value">27</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar__label">Marketing</span>
+              <span class="hbar__track"><span class="hbar__fill" style="width:36%"></span></span>
+              <span class="hbar__value">22</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar__label">Facilities</span>
+              <span class="hbar__track"><span class="hbar__fill" style="width:28%"></span></span>
+              <span class="hbar__value">17</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar__label">People</span>
+              <span class="hbar__track"><span class="hbar__fill" style="width:20%"></span></span>
+              <span class="hbar__value">12</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar__label">Design</span>
+              <span class="hbar__track"><span class="hbar__fill" style="width:18%"></span></span>
+              <span class="hbar__value">11</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar__label">Legal</span>
+              <span class="hbar__track"><span class="hbar__fill" style="width:11%"></span></span>
+              <span class="hbar__value">7</span>
+            </div>
+          </div>
+        </div>
+        <div class="card__foot">
+          <p>214 employees on record · 12 arriving · 5 leaving</p>
+          <a class="btn btn--link text-sm" href="reports.html">Headcount report</a>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="attention-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="attention-title">Records needing attention</h2>
+            <p class="card__sub">A case cannot open until these are resolved.</p>
+          </div>
+          <span class="badge badge--danger"><span class="badge__dot"></span>3 open</span>
+        </div>
+        <div class="list">
+          <article class="list__item">
+            <span class="notif__icon notif__icon--warn" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-user"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">Fatima Zahra · no coordinator assigned</p>
+              <p class="list__meta">People · starts 1 Dec 2026 · case cannot be opened</p>
+            </div>
+            <div class="list__aside">
+              <button class="btn btn--secondary btn--sm" type="button" data-confirm
+                      data-confirm-title="Assign a coordinator?"
+                      data-confirm-body="Rosa Bell would be assigned as coordinator for Fatima Zahra's arrival."
+                      data-confirm-label="Assign coordinator"
+                      data-confirm-status="Assigned|ok"
+                      data-confirm-toast="Coordinator assigned">
+                Assign
+              </button>
+            </div>
+          </article>
+          <article class="list__item">
+            <span class="notif__icon notif__icon--warn" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-building"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">Michael Osei · location missing</p>
+              <p class="list__meta">Operations · departure case DEP-2026-0036 needs a site before clearance starts</p>
+            </div>
+            <div class="list__aside">
+              <button class="btn btn--secondary btn--sm" type="button" data-confirm
+                      data-confirm-title="Set the work location?"
+                      data-confirm-body="Sheffield depot would be recorded for Michael Osei's clearance actions."
+                      data-confirm-label="Set location"
+                      data-confirm-status="Set|ok"
+                      data-confirm-toast="Location recorded">
+                Set location
+              </button>
+            </div>
+          </article>
+          <article class="list__item">
+            <span class="notif__icon notif__icon--warn" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-users"/></svg></span>
+            <div class="list__main">
+              <p class="list__title">Elena Petrova · reporting line unconfirmed</p>
+              <p class="list__meta">Legal · starts 10 Nov 2026 · manager approval route unknown</p>
+            </div>
+            <div class="list__aside">
+              <button class="btn btn--secondary btn--sm" type="button" data-confirm
+                      data-confirm-title="Confirm the reporting line?"
+                      data-confirm-body="Ines Duarte would be recorded as Elena Petrova's manager, which fixes the approval route."
+                      data-confirm-label="Confirm manager"
+                      data-confirm-status="Confirmed|ok"
+                      data-confirm-toast="Reporting line confirmed">
+                Confirm
+              </button>
+            </div>
+          </article>
+        </div>
+        <div class="card__foot">
+          <p>Data quality checks run nightly in the Django application</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="page-foot">
+    <p>Casidra Arrivals &amp; Departures · employee directory design prototype</p>
+    <p>Fictional sample data · UI only · not connected to a backend</p>
+  </footer>
+</div>
+
+<!-- @include partials/shell-end.html -->
+<!-- @include partials/sheet-new-case.html -->
+<!-- @include partials/scripts.html -->
+</body>
+</html>

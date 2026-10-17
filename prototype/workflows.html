@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Workflow templates · Casidra</title>
+<meta name="description" content="Workflow and checklist administration: reusable arrival and departure templates, task sequences, dependencies, approvals, transitions, escalation and versioning.">
+<!-- @include partials/head-assets.html -->
+</head>
+<body class="app" data-page="workflows">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- @include partials/icons.html -->
+<!-- @include partials/sidebar.html -->
+
+<div class="app__body">
+  <!-- @include partials/topbar.html -->
+
+  <main class="content" id="main">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Dashboard</a>
+      <span class="breadcrumb__sep" aria-hidden="true">/</span>
+      <span aria-current="page">Workflow templates</span>
+    </nav>
+
+    <div class="page-head">
+      <div>
+        <p class="eyebrow">Administration</p>
+        <h1 class="page-head__title">Workflow &amp; checklist templates</h1>
+        <p class="page-head__sub">
+          The templates that decide which departmental actions an arrival or departure case must complete, in
+          which order, with which due dates and which approvals. Editing a template changes every future case —
+          it never rewrites a case already in progress.
+        </p>
+      </div>
+      <div class="page-head__actions">
+        <button class="btn btn--secondary" type="button" data-confirm
+                data-confirm-title="Duplicate a template?"
+                data-confirm-sub="Duplicating creates a draft so the active version stays untouched."
+                data-confirm-body="The copy starts as a draft with no cases attached, and can be edited freely before activation."
+                data-confirm-label="Create draft"
+                data-confirm-icon="i-plus"
+                data-confirm-toast="Draft created"
+                data-confirm-toast-message="Draft templates are not created in this prototype.">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-plus"/></svg>
+          New draft template
+        </button>
+        <a class="btn btn--primary" href="approvals.html">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-inbox"/></svg>
+          Activation approvals
+        </a>
+      </div>
+    </div>
+
+    <div class="notice" role="note">
+      <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
+      <p>
+        <strong>Design prototype.</strong> No template can be edited, activated or retired here. In production
+        the template library lives in the Django application, activation requires an approved administrative
+        review, and every version change is written to the audit trail.
+      </p>
+    </div>
+
+    <!-- 1: template figures -->
+    <section class="grid grid--kpis mt-6" aria-label="Template figures">
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Active templates</p>
+            <p class="kpi__value tnum mt-2">4</p>
+          </div>
+          <span class="kpi__icon kpi__icon--ok" aria-hidden="true"><svg class="icon"><use href="#i-check-circle"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--flat">In use by 17 cases</span></div>
+        <p class="text-xs muted mt-4">2 arrival and 2 departure templates</p>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Awaiting review</p>
+            <p class="kpi__value tnum mt-2">2</p>
+          </div>
+          <span class="kpi__icon kpi__icon--warn" aria-hidden="true"><svg class="icon"><use href="#i-clock"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--down">1 waiting 2 days</span></div>
+        <a class="kpi__link" href="approvals.html">
+          Review activation requests
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Checklist steps in use</p>
+            <p class="kpi__value tnum mt-2">54</p>
+          </div>
+          <span class="kpi__icon" aria-hidden="true"><svg class="icon"><use href="#i-check-list"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--flat">Across four departments</span></div>
+        <p class="text-xs muted mt-4">11 steps require an approval before they complete</p>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Last reviewed</p>
+            <p class="kpi__value mt-2">13 Oct 2026</p>
+          </div>
+          <span class="kpi__icon" aria-hidden="true"><svg class="icon"><use href="#i-calendar"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--flat">Reviewed quarterly by HR and IT</span></div>
+        <p class="text-xs muted mt-4">Next review due 13 Jan 2027</p>
+      </article>
+    </section>
+
+    <!-- 2: template library -->
+    <section class="card mt-6" data-table-region data-count-noun="templates" aria-labelledby="library-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="library-title">Template library</h2>
+          <p class="card__sub">One row per template version. Only one version of each template can be active.</p>
+        </div>
+        <div class="segmented" role="tablist" aria-label="Filter templates by status" data-table-group>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="true" data-group-value="all">
+            All <span class="segmented__count">9</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="active">
+            Active <span class="segmented__count">4</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="draft">
+            Draft <span class="segmented__count">2</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="retired">
+            Retired <span class="segmented__count">3</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="toolbar__search input-wrap">
+          <label class="sr-only" for="wf-search">Search templates</label>
+          <svg class="icon icon--sm input-wrap__icon" aria-hidden="true"><use href="#i-search"/></svg>
+          <input class="input input--icon" id="wf-search" type="search" placeholder="Search template or owner…"
+                 autocomplete="off" data-table-search>
+        </div>
+        <div class="input-wrap">
+          <label class="sr-only" for="wf-kind">Applies to</label>
+          <select class="select" id="wf-kind" data-table-filter="kind">
+            <option value="">Arrivals and departures</option>
+            <option value="arrival">Arrivals (onboarding)</option>
+            <option value="departure">Departures (offboarding)</option>
+          </select>
+        </div>
+        <div class="input-wrap">
+          <label class="sr-only" for="wf-status">Status</label>
+          <select class="select" id="wf-status" data-table-filter="status">
+            <option value="">Any status</option>
+            <option value="active">Active</option>
+            <option value="draft">Draft</option>
+            <option value="review">In review</option>
+            <option value="retired">Retired</option>
+          </select>
+        </div>
+        <button class="btn btn--ghost btn--sm" type="button" data-table-reset>
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-refresh"/></svg>
+          Reset
+        </button>
+      </div>
+
+      <div class="table-wrap" data-table-wrap>
+        <table class="table table--stack">
+          <caption class="sr-only">Workflow templates with version, steps, status and last review</caption>
+          <thead>
+            <tr>
+              <th scope="col">Template</th>
+              <th scope="col">Applies to</th>
+              <th scope="col">Version</th>
+              <th scope="col">Steps</th>
+              <th scope="col">Status</th>
+              <th scope="col">Last reviewed</th>
+              <th scope="col" class="table__actions"><span class="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody data-table-rows>
+            <tr data-search="arrival standard v4 rosa bell hr it facilities communications" data-kind="arrival"
+                data-status="active" data-group="active">
+              <td data-label="Template">
+                <span class="table__primary">Arrival — standard</span>
+                <br><span class="text-xs muted">Permanent and long fixed-term employees</span>
+              </td>
+              <td data-label="Applies to">Arrivals</td>
+              <td data-label="Version"><span class="numeric">v4</span></td>
+              <td data-label="Steps">19 steps · 4 departments</td>
+              <td data-label="Status"><span class="badge badge--ok"><span class="badge__dot"></span>Active</span></td>
+              <td data-label="Last reviewed">13 Oct 2026</td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="#sequence">Open</a>
+              </td>
+            </tr>
+
+            <tr data-search="arrival fixed term field operations v3 rosa bell" data-kind="arrival"
+                data-status="review" data-group="draft">
+              <td data-label="Template">
+                <span class="table__primary">Arrival — fixed term (field operations)</span>
+                <br><span class="text-xs muted">Shorter checklist, fewer access approvals</span>
+              </td>
+              <td data-label="Applies to">Arrivals</td>
+              <td data-label="Version"><span class="numeric">v3</span></td>
+              <td data-label="Steps">14 steps · 3 departments</td>
+              <td data-label="Status"><span class="badge badge--warn"><span class="badge__dot"></span>In review</span></td>
+              <td data-label="Last reviewed">16 Oct 2026</td>
+              <td data-label="" class="table__actions">
+                <div class="row">
+                  <button class="btn btn--primary btn--sm" type="button" data-confirm
+                          data-confirm-title="Activate this template version?"
+                          data-confirm-sub="Activation applies the checklist to every new case using this template."
+                          data-confirm-body="Arrival — fixed term (field operations) v3 · 14 steps · 3 departments. Cases already in progress keep the version they started on. Activation needs an approved administrative review."
+                          data-confirm-label="Activate v3"
+                          data-confirm-icon="i-check-circle"
+                          data-confirm-comment="Administrative review reference"
+                          data-confirm-require-comment
+                          data-confirm-status="Active|ok"
+                          data-confirm-hide
+                          data-confirm-toast="Activation prepared"
+                          data-confirm-toast-tone="warn">
+                    Activate
+                  </button>
+                  <button class="btn btn--ghost btn--sm" type="button" data-toast="Template comparison"
+                          data-toast-message="Version comparison is not built in this prototype.">Compare</button>
+                </div>
+              </td>
+            </tr>
+
+            <tr data-search="departure voluntary v2 aisha khan hr it facilities" data-kind="departure"
+                data-status="active" data-group="active">
+              <td data-label="Template">
+                <span class="table__primary">Departure — voluntary</span>
+                <br><span class="text-xs muted">Resignation, with knowledge transfer</span>
+              </td>
+              <td data-label="Applies to">Departures</td>
+              <td data-label="Version"><span class="numeric">v2</span></td>
+              <td data-label="Steps">13 steps · 4 departments</td>
+              <td data-label="Status"><span class="badge badge--ok"><span class="badge__dot"></span>Active</span></td>
+              <td data-label="Last reviewed">13 Oct 2026</td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="#transitions">Open</a>
+              </td>
+            </tr>
+
+            <tr data-search="departure end of fixed term v1 tomas ferreira" data-kind="departure"
+                data-status="active" data-group="active">
+              <td data-label="Template">
+                <span class="table__primary">Departure — end of fixed-term contract</span>
+                <br><span class="text-xs muted">Includes contract confirmation and knowledge transfer</span>
+              </td>
+              <td data-label="Applies to">Departures</td>
+              <td data-label="Version"><span class="numeric">v1</span></td>
+              <td data-label="Steps">12 steps · 4 departments</td>
+              <td data-label="Status"><span class="badge badge--ok"><span class="badge__dot"></span>Active</span></td>
+              <td data-label="Last reviewed">13 Oct 2026</td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="#transitions">Open</a>
+              </td>
+            </tr>
+
+            <tr data-search="departure retirement v2 owen blackwood operations" data-kind="departure"
+                data-status="draft" data-group="draft">
+              <td data-label="Template">
+                <span class="table__primary">Departure — retirement</span>
+                <br><span class="text-xs muted">Includes pension and long-service steps</span>
+              </td>
+              <td data-label="Applies to">Departures</td>
+              <td data-label="Version"><span class="numeric">v2</span></td>
+              <td data-label="Steps">16 steps · 4 departments</td>
+              <td data-label="Status"><span class="badge"><span class="badge__dot"></span>Draft</span></td>
+              <td data-label="Last reviewed">9 Oct 2026</td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--ghost btn--sm" type="button" data-toast="Draft opened"
+                        data-toast-message="Template editing is not built in this prototype.">Edit draft</button>
+              </td>
+            </tr>
+
+            <tr data-search="arrival standard v3 retired rosa bell" data-kind="arrival" data-status="retired"
+                data-group="retired">
+              <td data-label="Template">
+                <span class="table__primary">Arrival — standard</span>
+                <br><span class="text-xs muted">Superseded by v4 on 13 Oct 2026</span>
+              </td>
+              <td data-label="Applies to">Arrivals</td>
+              <td data-label="Version"><span class="numeric">v3</span></td>
+              <td data-label="Steps">18 steps · 4 departments</td>
+              <td data-label="Status"><span class="badge"><span class="badge__dot"></span>Retired</span></td>
+              <td data-label="Last reviewed">2 Jul 2026</td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--ghost btn--sm" type="button" data-confirm
+                        data-confirm-title="Reinstate this version?"
+                        data-confirm-sub="Only one version of a template may be active."
+                        data-confirm-body="Reinstating Arrival — standard v3 would retire the currently active v4. In production this requires an approved administrative review."
+                        data-confirm-label="Reinstate v3"
+                        data-confirm-tone="danger"
+                        data-confirm-comment="Reason for reinstating"
+                        data-confirm-require-comment
+                        data-confirm-toast="Reinstatement prepared"
+                        data-confirm-toast-tone="warn">
+                  Reinstate
+                </button>
+              </td>
+            </tr>
+
+            <tr data-search="departure voluntary v1 retired aisha khan" data-kind="departure" data-status="retired"
+                data-group="retired">
+              <td data-label="Template">
+                <span class="table__primary">Departure — voluntary</span>
+                <br><span class="text-xs muted">Superseded by v2 on 13 Oct 2026</span>
+              </td>
+              <td data-label="Applies to">Departures</td>
+              <td data-label="Version"><span class="numeric">v1</span></td>
+              <td data-label="Steps">11 steps · 4 departments</td>
+              <td data-label="Status"><span class="badge"><span class="badge__dot"></span>Retired</span></td>
+              <td data-label="Last reviewed">8 Apr 2026</td>
+              <td data-label="" class="table__actions"><span class="text-xs muted">Read only</span></td>
+            </tr>
+
+            <tr data-search="arrival intern v2 retired hannah cole" data-kind="arrival" data-status="retired"
+                data-group="retired">
+              <td data-label="Template">
+                <span class="table__primary">Arrival — internship</span>
+                <br><span class="text-xs muted">Retired 1 Sep 2026 · replaced by fixed term</span>
+              </td>
+              <td data-label="Applies to">Arrivals</td>
+              <td data-label="Version"><span class="numeric">v2</span></td>
+              <td data-label="Steps">9 steps · 2 departments</td>
+              <td data-label="Status"><span class="badge"><span class="badge__dot"></span>Retired</span></td>
+              <td data-label="Last reviewed">1 Jun 2026</td>
+              <td data-label="" class="table__actions"><span class="text-xs muted">Read only</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="empty" data-table-empty hidden>
+        <span class="empty__art" aria-hidden="true"><svg class="icon icon--lg"><use href="#i-settings"/></svg></span>
+        <h3 class="empty__title">No templates match these filters</h3>
+        <p class="empty__text">
+          Try a different status or template kind, or create a new draft from an existing template.
+        </p>
+        <div class="empty__actions">
+          <button class="btn btn--secondary" type="button" data-table-reset>Clear filters</button>
+        </div>
+      </div>
+
+      <div class="card__foot">
+        <p data-table-count>Showing all 9 template versions</p>
+        <p class="text-xs muted">Cases keep the template version they started on</p>
+      </div>
+    </section>
+
+    <!-- 3: task sequence -->
+    <section class="card mt-6" id="sequence" aria-labelledby="sequence-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="sequence-title">Task sequence · Departure — voluntary v2</h2>
+          <p class="card__sub">
+            Each step names its department, owner role, due-date rule, dependencies and whether an approval is
+            required before it can complete.
+          </p>
+        </div>
+        <span class="badge badge--outline">13 steps</span>
+      </div>
+
+      <div class="table-wrap">
+        <table class="table table--stack">
+          <caption class="sr-only">Checklist steps in the departure template with due-date rules and dependencies</caption>
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Step</th>
+              <th scope="col">Department</th>
+              <th scope="col">Owner role</th>
+              <th scope="col">Due date rule</th>
+              <th scope="col">Depends on</th>
+              <th scope="col">Approval</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="#" class="numeric">1</td>
+              <td data-label="Step"><span class="table__primary">Resignation letter &amp; notice confirmed</span></td>
+              <td data-label="Department"><span class="dept dept--hr"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-briefcase"/></svg></span> HR</span></td>
+              <td data-label="Owner role">People Partner</td>
+              <td data-label="Due date rule">Case open + 1 day</td>
+              <td data-label="Depends on"><span class="muted">—</span></td>
+              <td data-label="Approval"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg> Manager authorisation</span></td>
+            </tr>
+            <tr>
+              <td data-label="#" class="numeric">2</td>
+              <td data-label="Step"><span class="table__primary">Clearance checklist assigned</span></td>
+              <td data-label="Department"><span class="dept dept--hr"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-briefcase"/></svg></span> HR</span></td>
+              <td data-label="Owner role">Coordinator</td>
+              <td data-label="Due date rule">Case open + 2 days</td>
+              <td data-label="Depends on">Step 1</td>
+              <td data-label="Approval"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> Not required</span></td>
+            </tr>
+            <tr>
+              <td data-label="#" class="numeric">3</td>
+              <td data-label="Step"><span class="table__primary">Equipment inventory confirmed</span></td>
+              <td data-label="Department"><span class="dept dept--it"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-monitor"/></svg></span> IT</span></td>
+              <td data-label="Owner role">IT task owner</td>
+              <td data-label="Due date rule">Last day − 14 days</td>
+              <td data-label="Depends on">Step 1</td>
+              <td data-label="Approval"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> Not required</span></td>
+            </tr>
+            <tr>
+              <td data-label="#" class="numeric">4</td>
+              <td data-label="Step"><span class="table__primary">Knowledge transfer document signed off</span></td>
+              <td data-label="Department"><span class="dept dept--hr"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-briefcase"/></svg></span> HR</span></td>
+              <td data-label="Owner role">Coordinator</td>
+              <td data-label="Due date rule">Last day − 1 day</td>
+              <td data-label="Depends on">Step 2</td>
+              <td data-label="Approval"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg> Line manager</span></td>
+            </tr>
+            <tr>
+              <td data-label="#" class="numeric">5</td>
+              <td data-label="Step"><span class="table__primary">Building access deactivated</span></td>
+              <td data-label="Department"><span class="dept dept--facilities"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-building"/></svg></span> Facilities</span></td>
+              <td data-label="Owner role">Facilities task owner</td>
+              <td data-label="Due date rule">Last day</td>
+              <td data-label="Depends on"><span class="muted">—</span></td>
+              <td data-label="Approval"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> Not required</span></td>
+            </tr>
+            <tr>
+              <td data-label="#" class="numeric">6</td>
+              <td data-label="Step"><span class="table__primary">Accounts &amp; email deactivation</span></td>
+              <td data-label="Department"><span class="dept dept--it"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-monitor"/></svg></span> IT</span></td>
+              <td data-label="Owner role">IT task owner</td>
+              <td data-label="Due date rule">Last day, 17:00</td>
+              <td data-label="Depends on">Step 3</td>
+              <td data-label="Approval"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg> Exception only</span></td>
+            </tr>
+            <tr>
+              <td data-label="#" class="numeric">7</td>
+              <td data-label="Step"><span class="table__primary">Access groups &amp; privileged accounts revoked</span></td>
+              <td data-label="Department"><span class="dept dept--it"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-monitor"/></svg></span> IT</span></td>
+              <td data-label="Owner role">IT Services Lead</td>
+              <td data-label="Due date rule">Last day</td>
+              <td data-label="Depends on">Step 6</td>
+              <td data-label="Approval"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg> IT Services Lead</span></td>
+            </tr>
+            <tr>
+              <td data-label="#" class="numeric">8</td>
+              <td data-label="Step"><span class="table__primary">Asset returns recorded</span></td>
+              <td data-label="Department"><span class="dept dept--it"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-monitor"/></svg></span> IT</span></td>
+              <td data-label="Owner role">IT task owner</td>
+              <td data-label="Due date rule">Last day − 1 day</td>
+              <td data-label="Depends on">Step 3</td>
+              <td data-label="Approval"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> Not required</span></td>
+            </tr>
+            <tr>
+              <td data-label="#" class="numeric">9</td>
+              <td data-label="Step"><span class="table__primary">Final payroll &amp; pension settlement</span></td>
+              <td data-label="Department"><span class="dept dept--hr"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-briefcase"/></svg></span> HR</span></td>
+              <td data-label="Owner role">People Partner</td>
+              <td data-label="Due date rule">Last day + 10 days</td>
+              <td data-label="Depends on">Steps 4, 7, 8</td>
+              <td data-label="Approval"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg> Finance director</span></td>
+            </tr>
+            <tr>
+              <td data-label="#" class="numeric">10</td>
+              <td data-label="Step"><span class="table__primary">Directory &amp; org chart entry removed</span></td>
+              <td data-label="Department"><span class="dept dept--comms"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-megaphone"/></svg></span> Communications</span></td>
+              <td data-label="Owner role">Communications owner</td>
+              <td data-label="Due date rule">Last day − 5 days</td>
+              <td data-label="Depends on"><span class="muted">—</span></td>
+              <td data-label="Approval"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> Not required</span></td>
+            </tr>
+            <tr>
+              <td data-label="#" class="numeric">11</td>
+              <td data-label="Step"><span class="table__primary">Farewell announcement published</span></td>
+              <td data-label="Department"><span class="dept dept--comms"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-megaphone"/></svg></span> Communications</span></td>
+              <td data-label="Owner role">Communications owner</td>
+              <td data-label="Due date rule">Last day</td>
+              <td data-label="Depends on"><span class="muted">—</span></td>
+              <td data-label="Approval"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg> HR administrator</span></td>
+            </tr>
+            <tr>
+              <td data-label="#" class="numeric">12</td>
+              <td data-label="Step"><span class="table__primary">Exit interview completed</span></td>
+              <td data-label="Department"><span class="dept dept--hr"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-briefcase"/></svg></span> HR</span></td>
+              <td data-label="Owner role">People Partner</td>
+              <td data-label="Due date rule">Last day − 1 day</td>
+              <td data-label="Depends on"><span class="muted">—</span></td>
+              <td data-label="Approval"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> Not required</span></td>
+            </tr>
+            <tr>
+              <td data-label="#" class="numeric">13</td>
+              <td data-label="Step"><span class="table__primary">Final clearance recorded</span></td>
+              <td data-label="Department"><span class="dept dept--hr"><span class="dept__icon" aria-hidden="true"><svg class="icon icon--sm"><use href="#i-briefcase"/></svg></span> HR</span></td>
+              <td data-label="Owner role">Coordinator</td>
+              <td data-label="Due date rule">Last day + 14 days</td>
+              <td data-label="Depends on">All steps</td>
+              <td data-label="Approval"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg> HR administrator</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card__foot">
+        <p>Dependencies block completion until every upstream step is complete</p>
+        <button class="btn btn--secondary btn--sm" type="button" data-confirm
+                data-confirm-title="Add a step to this template?"
+                data-confirm-sub="A new step applies to future cases only."
+                data-confirm-body="The step editor captures the department, owner role, due-date rule, dependencies and any approval requirement. Template editing is not built in this prototype."
+                data-confirm-label="Open step editor"
+                data-confirm-icon="i-plus"
+                data-confirm-toast="Step editor"
+                data-confirm-toast-message="Template editing is not built in this prototype."
+                data-confirm-toast-tone="info">
+          Add step
+        </button>
+      </div>
+    </section>
+
+    <!-- 4: transitions, escalation, versioning -->
+    <div class="grid grid--halves mt-6">
+      <section class="card" id="transitions" aria-labelledby="transitions-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="transitions-title">Status transitions &amp; approvals</h2>
+            <p class="card__sub">Which moves are permitted, and who may make them.</p>
+          </div>
+        </div>
+        <div class="card__body">
+          <div class="def-list">
+            <div class="def-row">
+              <span class="def-row__label">Not started → In progress</span>
+              <span class="def-row__value">Any task owner assigned to the step</span>
+              <span class="def-row__action"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Permitted</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">In progress → Awaiting approval</span>
+              <span class="def-row__value">Task owner submits completion evidence</span>
+              <span class="def-row__action"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Permitted</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Awaiting approval → Complete</span>
+              <span class="def-row__value">Designated approver records a decision</span>
+              <span class="def-row__action"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg> Approver only</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Awaiting approval → Returned</span>
+              <span class="def-row__value">Approver returns for correction · comment required</span>
+              <span class="def-row__action"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg> Approver only</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Any → Complete (override)</span>
+              <span class="def-row__value">HR administrator, with a mandatory comment</span>
+              <span class="def-row__action"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-key"/></svg> Override</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Step deleted after case opened</span>
+              <span class="def-row__value">Not permitted — the case keeps its checklist</span>
+              <span class="def-row__action"><span class="permit permit--no"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg> Blocked</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="card__foot">
+          <p>Transitions are enforced server-side in production</p>
+          <a class="btn btn--link text-sm" href="audit.html">Transition audit</a>
+        </div>
+      </section>
+
+      <section class="card" id="escalation" aria-labelledby="escalation-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="escalation-title">Assignment &amp; escalation settings</h2>
+            <p class="card__sub">What happens when nobody acts in time.</p>
+          </div>
+        </div>
+        <div class="card__body">
+          <div class="def-list">
+            <div class="def-row">
+              <span class="def-row__label">Default assignment</span>
+              <span class="def-row__value">Department queue · unassigned until claimed</span>
+              <span class="def-row__action"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Enabled</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Unassigned after</span>
+              <span class="def-row__value">2 days · escalates to the departmental lead</span>
+              <span class="def-row__action"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Enabled</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Overdue after</span>
+              <span class="def-row__value">1 day · escalates to the coordinator and the line manager</span>
+              <span class="def-row__action"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Enabled</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Blocked action</span>
+              <span class="def-row__value">Notifies the approver named on the blocking step</span>
+              <span class="def-row__action"><span class="permit permit--yes"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg> Enabled</span></span>
+            </div>
+            <div class="def-row">
+              <span class="def-row__label">Second escalation</span>
+              <span class="def-row__value">HR administrator after 5 days without action</span>
+              <span class="def-row__action"><span class="permit permit--limited"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-clock"/></svg> Review due</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="card__body">
+          <p class="meta__label">Template version history</p>
+          <ol class="timeline mt-4">
+            <li class="timeline__item timeline__item--done">
+              <div class="timeline__rail">
+                <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
+                <span class="timeline__line"></span>
+              </div>
+              <div class="timeline__body">
+                <p class="timeline__title">v2 activated</p>
+                <p class="timeline__meta"><span>13 Oct 2026</span><span>Approved by Dev Sharma</span></p>
+              </div>
+            </li>
+            <li class="timeline__item timeline__item--done">
+              <div class="timeline__rail">
+                <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
+                <span class="timeline__line"></span>
+              </div>
+              <div class="timeline__body">
+                <p class="timeline__title">v2 drafted</p>
+                <p class="timeline__meta"><span>6 Oct 2026</span><span>Rosa Bell · added asset return dependency</span></p>
+              </div>
+            </li>
+            <li class="timeline__item timeline__item--done">
+              <div class="timeline__rail">
+                <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
+                <span class="timeline__line"></span>
+              </div>
+              <div class="timeline__body">
+                <p class="timeline__title">v1 retired</p>
+                <p class="timeline__meta"><span>13 Oct 2026</span><span>Superseded, still readable for old cases</span></p>
+              </div>
+            </li>
+          </ol>
+        </div>
+        <div class="card__foot">
+          <p>Version history is retained with the template</p>
+          <a class="btn btn--link text-sm" href="approvals.html">Activation approvals</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="page-foot">
+    <p>Casidra Arrivals &amp; Departures · workflow administration design prototype</p>
+    <p>Fictional sample data · UI only · no template can be changed here</p>
+  </footer>
+</div>
+
+<!-- @include partials/shell-end.html -->
+<!-- @include partials/scripts.html -->
+</body>
+</html>

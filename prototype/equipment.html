@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Equipment register · Casidra</title>
+<meta name="description" content="Equipment and asset register: custody, issue, return, transfer, handover checklists and clearance indicators.">
+<!-- @include partials/head-assets.html -->
+</head>
+<body class="app" data-page="equipment">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- @include partials/icons.html -->
+<!-- @include partials/sidebar.html -->
+
+<div class="app__body">
+  <!-- @include partials/topbar.html -->
+
+  <main class="content" id="main">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Dashboard</a>
+      <span class="breadcrumb__sep" aria-hidden="true">/</span>
+      <span aria-current="page">Equipment register</span>
+    </nav>
+
+    <div class="page-head">
+      <div>
+        <p class="eyebrow">Assets</p>
+        <h1 class="page-head__title">Equipment register</h1>
+        <p class="page-head__sub">
+          Every asset, who holds it and whether it has actually come back. The register feeds arrivals
+          (equipment issued) and departures (equipment returned), and it is the record of custody.
+        </p>
+      </div>
+      <div class="page-head__actions">
+        <button class="btn btn--secondary" type="button"
+                data-toast="Asset report queued" data-toast-message="Exports are part of the production build, not this prototype.">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-download"/></svg>
+          Asset report
+        </button>
+        <button class="btn btn--primary" type="button" data-confirm
+                data-confirm-title="Issue a new asset?"
+                data-confirm-sub="Issuing an asset records custody against an employee and a case."
+                data-confirm-body="The issue form captures asset type, identifier, custodian and case reference. Nothing is saved in this prototype."
+                data-confirm-label="Open issue form"
+                data-confirm-icon="i-plus"
+                data-confirm-toast="Issue form"
+                data-confirm-toast-message="The asset issue form is not built in this prototype."
+                data-confirm-toast-tone="info">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-plus"/></svg>
+          Issue asset
+        </button>
+      </div>
+    </div>
+
+    <div class="notice" role="note">
+      <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
+      <p>
+        <strong>Design prototype.</strong> Asset identifiers, serial numbers and valuations are fictional.
+        Custody changes update this page only — in production the register is written by the Django
+        application and every custody change is audited.
+      </p>
+    </div>
+
+    <!-- 1: register figures -->
+    <section class="grid grid--kpis mt-6" aria-label="Asset figures">
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Assets on register</p>
+            <p class="kpi__value tnum mt-2">486</p>
+          </div>
+          <span class="kpi__icon" aria-hidden="true"><svg class="icon"><use href="#i-monitor"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--flat">9 asset types</span><span>4 locations</span></div>
+        <p class="text-xs muted mt-4">Recorded value £412,900</p>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">In employee custody</p>
+            <p class="kpi__value tnum mt-2">372</p>
+          </div>
+          <span class="kpi__icon" aria-hidden="true"><svg class="icon"><use href="#i-users"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--flat">12 issued to arriving employees</span></div>
+        <p class="text-xs muted mt-4">Custody is attached to an employee, not to a desk</p>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Awaiting return</p>
+            <p class="kpi__value tnum mt-2">9</p>
+          </div>
+          <span class="kpi__icon kpi__icon--danger" aria-hidden="true"><svg class="icon"><use href="#i-alert"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--down">3 past their return date</span></div>
+        <a class="kpi__link" href="#handover">
+          Review returns
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Outstanding balance</p>
+            <p class="kpi__value mt-2">£14,860</p>
+          </div>
+          <span class="kpi__icon" aria-hidden="true"><svg class="icon"><use href="#i-trend-down"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--flat">Value of assets still with leavers</span></div>
+        <p class="text-xs muted mt-4">1 write-off request is awaiting approval</p>
+      </article>
+    </section>
+
+    <!-- 2: register -->
+    <section class="card mt-6" data-table-region data-count-noun="assets" aria-labelledby="register-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="register-title">Asset register</h2>
+          <p class="card__sub">Search by asset, identifier or custodian. Assets with leavers are flagged.</p>
+        </div>
+        <div class="segmented" role="tablist" aria-label="Filter assets by custody state" data-table-group>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="true" data-group-value="all">
+            All <span class="segmented__count">12</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="outstanding">
+            Outstanding <span class="segmented__count">4</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="custody">
+            In custody <span class="segmented__count">5</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="cleared">
+            Cleared <span class="segmented__count">3</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="toolbar__search input-wrap">
+          <label class="sr-only" for="asset-search">Search assets by identifier, type or custodian</label>
+          <svg class="icon icon--sm input-wrap__icon" aria-hidden="true"><use href="#i-search"/></svg>
+          <input class="input input--icon" id="asset-search" type="search" placeholder="Search asset, identifier or custodian…"
+                 autocomplete="off" data-table-search>
+        </div>
+        <div class="input-wrap">
+          <label class="sr-only" for="asset-type">Asset type</label>
+          <select class="select" id="asset-type" data-table-filter="type">
+            <option value="">All asset types</option>
+            <option value="laptop">Laptop</option>
+            <option value="phone">Mobile phone</option>
+            <option value="monitor">Monitor</option>
+            <option value="peripheral">Peripheral</option>
+            <option value="access">Building access</option>
+            <option value="vehicle">Vehicle</option>
+          </select>
+        </div>
+        <div class="input-wrap">
+          <label class="sr-only" for="asset-state">Custody state</label>
+          <select class="select" id="asset-state" data-table-filter="state">
+            <option value="">Any custody state</option>
+            <option value="issued">Issued</option>
+            <option value="outstanding">Return outstanding</option>
+            <option value="requested">Recall requested</option>
+            <option value="returned">Returned</option>
+            <option value="storage">In storage</option>
+          </select>
+        </div>
+        <button class="btn btn--ghost btn--sm" type="button" data-table-reset>
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-refresh"/></svg>
+          Reset
+        </button>
+      </div>
+
+      <div class="table-wrap" data-table-wrap>
+        <table class="table table--stack">
+          <caption class="sr-only">Equipment register with identifier, type, custodian and custody state</caption>
+          <thead>
+            <tr>
+              <th scope="col">Asset</th>
+              <th scope="col">Identifier</th>
+              <th scope="col">Type</th>
+              <th scope="col">Custodian</th>
+              <th scope="col">Custody state</th>
+              <th scope="col">Value</th>
+              <th scope="col" class="table__actions"><span class="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody data-table-rows>
+            <tr data-search="ast-1042 laptop macbook pro helena marsh finance custody" data-type="laptop"
+                data-state="outstanding" data-group="outstanding">
+              <td data-label="Asset">
+                <span class="table__primary">Laptop · 14" MacBook Pro</span>
+                <br><span class="text-xs muted">Serial C02XK1LJK9 · issued 4 Mar 2025</span>
+              </td>
+              <td data-label="Identifier"><span class="numeric">AST-1042</span></td>
+              <td data-label="Type">Laptop</td>
+              <td data-label="Custodian">
+                <a class="owner" href="employee.html"><span class="avatar avatar--sm avatar--rose" aria-hidden="true">HM</span> Helena Marsh</a>
+              </td>
+              <td data-label="Custody state"><span class="badge badge--danger"><span class="badge__dot"></span>Return outstanding</span></td>
+              <td data-label="Value"><span class="table__num">£2,640</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--primary btn--sm" type="button" data-confirm
+                        data-confirm-title="Record the return of AST-1042?"
+                        data-confirm-sub="The asset is released from Helena Marsh's custody."
+                        data-confirm-body="A return receipt is created and the departure case clearance score updates. Nothing is saved in this prototype."
+                        data-confirm-label="Record return"
+                        data-confirm-icon="i-check-circle"
+                        data-confirm-status="Returned 29 Oct 2026|ok"
+                        data-confirm-hide
+                        data-confirm-toast="Asset returned">
+                  Record return
+                </button>
+              </td>
+            </tr>
+
+            <tr data-search="ast-1043 iphone mobile phone helena marsh finance" data-type="phone"
+                data-state="outstanding" data-group="outstanding">
+              <td data-label="Asset">
+                <span class="table__primary">Mobile phone · iPhone 16</span>
+                <br><span class="text-xs muted">Finance SIM 447700900412</span>
+              </td>
+              <td data-label="Identifier"><span class="numeric">AST-1043</span></td>
+              <td data-label="Type">Mobile phone</td>
+              <td data-label="Custodian">
+                <a class="owner" href="employee.html"><span class="avatar avatar--sm avatar--rose" aria-hidden="true">HM</span> Helena Marsh</a>
+              </td>
+              <td data-label="Custody state"><span class="badge badge--danger"><span class="badge__dot"></span>Return outstanding</span></td>
+              <td data-label="Value"><span class="table__num">£840</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--primary btn--sm" type="button" data-confirm
+                        data-confirm-title="Record the return of AST-1043?"
+                        data-confirm-sub="The SIM is cancelled when the handset is received."
+                        data-confirm-body="Nothing is saved in this design prototype."
+                        data-confirm-label="Record return"
+                        data-confirm-icon="i-check-circle"
+                        data-confirm-status="Returned 29 Oct 2026|ok"
+                        data-confirm-hide
+                        data-confirm-toast="Asset returned">
+                  Record return
+                </button>
+              </td>
+            </tr>
+
+            <tr data-search="ast-1180 docking station caldigit helena marsh" data-type="peripheral"
+                data-state="requested" data-group="outstanding">
+              <td data-label="Asset">
+                <span class="table__primary">Docking station · CalDigit TS4</span>
+                <br><span class="text-xs muted">Desk kit · recall requested 22 Oct 2026</span>
+              </td>
+              <td data-label="Identifier"><span class="numeric">AST-1180</span></td>
+              <td data-label="Type">Peripheral</td>
+              <td data-label="Custodian">
+                <a class="owner" href="employee.html"><span class="avatar avatar--sm avatar--rose" aria-hidden="true">HM</span> Helena Marsh</a>
+              </td>
+              <td data-label="Custody state"><span class="badge badge--warn"><span class="badge__dot"></span>Recall requested</span></td>
+              <td data-label="Value"><span class="table__num">£280</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-confirm
+                        data-confirm-title="Record the return of AST-1180?"
+                        data-confirm-sub="Requested is not the same as returned."
+                        data-confirm-body="Nothing is saved in this design prototype."
+                        data-confirm-label="Record return"
+                        data-confirm-icon="i-check-circle"
+                        data-confirm-status="Returned 29 Oct 2026|ok"
+                        data-confirm-hide
+                        data-confirm-toast="Asset returned">
+                  Record return
+                </button>
+              </td>
+            </tr>
+
+            <tr data-search="ast-1502 building pass access card raj patel technology" data-type="access"
+                data-state="outstanding" data-group="outstanding">
+              <td data-label="Asset">
+                <span class="table__primary">Building access pass</span>
+                <br><span class="text-xs muted">Bristol office · deactivated 24 Oct 2026</span>
+              </td>
+              <td data-label="Identifier"><span class="numeric">AST-1502</span></td>
+              <td data-label="Type">Building access</td>
+              <td data-label="Custodian">
+                <span class="owner"><span class="avatar avatar--sm avatar--slate" aria-hidden="true">RP</span> Raj Patel</span>
+              </td>
+              <td data-label="Custody state"><span class="badge badge--danger"><span class="badge__dot"></span>Return outstanding</span></td>
+              <td data-label="Value"><span class="table__num">£15</span></td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="offboarding.html">Departure case</a>
+              </td>
+            </tr>
+
+            <tr data-search="ast-3301 ford transit van vehicle michael osei operations" data-type="vehicle"
+                data-state="issued" data-group="custody">
+              <td data-label="Asset">
+                <span class="table__primary">Vehicle · Ford Transit</span>
+                <br><span class="text-xs muted">Sheffield depot · site vehicle, no personal use</span>
+              </td>
+              <td data-label="Identifier"><span class="numeric">AST-3301</span></td>
+              <td data-label="Type">Vehicle</td>
+              <td data-label="Custodian">
+                <span class="owner"><span class="avatar avatar--sm avatar--amber" aria-hidden="true">MO</span> Michael Osei</span>
+              </td>
+              <td data-label="Custody state"><span class="badge"><span class="badge__dot"></span>Issued</span></td>
+              <td data-label="Value"><span class="table__num">£18,400</span></td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="offboarding.html">Departure case</a>
+              </td>
+            </tr>
+
+            <tr data-search="ast-0654 handheld radio michael osei operations" data-type="peripheral"
+                data-state="issued" data-group="custody">
+              <td data-label="Asset">
+                <span class="table__primary">Handheld radio</span>
+                <br><span class="text-xs muted">Sheffield depot · warehouse channel 3</span>
+              </td>
+              <td data-label="Identifier"><span class="numeric">AST-0654</span></td>
+              <td data-label="Type">Peripheral</td>
+              <td data-label="Custodian">
+                <span class="owner"><span class="avatar avatar--sm avatar--amber" aria-hidden="true">MO</span> Michael Osei</span>
+              </td>
+              <td data-label="Custody state"><span class="badge"><span class="badge__dot"></span>Issued</span></td>
+              <td data-label="Value"><span class="table__num">£190</span></td>
+              <td data-label="" class="table__actions">
+                <button class="btn btn--secondary btn--sm" type="button" data-confirm
+                        data-confirm-title="Request the radio back?"
+                        data-confirm-sub="A recall is recorded against the leaver's clearance case."
+                        data-confirm-body="AST-0654 · handheld radio. The Facilities and IT clearance actions would show a recall request."
+                        data-confirm-label="Request recall"
+                        data-confirm-icon="i-refresh"
+                        data-confirm-status="Recall requested|warn"
+                        data-confirm-toast="Recall requested">
+                  Request recall
+                </button>
+              </td>
+            </tr>
+
+            <tr data-search="ast-2210 monitor dell u2723qe amara okafor design" data-type="monitor"
+                data-state="issued" data-group="custody">
+              <td data-label="Asset">
+                <span class="table__primary">Monitor · Dell U2723QE</span>
+                <br><span class="text-xs muted">Reserved for the London studio desk</span>
+              </td>
+              <td data-label="Identifier"><span class="numeric">AST-2210</span></td>
+              <td data-label="Type">Monitor</td>
+              <td data-label="Custodian">
+                <span class="owner"><span class="avatar avatar--sm" aria-hidden="true">AO</span> Amara Okafor</span>
+              </td>
+              <td data-label="Custody state"><span class="badge badge--info"><span class="badge__dot"></span>Issued — arriving</span></td>
+              <td data-label="Value"><span class="table__num">£520</span></td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="case.html">Case file</a>
+              </td>
+            </tr>
+
+            <tr data-search="ast-2211 keyboard mouse amara okafor design peripheral" data-type="peripheral"
+                data-state="issued" data-group="custody">
+              <td data-label="Asset">
+                <span class="table__primary">Keyboard &amp; mouse set</span>
+                <br><span class="text-xs muted">Design peripherals profile</span>
+              </td>
+              <td data-label="Identifier"><span class="numeric">AST-2211</span></td>
+              <td data-label="Type">Peripheral</td>
+              <td data-label="Custodian">
+                <span class="owner"><span class="avatar avatar--sm" aria-hidden="true">AO</span> Amara Okafor</span>
+              </td>
+              <td data-label="Custody state"><span class="badge badge--info"><span class="badge__dot"></span>Issued — arriving</span></td>
+              <td data-label="Value"><span class="table__num">£145</span></td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="case.html">Case file</a>
+              </td>
+            </tr>
+
+            <tr data-search="ast-1902 laptop macbook air yuki tanaka marketing" data-type="laptop"
+                data-state="issued" data-group="custody">
+              <td data-label="Asset">
+                <span class="table__primary">Laptop · MacBook Air M3</span>
+                <br><span class="text-xs muted">Issued 2024 · Lisbon office</span>
+              </td>
+              <td data-label="Identifier"><span class="numeric">AST-1902</span></td>
+              <td data-label="Type">Laptop</td>
+              <td data-label="Custodian">
+                <span class="owner"><span class="avatar avatar--sm avatar--rose" aria-hidden="true">YT</span> Yuki Tanaka</span>
+              </td>
+              <td data-label="Custody state"><span class="badge"><span class="badge__dot"></span>Issued</span></td>
+              <td data-label="Value"><span class="table__num">£1,290</span></td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="offboarding.html">Departure case</a>
+              </td>
+            </tr>
+
+            <tr data-search="ast-0777 monitor dell u2723qe helena marsh returned" data-type="monitor"
+                data-state="returned" data-group="cleared">
+              <td data-label="Asset">
+                <span class="table__primary">Monitor · Dell U2723QE</span>
+                <br><span class="text-xs muted">Collected by IT · condition good</span>
+              </td>
+              <td data-label="Identifier"><span class="numeric">AST-0777</span></td>
+              <td data-label="Type">Monitor</td>
+              <td data-label="Custodian"><span class="muted">No custodian · returned 20 Oct 2026</span></td>
+              <td data-label="Custody state"><span class="badge badge--ok"><span class="badge__dot"></span>Returned</span></td>
+              <td data-label="Value"><span class="table__num">£520</span></td>
+              <td data-label="" class="table__actions"><span class="text-xs muted">Available for issue</span></td>
+            </tr>
+
+            <tr data-search="ast-1204 headset jabra evolve2 helena marsh returned" data-type="peripheral"
+                data-state="returned" data-group="cleared">
+              <td data-label="Asset">
+                <span class="table__primary">Headset · Jabra Evolve2</span>
+                <br><span class="text-xs muted">Handed back during the exit interview</span>
+              </td>
+              <td data-label="Identifier"><span class="numeric">AST-1204</span></td>
+              <td data-label="Type">Peripheral</td>
+              <td data-label="Custodian"><span class="muted">No custodian · returned 29 Oct 2026</span></td>
+              <td data-label="Custody state"><span class="badge badge--ok"><span class="badge__dot"></span>Returned</span></td>
+              <td data-label="Value"><span class="table__num">£180</span></td>
+              <td data-label="" class="table__actions"><span class="text-xs muted">Available for issue</span></td>
+            </tr>
+
+            <tr data-search="ast-0455 desk phone cisco priya raman facilities storage" data-type="peripheral"
+                data-state="storage" data-group="cleared">
+              <td data-label="Asset">
+                <span class="table__primary">Desk phone · Cisco 8841</span>
+                <br><span class="text-xs muted">Beyond economic repair · write-off requested</span>
+              </td>
+              <td data-label="Identifier"><span class="numeric">AST-0455</span></td>
+              <td data-label="Type">Peripheral</td>
+              <td data-label="Custodian"><span class="muted">Facilities store · Leeds</span></td>
+              <td data-label="Custody state"><span class="badge badge--warn"><span class="badge__dot"></span>Write-off pending</span></td>
+              <td data-label="Value"><span class="table__num">£60</span></td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="approvals.html">Approval</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="empty" data-table-empty hidden>
+        <span class="empty__art" aria-hidden="true"><svg class="icon icon--lg"><use href="#i-monitor"/></svg></span>
+        <h3 class="empty__title">No assets match these filters</h3>
+        <p class="empty__text">
+          Try a different identifier, asset type or custody state. Assets appear here when they are added to
+          the register, before they are issued to anyone.
+        </p>
+        <div class="empty__actions">
+          <button class="btn btn--secondary" type="button" data-table-reset>Clear filters</button>
+        </div>
+      </div>
+
+      <div class="card__foot">
+        <p data-table-count>Showing all 12 assets</p>
+        <p class="text-xs muted">Custody changes are confirmed before they are recorded</p>
+      </div>
+    </section>
+
+    <!-- 3: handover, issue, return and transfer -->
+    <section id="handover" class="mt-6" aria-labelledby="handover-title">
+      <div class="section-head">
+        <div>
+          <h2 class="section-head__title" id="handover-title">Handover &amp; returns</h2>
+          <p class="text-sm muted mt-2">
+            Issue to a new starter, return and clear equipment from a leaver, or transfer custody between
+            employees. A checked box here is a browser-only demo.
+          </p>
+        </div>
+        <div class="legend" role="list">
+          <span class="legend__item"><span class="legend__swatch" style="background:var(--ok-600)"></span> Returned and cleared</span>
+          <span class="legend__item"><span class="legend__swatch" style="background:var(--warn-600)"></span> Requested</span>
+          <span class="legend__item"><span class="legend__swatch" style="background:var(--danger-600)"></span> Outstanding</span>
+        </div>
+      </div>
+
+      <div class="grid grid--halves">
+        <section class="card" aria-labelledby="return-checklist-title">
+          <div class="card__head">
+            <div>
+              <h2 class="card__title" id="return-checklist-title">Return checklist · Helena Marsh</h2>
+              <p class="card__sub">IT and Facilities confirm each item before clearance is recorded.</p>
+            </div>
+            <span class="badge badge--danger"><span class="badge__dot"></span>3 outstanding</span>
+          </div>
+          <div class="card__body">
+            <ul class="stack">
+              <li>
+                <label class="check">
+                  <input type="checkbox" checked>
+                  <span class="check__text">
+                    <strong class="strong">Laptop AST-1042</strong> — logged, wiped and returned to the IT store<br>
+                    <span class="text-xs muted">Received by Tomás Ferreira · 29 Oct 2026</span>
+                  </span>
+                </label>
+              </li>
+              <li>
+                <label class="check">
+                  <input type="checkbox" checked>
+                  <span class="check__text">
+                    <strong class="strong">Monitor AST-0777</strong> — collected from the Leeds desk<br>
+                    <span class="text-xs muted">Received by Tomás Ferreira · 20 Oct 2026</span>
+                  </span>
+                </label>
+              </li>
+              <li>
+                <label class="check">
+                  <input type="checkbox" checked>
+                  <span class="check__text">
+                    <strong class="strong">Headset AST-1204</strong> — returned at the exit interview<br>
+                    <span class="text-xs muted">Received by Rosa Bell · 29 Oct 2026</span>
+                  </span>
+                </label>
+              </li>
+              <li>
+                <label class="check">
+                  <input type="checkbox">
+                  <span class="check__text">
+                    <strong class="strong">Mobile phone AST-1043</strong> — handset and SIM not yet received<br>
+                    <span class="text-xs muted">Recall requested 22 Oct 2026 · SIM still active</span>
+                  </span>
+                </label>
+              </li>
+              <li>
+                <label class="check">
+                  <input type="checkbox">
+                  <span class="check__text">
+                    <strong class="strong">Docking station AST-1180</strong> — recall requested, nothing returned<br>
+                    <span class="text-xs muted">Facilities desk check cannot close until this is received</span>
+                  </span>
+                </label>
+              </li>
+              <li>
+                <label class="check">
+                  <input type="checkbox">
+                  <span class="check__text">
+                    <strong class="strong">Building access pass</strong> — deactivated, card not yet collected<br>
+                    <span class="text-xs muted">Facilities · Leeds reception</span>
+                  </span>
+                </label>
+              </li>
+            </ul>
+          </div>
+          <div class="card__foot">
+            <p>Nothing is saved in this prototype</p>
+            <a class="btn btn--link text-sm" href="departure.html#asset-returns">Open the departure case</a>
+          </div>
+        </section>
+
+        <section class="card" data-table-region data-count-noun="handovers" aria-labelledby="handovers-title">
+          <div class="card__head">
+            <div>
+              <h2 class="card__title" id="handovers-title">Open handovers</h2>
+              <p class="card__sub">Issued to arrivals, and transfers between employees.</p>
+            </div>
+          </div>
+          <div class="table-wrap" data-table-wrap>
+            <table class="table table--stack">
+              <caption class="sr-only">Open equipment handovers</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Asset</th>
+                  <th scope="col">From</th>
+                  <th scope="col">To</th>
+                  <th scope="col">Due</th>
+                  <th scope="col">State</th>
+                </tr>
+              </thead>
+              <tbody data-table-rows>
+                <tr data-search="ast-2210 monitor amara okafor it issue">
+                  <td data-label="Asset"><span class="table__primary">Monitor AST-2210</span><br><span class="text-xs muted">Design peripherals profile</span></td>
+                  <td data-label="From">IT store · London</td>
+                  <td data-label="To">Amara Okafor</td>
+                  <td data-label="Due">3 Nov 2026</td>
+                  <td data-label="State" data-row-status><span class="badge badge--info"><span class="badge__dot"></span>Issued</span></td>
+                </tr>
+                <tr data-search="ast-2211 keyboard mouse amara okafor it issue">
+                  <td data-label="Asset"><span class="table__primary">Keyboard &amp; mouse AST-2211</span><br><span class="text-xs muted">Design peripherals profile</span></td>
+                  <td data-label="From">IT store · London</td>
+                  <td data-label="To">Amara Okafor</td>
+                  <td data-label="Due">3 Nov 2026</td>
+                  <td data-label="State" data-row-status><span class="badge badge--info"><span class="badge__dot"></span>Issued</span></td>
+                </tr>
+                <tr data-search="ast-1042 laptop transfer chen wei helena marsh">
+                  <td data-label="Asset"><span class="table__primary">Laptop AST-1042</span><br><span class="text-xs muted">Reissue after reimaging</span></td>
+                  <td data-label="From">Helena Marsh (leaver)</td>
+                  <td data-label="To">Chen Wei</td>
+                  <td data-label="Due">6 Nov 2026</td>
+                  <td data-label="State" data-row-status><span class="badge badge--warn"><span class="badge__dot"></span>Awaiting return</span></td>
+                </tr>
+                <tr data-search="ast-1503 laptop raj patel return">
+                  <td data-label="Asset"><span class="table__primary">Laptop AST-1503</span><br><span class="text-xs muted">16" MacBook Pro · fixed-term contract</span></td>
+                  <td data-label="From">Raj Patel (leaver)</td>
+                  <td data-label="To">IT store · Bristol</td>
+                  <td data-label="Due">6 Nov 2026</td>
+                  <td data-label="State" data-row-status><span class="badge badge--danger"><span class="badge__dot"></span>Outstanding</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="empty" data-table-empty hidden>
+            <span class="empty__art" aria-hidden="true"><svg class="icon icon--lg"><use href="#i-check-circle"/></svg></span>
+            <h3 class="empty__title">No open handovers</h3>
+            <p class="empty__text">Every issued asset is with its custodian and nothing is in transit.</p>
+          </div>
+          <div class="card__foot">
+            <p data-table-count>Showing all 4 handovers</p>
+            <p class="text-xs muted">Handovers are confirmed by the receiving custodian</p>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- 4: custody history -->
+    <div class="grid grid--split mt-6">
+      <section class="card" aria-labelledby="history-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="history-title">Asset history · AST-1042</h2>
+            <p class="card__sub">Every custody change recorded against one asset.</p>
+          </div>
+          <span class="tag tag--quiet">Laptop · 14" MacBook Pro</span>
+        </div>
+        <div class="card__body">
+          <ol class="timeline">
+            <li class="timeline__item timeline__item--done">
+              <div class="timeline__rail">
+                <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
+                <span class="timeline__line"></span>
+              </div>
+              <div class="timeline__body">
+                <p class="timeline__title">Procured and added to the register</p>
+                <p class="timeline__meta"><span>18 Feb 2025</span><span>£2,640 · IT store, Leeds</span></p>
+              </div>
+            </li>
+            <li class="timeline__item timeline__item--done">
+              <div class="timeline__rail">
+                <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
+                <span class="timeline__line"></span>
+              </div>
+              <div class="timeline__body">
+                <p class="timeline__title">Issued to Helena Marsh</p>
+                <p class="timeline__meta"><span>4 Mar 2025</span><span>Issued by Tomás Ferreira</span></p>
+              </div>
+            </li>
+            <li class="timeline__item timeline__item--done">
+              <div class="timeline__rail">
+                <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
+                <span class="timeline__line"></span>
+              </div>
+              <div class="timeline__body">
+                <p class="timeline__title">Inspection recorded</p>
+                <p class="timeline__meta"><span>11 Aug 2026</span><span>Condition good · battery 91%</span></p>
+              </div>
+            </li>
+            <li class="timeline__item timeline__item--requested">
+              <div class="timeline__rail">
+                <span class="timeline__dot" aria-hidden="true"><svg class="icon"><use href="#i-more"/></svg></span>
+                <span class="timeline__line"></span>
+              </div>
+              <div class="timeline__body">
+                <p class="timeline__title">Return requested</p>
+                <p class="timeline__meta">
+                  <span>14 Oct 2026</span>
+                  <span class="badge badge--warn"><span class="badge__dot"></span>Requested — not received</span>
+                  <span>Departure DEP-2026-0031</span>
+                </p>
+              </div>
+            </li>
+            <li class="timeline__item">
+              <div class="timeline__rail">
+                <span class="timeline__dot" aria-hidden="true"></span>
+              </div>
+              <div class="timeline__body">
+                <p class="timeline__title">Awaiting receipt and reissue</p>
+                <p class="timeline__meta"><span>Due 30 Oct 2026</span><span>Planned reissue to Chen Wei</span></p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="custody-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="custody-title">Custody by department</h2>
+            <p class="card__sub">Where the register's assets currently sit.</p>
+          </div>
+        </div>
+        <div class="card__body">
+          <div class="hbars">
+            <div class="hbar">
+              <span class="hbar__label">Technology</span>
+              <span class="hbar__track"><span class="hbar__fill" style="width:100%"></span></span>
+              <span class="hbar__value">168</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar__label">Operations</span>
+              <span class="hbar__track"><span class="hbar__fill" style="width:74%"></span></span>
+              <span class="hbar__value">124</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar__label">Finance</span>
+              <span class="hbar__track"><span class="hbar__fill" style="width:32%"></span></span>
+              <span class="hbar__value">54</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar__label">Facilities</span>
+              <span class="hbar__track"><span class="hbar__fill" style="width:16%"></span></span>
+              <span class="hbar__value">26</span>
+            </div>
+          </div>
+          <div class="alert alert--info mt-6" role="note">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
+            <div>
+              <p class="alert__title">Outstanding assets block final clearance</p>
+              <p>Nine assets are still with leavers. The departure case cannot be closed until each one is
+                received by IT or Facilities.</p>
+            </div>
+          </div>
+        </div>
+        <div class="card__foot">
+          <p>3 assets are past their return date</p>
+          <a class="btn btn--link text-sm" href="reports.html">Asset clearance report</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="page-foot">
+    <p>Casidra Arrivals &amp; Departures · equipment register design prototype</p>
+    <p>Fictional sample data · UI only · not connected to a backend</p>
+  </footer>
+</div>
+
+<!-- @include partials/shell-end.html -->
+<!-- @include partials/scripts.html -->
+</body>
+</html>

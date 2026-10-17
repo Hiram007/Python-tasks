@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Departure cases · Casidra</title>
+<meta name="description" content="Offboarding cases: clearance progress, departmental actions, asset returns and final clearance for every leaver.">
+<!-- @include partials/head-assets.html -->
+</head>
+<body class="app" data-page="offboarding">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- @include partials/icons.html -->
+<!-- @include partials/sidebar.html -->
+
+<div class="app__body">
+  <!-- @include partials/topbar.html -->
+
+  <main class="content" id="main">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Dashboard</a>
+      <span class="breadcrumb__sep" aria-hidden="true">/</span>
+      <span aria-current="page">Departure cases</span>
+    </nav>
+
+    <div class="page-head">
+      <div>
+        <p class="eyebrow">Departures</p>
+        <h1 class="page-head__title">Departure cases</h1>
+        <p class="page-head__sub">
+          Every leaver in clearance: the departmental actions still open, the assets still in their custody and
+          the approvals holding a case back. Work from the nearest departure date.
+        </p>
+      </div>
+      <div class="page-head__actions">
+        <button class="btn btn--secondary" type="button"
+                data-toast="Export queued" data-toast-message="Clearance exports are part of the production build, not this prototype.">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-download"/></svg>
+          Export clearance
+        </button>
+        <button class="btn btn--primary" type="button" data-sheet-open="sheet-new-departure" aria-haspopup="dialog">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-plus"/></svg>
+          Initiate departure
+        </button>
+      </div>
+    </div>
+
+    <div class="alert alert--warn" role="note">
+      <svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg>
+      <div>
+        <p class="alert__title">3 departures fall within the next 21 days</p>
+        <p>
+          Michael Osei's case has actions past their due date: the warehouse vehicle and handheld radio are
+          still in his custody. Overdue clearance actions are escalated to the departmental lead in production.
+        </p>
+      </div>
+    </div>
+
+    <!-- 1: departure figures -->
+    <section class="grid grid--kpis mt-6" aria-label="Departure key figures">
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Open departure cases</p>
+            <p class="kpi__value tnum mt-2">5</p>
+          </div>
+          <span class="kpi__icon" aria-hidden="true"><svg class="icon"><use href="#i-door"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--flat">2 more than last month</span><span>across 5 departments</span></div>
+        <p class="text-xs muted mt-4">Cases close only when final clearance is recorded</p>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Clearance actions outstanding</p>
+            <p class="kpi__value tnum mt-2">27</p>
+          </div>
+          <span class="kpi__icon kpi__icon--warn" aria-hidden="true"><svg class="icon"><use href="#i-check-list"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--down">5 overdue</span><span>HR holds 9, IT holds 8</span></div>
+        <a class="kpi__link" href="tasks.html">
+          Open task queues
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Assets awaiting return</p>
+            <p class="kpi__value tnum mt-2">9</p>
+          </div>
+          <span class="kpi__icon kpi__icon--danger" aria-hidden="true"><svg class="icon"><use href="#i-monitor"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--flat">Valued at £14,860</span></div>
+        <a class="kpi__link" href="equipment.html#handover">
+          Equipment returns
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </article>
+
+      <article class="kpi">
+        <div class="kpi__top">
+          <div>
+            <p class="kpi__label">Median clearance time</p>
+            <p class="kpi__value tnum mt-2">11 days</p>
+          </div>
+          <span class="kpi__icon kpi__icon--ok" aria-hidden="true"><svg class="icon"><use href="#i-trend-up"/></svg></span>
+        </div>
+        <div class="kpi__meta"><span class="delta delta--up">2 days faster than last quarter</span></div>
+        <div class="row row--between">
+          <p class="text-xs muted">4 cases cleared this month</p>
+          <svg class="kpi__spark kpi__spark--ok" viewBox="0 0 88 30" fill="none" aria-hidden="true">
+            <path d="M1 24l13-2 12-3 12 1 12-4 12-2 12-4 13-6" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </article>
+    </section>
+
+    <!-- 2: case list -->
+    <section class="card mt-6" data-table-region data-count-noun="departure cases" aria-labelledby="departures-title">
+      <div class="card__head">
+        <div>
+          <h2 class="card__title" id="departures-title">Cases in clearance</h2>
+          <p class="card__sub">Sorted by last working day, nearest first.</p>
+        </div>
+        <div class="segmented" role="tablist" aria-label="Filter departures by clearance risk" data-table-group>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="true" data-group-value="all">
+            All <span class="segmented__count">5</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="overdue">
+            Attention <span class="segmented__count">1</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="at-risk">
+            At risk <span class="segmented__count">2</span>
+          </button>
+          <button class="segmented__btn" type="button" role="tab" aria-selected="false" data-group-value="on-track">
+            On track <span class="segmented__count">2</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="toolbar__search input-wrap">
+          <label class="sr-only" for="dep-search">Search departure cases by name, case number or coordinator</label>
+          <svg class="icon icon--sm input-wrap__icon" aria-hidden="true"><use href="#i-search"/></svg>
+          <input class="input input--icon" id="dep-search" type="search" placeholder="Search name or case number…"
+                 autocomplete="off" data-table-search>
+        </div>
+        <div class="input-wrap">
+          <label class="sr-only" for="dep-department">Department</label>
+          <select class="select" id="dep-department" data-table-filter="department">
+            <option value="">All departments</option>
+            <option value="finance">Finance</option>
+            <option value="technology">Technology</option>
+            <option value="facilities">Facilities</option>
+            <option value="operations">Operations</option>
+            <option value="marketing">Marketing</option>
+          </select>
+        </div>
+        <div class="input-wrap">
+          <label class="sr-only" for="dep-reason">Reason</label>
+          <select class="select" id="dep-reason" data-table-filter="reason">
+            <option value="">Any reason</option>
+            <option value="resignation">Resignation</option>
+            <option value="contract-end">End of fixed-term contract</option>
+            <option value="retirement">Retirement</option>
+          </select>
+        </div>
+        <div class="input-wrap">
+          <label class="sr-only" for="dep-status">Clearance status</label>
+          <select class="select" id="dep-status" data-table-filter="status">
+            <option value="">Any status</option>
+            <option value="on-track">On track</option>
+            <option value="at-risk">At risk</option>
+            <option value="overdue">Needs attention</option>
+          </select>
+        </div>
+        <button class="btn btn--ghost btn--sm" type="button" data-table-reset>
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-refresh"/></svg>
+          Reset
+        </button>
+      </div>
+
+      <div class="table-wrap" data-table-wrap>
+        <table class="table table--stack">
+          <caption class="sr-only">Departure cases in clearance with last working day, reason, clearance progress and status</caption>
+          <thead>
+            <tr>
+              <th scope="col">Employee</th>
+              <th scope="col">Case</th>
+              <th scope="col">Last working day</th>
+              <th scope="col">Reason</th>
+              <th scope="col">Clearance</th>
+              <th scope="col">Status</th>
+              <th scope="col" class="table__actions"><span class="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody data-table-rows>
+            <tr data-search="helena marsh dep-2026-0031 finance resignation rosa bell" data-department="finance"
+                data-reason="resignation" data-status="at-risk" data-group="at-risk" data-row-href="departure.html">
+              <td data-label="Employee">
+                <a class="person" href="departure.html">
+                  <span class="avatar avatar--rose" aria-hidden="true">HM</span>
+                  <span>
+                    <span class="person__name">Helena Marsh</span>
+                    <span class="person__meta">Finance Business Partner</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Case"><span class="table__primary numeric">DEP-2026-0031</span></td>
+              <td data-label="Last working day">Fri 30 Oct 2026</td>
+              <td data-label="Reason">Resignation</td>
+              <td data-label="Clearance">
+                <div class="progress progress--sm" role="progressbar" aria-valuenow="46" aria-valuemin="0" aria-valuemax="100"
+                     aria-label="Helena Marsh clearance progress">
+                  <span class="progress__track"><span class="progress__fill progress__fill--warn" style="width:46%"></span></span>
+                  <span class="progress__value">46%</span>
+                </div>
+              </td>
+              <td data-label="Status"><span class="badge badge--warn"><span class="badge__dot"></span>At risk</span></td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="departure.html">Open
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg></a>
+              </td>
+            </tr>
+
+            <tr data-search="chiara rossi dep-2026-0035 facilities resignation priya raman" data-department="facilities"
+                data-reason="resignation" data-status="on-track" data-group="on-track" data-row-href="departure.html">
+              <td data-label="Employee">
+                <a class="person" href="departure.html">
+                  <span class="avatar avatar--teal" aria-hidden="true">CR</span>
+                  <span>
+                    <span class="person__name">Chiara Rossi</span>
+                    <span class="person__meta">Office Manager</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Case"><span class="table__primary numeric">DEP-2026-0035</span></td>
+              <td data-label="Last working day">Wed 28 Oct 2026</td>
+              <td data-label="Reason">Resignation</td>
+              <td data-label="Clearance">
+                <div class="progress progress--sm" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"
+                     aria-label="Chiara Rossi clearance progress">
+                  <span class="progress__track"><span class="progress__fill progress__fill--ok" style="width:90%"></span></span>
+                  <span class="progress__value">90%</span>
+                </div>
+              </td>
+              <td data-label="Status"><span class="badge badge--ok"><span class="badge__dot"></span>On track</span></td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="departure.html">Open
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg></a>
+              </td>
+            </tr>
+
+            <tr data-search="raj patel dep-2026-0033 technology end of fixed-term contract daniel okonkwo"
+                data-department="technology" data-reason="contract-end" data-status="at-risk" data-group="at-risk"
+                data-row-href="departure.html">
+              <td data-label="Employee">
+                <a class="person" href="departure.html">
+                  <span class="avatar avatar--slate" aria-hidden="true">RP</span>
+                  <span>
+                    <span class="person__name">Raj Patel</span>
+                    <span class="person__meta">Senior Data Engineer</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Case"><span class="table__primary numeric">DEP-2026-0033</span></td>
+              <td data-label="Last working day">Fri 6 Nov 2026</td>
+              <td data-label="Reason">Fixed-term contract ends</td>
+              <td data-label="Clearance">
+                <div class="progress progress--sm" role="progressbar" aria-valuenow="41" aria-valuemin="0" aria-valuemax="100"
+                     aria-label="Raj Patel clearance progress">
+                  <span class="progress__track"><span class="progress__fill progress__fill--warn" style="width:41%"></span></span>
+                  <span class="progress__value">41%</span>
+                </div>
+              </td>
+              <td data-label="Status"><span class="badge badge--warn"><span class="badge__dot"></span>At risk</span></td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="departure.html">Open
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg></a>
+              </td>
+            </tr>
+
+            <tr data-search="michael osei dep-2026-0036 operations retirement owen blackwood" data-department="operations"
+                data-reason="retirement" data-status="overdue" data-group="overdue" data-row-href="departure.html">
+              <td data-label="Employee">
+                <a class="person" href="departure.html">
+                  <span class="avatar avatar--amber" aria-hidden="true">MO</span>
+                  <span>
+                    <span class="person__name">Michael Osei</span>
+                    <span class="person__meta">Warehouse Operative</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Case"><span class="table__primary numeric">DEP-2026-0036</span></td>
+              <td data-label="Last working day">Fri 13 Nov 2026</td>
+              <td data-label="Reason">Retirement</td>
+              <td data-label="Clearance">
+                <div class="progress progress--sm" role="progressbar" aria-valuenow="18" aria-valuemin="0" aria-valuemax="100"
+                     aria-label="Michael Osei clearance progress">
+                  <span class="progress__track"><span class="progress__fill progress__fill--danger" style="width:18%"></span></span>
+                  <span class="progress__value">18%</span>
+                </div>
+              </td>
+              <td data-label="Status"><span class="badge badge--danger"><span class="badge__dot"></span>Needs attention</span></td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="departure.html">Open
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg></a>
+              </td>
+            </tr>
+
+            <tr data-search="yuki tanaka dep-2026-0038 marketing resignation hannah cole" data-department="marketing"
+                data-reason="resignation" data-status="on-track" data-group="on-track" data-row-href="departure.html">
+              <td data-label="Employee">
+                <a class="person" href="departure.html">
+                  <span class="avatar avatar--rose" aria-hidden="true">YT</span>
+                  <span>
+                    <span class="person__name">Yuki Tanaka</span>
+                    <span class="person__meta">Marketing Executive</span>
+                  </span>
+                </a>
+              </td>
+              <td data-label="Case"><span class="table__primary numeric">DEP-2026-0038</span></td>
+              <td data-label="Last working day">Fri 20 Nov 2026</td>
+              <td data-label="Reason">Resignation</td>
+              <td data-label="Clearance">
+                <div class="progress progress--sm" role="progressbar" aria-valuenow="6" aria-valuemin="0" aria-valuemax="100"
+                     aria-label="Yuki Tanaka clearance progress">
+                  <span class="progress__track"><span class="progress__fill" style="width:6%"></span></span>
+                  <span class="progress__value">6%</span>
+                </div>
+              </td>
+              <td data-label="Status"><span class="badge badge--ok"><span class="badge__dot"></span>On track</span></td>
+              <td data-label="" class="table__actions">
+                <a class="btn btn--secondary btn--sm" href="departure.html">Open
+                  <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron-right"/></svg></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="empty" data-table-empty hidden>
+        <span class="empty__art" aria-hidden="true"><svg class="icon icon--lg"><use href="#i-door"/></svg></span>
+        <h3 class="empty__title">No departure cases match these filters</h3>
+        <p class="empty__text">
+          Try a different department or reason, or reset the filters. A departure case appears here as soon as
+          an authorised user initiates it.
+        </p>
+        <div class="empty__actions">
+          <button class="btn btn--secondary" type="button" data-table-reset>Clear filters</button>
+          <button class="btn btn--primary" type="button" data-sheet-open="sheet-new-departure" aria-haspopup="dialog">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-plus"/></svg>
+            Initiate departure
+          </button>
+        </div>
+      </div>
+
+      <div class="card__foot">
+        <p data-table-count>Showing all 5 departure cases</p>
+        <p class="text-xs muted">Clearance progress is derived from the departmental clearance checklists</p>
+      </div>
+    </section>
+
+    <!-- 3: outstanding work and departure calendar -->
+    <div class="grid grid--halves mt-6">
+      <section class="card" aria-labelledby="outstanding-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="outstanding-title">Outstanding clearance by department</h2>
+            <p class="card__sub">Open actions across all five departure cases.</p>
+          </div>
+        </div>
+        <div class="card__body">
+          <div class="hbars">
+            <div class="hbar">
+              <span class="hbar__label">HR</span>
+              <span class="hbar__track"><span class="hbar__fill hbar__fill--danger" style="width:100%"></span></span>
+              <span class="hbar__value">9</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar__label">IT</span>
+              <span class="hbar__track"><span class="hbar__fill hbar__fill--warn" style="width:89%"></span></span>
+              <span class="hbar__value">8</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar__label">Facilities</span>
+              <span class="hbar__track"><span class="hbar__fill" style="width:67%"></span></span>
+              <span class="hbar__value">6</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar__label">Communications</span>
+              <span class="hbar__track"><span class="hbar__fill hbar__fill--info" style="width:44%"></span></span>
+              <span class="hbar__value">4</span>
+            </div>
+          </div>
+        </div>
+        <div class="card__foot">
+          <p>5 actions are past their due date</p>
+          <a class="btn btn--link text-sm" href="tasks.html#department-queues">Department queues</a>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="calendar-title">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="calendar-title">Upcoming departures</h2>
+            <p class="card__sub">Last working days over the next five weeks.</p>
+          </div>
+        </div>
+        <div class="list">
+          <article class="list__item">
+            <span class="date-chip" aria-hidden="true"><span class="date-chip__month">Oct</span><span class="date-chip__day">28</span></span>
+            <div class="list__main">
+              <p class="list__title">Chiara Rossi</p>
+              <p class="list__meta">Office Manager · Facilities · 90% cleared</p>
+            </div>
+            <div class="list__aside"><span class="badge badge--ok"><span class="badge__dot"></span>On track</span></div>
+          </article>
+          <article class="list__item">
+            <span class="date-chip" aria-hidden="true"><span class="date-chip__month">Oct</span><span class="date-chip__day">30</span></span>
+            <div class="list__main">
+              <p class="list__title">Helena Marsh</p>
+              <p class="list__meta">Finance Business Partner · Finance · 46% cleared</p>
+            </div>
+            <div class="list__aside"><span class="badge badge--warn"><span class="badge__dot"></span>At risk</span></div>
+          </article>
+          <article class="list__item">
+            <span class="date-chip" aria-hidden="true"><span class="date-chip__month">Nov</span><span class="date-chip__day">6</span></span>
+            <div class="list__main">
+              <p class="list__title">Raj Patel</p>
+              <p class="list__meta">Senior Data Engineer · Technology · 41% cleared</p>
+            </div>
+            <div class="list__aside"><span class="badge badge--warn"><span class="badge__dot"></span>At risk</span></div>
+          </article>
+          <article class="list__item">
+            <span class="date-chip" aria-hidden="true"><span class="date-chip__month">Nov</span><span class="date-chip__day">13</span></span>
+            <div class="list__main">
+              <p class="list__title">Michael Osei</p>
+              <p class="list__meta">Warehouse Operative · Operations · 18% cleared</p>
+            </div>
+            <div class="list__aside"><span class="badge badge--danger"><span class="badge__dot"></span>Needs attention</span></div>
+          </article>
+          <article class="list__item">
+            <span class="date-chip" aria-hidden="true"><span class="date-chip__month">Nov</span><span class="date-chip__day">20</span></span>
+            <div class="list__main">
+              <p class="list__title">Yuki Tanaka</p>
+              <p class="list__meta">Marketing Executive · Marketing · 6% cleared</p>
+            </div>
+            <div class="list__aside"><span class="badge badge--ok"><span class="badge__dot"></span>On track</span></div>
+          </article>
+        </div>
+        <div class="card__foot">
+          <p>Clearance deadlines derive from the last working day</p>
+          <a class="btn btn--link text-sm" href="reports.html">Departure report</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="page-foot">
+    <p>Casidra Arrivals &amp; Departures · departure cases design prototype</p>
+    <p>Fictional sample data · UI only · not connected to a backend</p>
+  </footer>
+</div>
+
+<!-- @include partials/shell-end.html -->
+<!-- @include partials/sheet-new-departure.html -->
+<!-- @include partials/scripts.html -->
+</body>
+</html>
