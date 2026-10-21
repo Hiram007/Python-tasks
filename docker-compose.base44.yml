@@ -1,0 +1,78 @@
+# Base44 development environment for the Casidra Employee Recognition System.
+#
+# The application is a FastAPI + SQLAlchemy service rendering Jinja templates.
+# Source is bind-mounted and uvicorn runs with --reload, so edits apply without
+# a rebuild. PostgreSQL is the application database; the schema is created and
+# seeded by `python -m app.bootstrap` on start-up.
+name: casidra-recognition
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: recognition
+      POSTGRES_PASSWORD: recognition_dev_password
+      POSTGRES_DB: recognition
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U recognition -d recognition"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 15s
+    restart: on-failure
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.base44
+    working_dir: /app
+    command:
+      - sh
+      - -ec
+      - >
+        python -m app.bootstrap &&
+        exec uvicorn app.main:app --host 0.0.0.0 --port 3000 --reload --reload-dir /app/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DATABASE_URL=postgresql+psycopg://recognition:recognition_dev_password@db:5432/recognition
+      - ENABLE_SCHEDULER=1
+      - BASE44_PREVIEW_MODE
+    env_file:
+      - ./.env.base44-defaults
+      - /run/base44/app.env
+    volumes:
+      - ./:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    labels:
+      base44.project: "Casidra Employee Recognition"
+      base44.kind: "web"
+      base44.port: "3000"
+      base44.docs: "/docs"
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - |
+          import sys, urllib.request
+          try:
+              with urllib.request.urlopen("http://127.0.0.1:3000/login", timeout=4) as r:
+                  code = r.status
+          except Exception as exc:
+              print("web: login probe failed:", exc)
+              sys.exit(1)
+          sys.exit(0 if code == 200 else 1)
+      interval: 10s
+      timeout: 6s
+      retries: 6
+      start_period: 60s
+    restart: on-failure
+
+volumes:
+  pgdata:

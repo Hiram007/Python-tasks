@@ -1,0 +1,15 @@
+# Base44 development image for the Casidra Employee Recognition System.
+#
+# Only dependencies live in the image; the application source is bind-mounted
+# from the repository at run time (see docker-compose.base44.yml) so edits are
+# picked up by uvicorn --reload without rebuilding.
+FROM python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+WORKDIR /app
+
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
