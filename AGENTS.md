@@ -51,6 +51,16 @@ optional call to action. Add a screen by composing these rather than
 hand-writing `<div class="page-head">`, so headers, filter bars, card grids and
 empty states cannot drift apart.
 
+**The shell is one top application bar.** `base.html` renders a sticky dark
+`.appbar` holding the brand, the grouped primary navigation (`nav_for`) and the
+account block. A group with a single link renders as a direct link; a group with
+several renders as a dropdown (`.nav-group` + `.nav-trigger`/`.nav-menu`, toggled
+by the inline script). `{% block topbar_actions %}` is the page-level action slot
+in that bar, and below 980px the navigation folds into the `body.nav-open`
+hamburger panel. The stylesheet is linked as `?v={{ asset_version }}` (the CSS
+file's mtime) because browsers cache `/static/app.css` hard enough that a
+restyled shell can otherwise render against a stale sheet.
+
 ## Verifying a change
 
 The acceptance suite is the single source of truth for the business rules and

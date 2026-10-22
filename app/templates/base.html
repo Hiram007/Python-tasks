@@ -4,73 +4,104 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{{ page_title }} · {{ app_name }}{% endblock %}</title>
-  <link rel="stylesheet" href="/static/app.css">
+  <link rel="stylesheet" href="/static/app.css?v={{ asset_version }}">
 </head>
 <body>
-<div class="shell">
-  <aside class="sidebar" id="sidebar">
-    <div class="brand">
-      <span class="brand-mark">{{ brand_name[0] }}</span>
-      <span class="brand-text">
-        <span class="brand-name">{{ brand_name }}</span>
-        <span class="brand-sub">Recognition System</span>
-      </span>
-    </div>
+<div class="app">
+  <header class="appbar">
+    <div class="appbar-inner">
+      <a class="brand" href="/">
+        <span class="brand-mark">{{ brand_name[0] }}</span>
+        <span class="brand-text">
+          <span class="brand-name">{{ brand_name }}</span>
+          <span class="brand-sub">Recognition System</span>
+        </span>
+      </a>
 
-    <nav>
-      {% for group in nav_for(current_user) %}
-        <div class="nav-group">
-          <p class="nav-title">{{ group.title }}</p>
-          {% for item in group['items'] %}
-            <a class="nav-link {{ 'is-active' if is_active(item.path, current_path) else '' }}" href="{{ item.path }}">
-              <span class="nav-icon">{{ ui.icon(item.icon) }}</span><span>{{ item.label }}</span>
-            </a>
-          {% endfor %}
-        </div>
-      {% endfor %}
-    </nav>
-
-    <div class="sidebar-foot">
-      <div class="who">
-        {{ ui.avatar(current_user.full_name, 'dark') }}
-        <div style="min-width:0">
-          <div class="who-name">{{ current_user.full_name }}</div>
-          <div class="who-roles">{% for role in current_user.role_list %}{{ role_labels.get(role, role) }}{% if not loop.last %} · {% endif %}{% endfor %}</div>
-        </div>
-      </div>
-      <form method="post" action="/logout">
-        <button class="btn btn-sm btn-block" type="submit">{{ ui.icon('logout', 'ic') }} Sign out</button>
-      </form>
-    </div>
-  </aside>
-
-  <div class="main">
-    <header class="topbar">
-      <button class="btn btn-sm menu-toggle" type="button" id="menu-toggle" aria-label="Toggle navigation">{{ ui.icon('menu') }}</button>
-      <div class="topbar-title">
-        <span class="topbar-eyebrow">{{ app_name }}</span>
-        <h1 style="font-size:1.12rem">{{ page_title }}</h1>
-      </div>
-      <div class="topbar-actions">
+      <div class="appbar-right">
         {% block topbar_actions %}{% endblock %}
+        <div class="who">
+          {{ ui.avatar(current_user.full_name, 'dark') }}
+          <div class="who-text">
+            <div class="who-name">{{ current_user.full_name }}</div>
+            <div class="who-roles">{% for role in current_user.role_list %}{{ role_labels.get(role, role) }}{% if not loop.last %} · {% endif %}{% endfor %}</div>
+          </div>
+        </div>
+        <form method="post" action="/logout">
+          <button class="btn btn-sm" type="submit">{{ ui.icon('logout', 'ic') }} Sign out</button>
+        </form>
+        <button class="btn btn-sm menu-toggle" type="button" id="menu-toggle" aria-label="Toggle navigation" aria-controls="topnav" aria-expanded="false">{{ ui.icon('menu') }}</button>
       </div>
-    </header>
 
-    <main class="content">
-      {% if ok_message %}<div class="alert alert-ok">{{ ui.icon('check') }}<div>{{ ok_message }}</div></div>{% endif %}
-      {% if error_message %}<div class="alert alert-danger">{{ ui.icon('alert') }}<div>{{ error_message }}</div></div>{% endif %}
-      {% block content %}{% endblock %}
-    </main>
-  </div>
+      <nav class="topnav" id="topnav">
+        {% for group in nav_for(current_user) %}
+          <div class="nav-group">
+            {% if group['items'] | length == 1 %}
+              {% set item = group['items'][0] %}
+              <a class="nav-link nav-top {{ 'is-active' if is_active(item.path, current_path) else '' }}" href="{{ item.path }}">
+                <span class="nav-icon">{{ ui.icon(item.icon) }}</span><span>{{ item.label }}</span>
+              </a>
+            {% else %}
+              <button class="nav-trigger" type="button" aria-expanded="false">
+                <span>{{ group.title }}</span><span class="caret" aria-hidden="true">&#9662;</span>
+              </button>
+              <div class="nav-menu">
+                {% for item in group['items'] %}
+                  <a class="nav-link {{ 'is-active' if is_active(item.path, current_path) else '' }}" href="{{ item.path }}">
+                    <span class="nav-icon">{{ ui.icon(item.icon) }}</span><span>{{ item.label }}</span>
+                  </a>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </nav>
+    </div>
+  </header>
+
+  <main class="content">
+    {% if ok_message %}<div class="alert alert-ok">{{ ui.icon('check') }}<div>{{ ok_message }}</div></div>{% endif %}
+    {% if error_message %}<div class="alert alert-danger">{{ ui.icon('alert') }}<div>{{ error_message }}</div></div>{% endif %}
+    {% block content %}{% endblock %}
+  </main>
 </div>
 
 <script>
   (function () {
     var toggle = document.getElementById('menu-toggle');
     if (toggle) {
-      toggle.addEventListener('click', function () { document.body.classList.toggle('nav-open'); });
+      toggle.addEventListener('click', function () {
+        var open = document.body.classList.toggle('nav-open');
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
     }
+
+    var groups = Array.prototype.slice.call(document.querySelectorAll('.nav-group'));
+
+    function closeGroups(except) {
+      groups.forEach(function (group) {
+        if (group === except) { return; }
+        group.classList.remove('is-open');
+        var trigger = group.querySelector('.nav-trigger');
+        if (trigger) { trigger.setAttribute('aria-expanded', 'false'); }
+      });
+    }
+
+    groups.forEach(function (group) {
+      var trigger = group.querySelector('.nav-trigger');
+      if (!trigger) { return; }
+      trigger.addEventListener('click', function (event) {
+        event.stopPropagation();
+        var open = !group.classList.contains('is-open');
+        closeGroups(group);
+        group.classList.toggle('is-open', open);
+        trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    });
+
     document.addEventListener('click', function (event) {
+      if (!event.target.closest('.nav-group')) { closeGroups(null); }
+
       var opener = event.target.closest('[data-dialog-open]');
       if (opener) {
         var target = document.getElementById(opener.getAttribute('data-dialog-open'));
@@ -83,6 +114,14 @@
         if (dialog) { event.preventDefault(); dialog.close(); }
       }
     });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key !== 'Escape') { return; }
+      closeGroups(null);
+      document.body.classList.remove('nav-open');
+      if (toggle) { toggle.setAttribute('aria-expanded', 'false'); }
+    });
+
     document.querySelectorAll('dialog').forEach(function (dialog) {
       dialog.addEventListener('click', function (event) {
         if (event.target === dialog) { dialog.close(); }

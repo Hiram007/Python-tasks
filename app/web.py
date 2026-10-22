@@ -24,6 +24,15 @@ from app.timeutil import fmt, fmt_date, month_label, to_local
 
 templates = Jinja2Templates(directory=str(BASE_DIR / "app" / "templates"))
 
+
+def asset_version() -> str:
+    """Cache-busting token for the stylesheet, derived from its modification time."""
+    try:
+        return str(int((BASE_DIR / "app" / "static" / "app.css").stat().st_mtime))
+    except OSError:
+        return "0"
+
+
 templates.env.filters["dt"] = fmt
 templates.env.filters["date"] = fmt_date
 templates.env.filters["local"] = to_local
@@ -33,6 +42,7 @@ templates.env.globals.update(
     timezone_name=TIMEZONE_NAME,
     role_labels=ROLE_LABELS,
     app_settings=settings,
+    asset_version=asset_version(),
 )
 
 
