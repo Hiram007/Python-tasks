@@ -124,7 +124,9 @@ def validation_page(
         {
             "page_title": "Validation & Acceptance Tests",
             "results": results,
-            "summary": acceptance.summarise(results),
+            # latest_results() returns the stored envelope; summarise() counts the
+            # scenario list inside it.
+            "summary": acceptance.summarise(results["results"]),
             "can_run": user.has_role(*HR_ROLES),
         },
         user=user,

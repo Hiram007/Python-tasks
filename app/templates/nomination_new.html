@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% import "_macros.html" as ui %}
+
+{% block content %}
+<div class="page-head">
+  <div class="grow">
+    <h2>Nomination Submission</h2>
+    <p class="page-sub">Nominating a colleague is <strong>not</strong> a vote. It starts the Initial Review Panel process for {{ active_cycle.label }}.</p>
+  </div>
+  <div class="actions">{{ ui.cycle_picker(cycle_options, active_cycle.cycle_key, '/nominations/new') }}</div>
+</div>
+
+{% if nominator is none %}
+  <div class="alert alert-danger">{{ ui.icon('alert') }}<div>Your account is not linked to an employee record, so you cannot submit a nomination. Ask an administrator to link your account.</div></div>
+{% else %}
+  <div class="split">
+    <div class="card">
+      <div class="card-head">
+        <h2>New nomination</h2><span class="spacer"></span>{{ ui.cycle_status(active_cycle.status, active_cycle.status_label) }}
+      </div>
+      <div class="card-body">
+        <form method="post" action="/nominations/new">
+          <input type="hidden" name="cycle" value="{{ active_cycle.cycle_key }}">
+
+          <fieldset>
+            <legend>Who and where</legend>
+            <div class="form-row">
+              <div class="field">
+                <label for="nominee_id">Nominee</label>
+                <select class="select {{ 'is-invalid' if errors.nominee_id else '' }}" id="nominee_id" name="nominee_id" required>
+                  <option value="">Select a colleague…</option>
+                  {% for employee in employees %}
+                    <option value="{{ employee.id }}" {{ 'selected' if form.get('nominee_id') == employee.id | string else '' }}>{{ employee.full_name }} — {{ employee.department }}</option>
+                  {% endfor %}
+                </select>
+                {% if errors.nominee_id %}<p class="err">{{ errors.nominee_id }}</p>{% endif %}
+                <p class="help">You cannot nominate yourself.</p>
+              </div>
+              <div class="field">
+                <label for="department">Department</label>
+                <input class="input {{ 'is-invalid' if errors.department else '' }}" id="department" name="department" value="{{ form.get('department', '') }}" placeholder="Operations">
+                {% if errors.department %}<p class="err">{{ errors.department }}</p>{% endif %}
+              </div>
+              <div class="field">
+                <label for="achievement_date">Date of the achievement</label>
+                <input class="input {{ 'is-invalid' if errors.achievement_date else '' }}" type="date" id="achievement_date" name="achievement_date" value="{{ form.get('achievement_date', '') }}">
+                {% if errors.achievement_date %}<p class="err">{{ errors.achievement_date }}</p>{% endif %}
+                <p class="help">Cannot be in the future.</p>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>What happened</legend>
+            <div class="field">
+              <label for="achievement_description">Achievement description</label>
+              <textarea class="textarea {{ 'is-invalid' if errors.achievement_description else '' }}" id="achievement_description" name="achievement_description" required>{{ form.get('achievement_description', '') }}</textarea>
+              {% if errors.achievement_description %}<p class="err">{{ errors.achievement_description }}</p>{% endif %}
+              <p class="help">At least {{ min_description }} characters. Describe what was done and the difference it made.</p>
+            </div>
+            <div class="field">
+              <label for="motivation">{{ prompt }}</label>
+              <textarea class="textarea {{ 'is-invalid' if errors.motivation else '' }}" id="motivation" name="motivation" required>{{ form.get('motivation', '') }}</textarea>
+              {% if errors.motivation %}<p class="err">{{ errors.motivation }}</p>{% endif %}
+              <p class="help">At least {{ min_motivation }} characters.</p>
+            </div>
+          </fieldset>
+
+          <div class="form-actions">
+            <button class="btn btn-primary" type="submit">Submit nomination</button>
+            <a class="btn" href="/nominations">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-head"><h2>Nominating as</h2></div>
+        <div class="card-body">
+          {{ ui.person(nominator.full_name, nominator.job_title or nominator.department) }}
+          <p class="small muted mt-2 mb-0">A confirmation email is recorded against your address when the nomination is saved.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>What happens next</h2></div>
+        <div class="card-body">
+          <ol class="check-list" style="list-style:decimal;padding-left:18px">
+            <li>Your nomination goes to the {{ active_cycle.required_initial_reviews }} assigned Initial Review Panel members.</li>
+            <li>Each reviewer records Approve or Reject with comments.</li>
+            <li>Once every nomination has completed its reviews and at least {{ active_cycle.threshold_nominations }} nominations exist, approved nominations are shortlisted.</li>
+            <li>The Final Voting Panel votes — a separate action-required email.</li>
+            <li>The winner is declared only after all four valid votes are received.</li>
+          </ol>
+          <p class="small muted mb-0">Duplicate rule: one nomination per nominator and nominee pair per month (configurable in System Administration).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% import "_macros.html" as ui %}
+
+{% block content %}
+<div class="page-head">
+  <div class="grow">
+    <h2>Reports & Audit Logs</h2>
+    <p class="page-sub">The complete monthly result for {{ active_cycle.label }}, plus the exports available to HR and administrators.</p>
+  </div>
+  <div class="actions">{{ ui.cycle_picker(cycle_options, active_cycle.cycle_key, '/reports') }}</div>
+</div>
+
+<div class="stat-grid mb-2">
+  {{ ui.stat('Nominations', stats.nominations, 'threshold ' ~ stats.threshold, 'ok' if stats.threshold_met else 'warn') }}
+  {{ ui.stat('Approved', stats.approved, stats.rejected ~ ' rejected', 'brand') }}
+  {{ ui.stat('Shortlisted', stats.shortlisted, 'on the ballot', 'info') }}
+  {{ ui.stat('Winner', (stats.winner.winner_nomination.nominee.full_name if stats.winner and stats.winner.winner_nomination else ('Tie pending' if stats.winner else '—')), stats.winner.status_label if stats.winner else 'not calculated', 'gold' if stats.winner and stats.winner.winner_nomination else 'neutral') }}
+</div>
+
+{% if can_export %}
+  <div class="card">
+    <div class="card-head"><h2>Exports</h2><span class="spacer"></span><span class="chip">CSV · {{ active_cycle.cycle_key }}</span></div>
+    <div class="card-body">
+      <div class="actions">
+        {% for kind, label in exports.items() %}
+          <a class="btn btn-sm" href="/reports/export/{{ kind }}.csv?cycle={{ active_cycle.cycle_key }}">{{ ui.icon('download') }} {{ label }}</a>
+        {% endfor %}
+      </div>
+      <p class="help mb-0">Exports respect your role; confidential nomination detail is included only for authorised roles.</p>
+    </div>
+  </div>
+{% endif %}
+
+<div class="card">
+  <div class="card-head"><h2>Monthly result — {{ active_cycle.label }}</h2><span class="spacer"></span>{{ ui.cycle_status(active_cycle.status, active_cycle.status_label) }}</div>
+  <div class="card-body">
+    <div class="detail-grid">
+      <div><div class="dt">Nominations received</div><div class="dd">{{ results.nominations | length }}</div></div>
+      <div><div class="dt">Shortlisted</div><div class="dd">{{ results.shortlist | length }}</div></div>
+      <div><div class="dt">Voting round</div><div class="dd">{{ results.round.status if results.round else 'Not opened' }}</div></div>
+      <div><div class="dt">Winner</div><div class="dd">{{ results.winner.winner_nomination.nominee.full_name if results.winner and results.winner.winner_nomination else '—' }}</div></div>
+      <div><div class="dt">Shared panel member</div><div class="dd">{{ results.assignment.shared[0].name if results.assignment.shared else '—' }}</div></div>
+      <div><div class="dt">Panel signature</div><div class="dd mono">{{ results.assignment.signature or '—' }}</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="split mt-3">
+  <div class="card">
+    <div class="card-head"><h2>Nominations</h2><span class="spacer"></span><span class="chip">{{ results.nominations | length }}</span></div>
+    <div class="card-body flush">
+      {% if results.nominations %}
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Reference</th><th>Nominee</th><th>Nominator</th><th>Department</th><th>Reviews</th><th>Status</th></tr></thead>
+            <tbody>
+              {% for nomination in results.nominations %}
+                <tr>
+                  <td class="mono nowrap">{{ nomination.reference }}</td>
+                  <td>{{ nomination.nominee.full_name }}</td>
+                  <td class="cell-sub">{{ nomination.nominator.full_name }}</td>
+                  <td>{{ nomination.department }}</td>
+                  <td class="mono">{{ nomination.review_count }} / {{ active_cycle.required_initial_reviews }}</td>
+                  <td>{{ ui.nom_status(nomination.status) }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        {{ ui.empty('No nominations for ' ~ active_cycle.label) }}
+      {% endif %}
+    </div>
+  </div>
+
+  <div>
+    <div class="card">
+      <div class="card-head"><h2>Shortlist</h2><span class="spacer"></span><span class="chip">{{ shortlist | length }}</span></div>
+      <div class="card-body flush">
+        {% if shortlist %}
+          <div class="table-wrap">
+            <table class="table compact">
+              <thead><tr><th>Candidate</th><th>Department</th><th class="right">Votes</th></tr></thead>
+              <tbody>
+                {% for entry in shortlist %}
+                  <tr>
+                    <td>{{ entry.nominee.full_name }}<div class="cell-sub mono">{{ entry.nomination.reference }}</div></td>
+                    <td class="cell-sub">{{ entry.nomination.department }}</td>
+                    <td class="right mono">{{ entry.votes }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          {{ ui.empty('No shortlist for this month') }}
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>Months</h2></div>
+      <div class="card-body tight">
+        <table class="table compact">
+          <tbody>
+            {% for cycle in recent_cycles %}
+              <tr>
+                <td><a href="/reports?cycle={{ cycle.cycle_key }}">{{ cycle.label }}</a></td>
+                <td class="right">{{ ui.cycle_status(cycle.status, cycle.status_label) }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+{% import "_macros.html" as ui %}
+
+{% block content %}
+<div class="page-head">
+  <div class="grow">
+    <h2>System Administration</h2>
+    <p class="page-sub">Business rules, email copy, user accounts and recognition cycles. Changes are audited.</p>
+  </div>
+  <div class="actions">
+    <span class="chip">{{ users | length }} user(s)</span>
+    <span class="chip">{{ panel_count }} panel member(s)</span>
+    {% if can_edit_settings %}{{ ui.pill('Settings editable', 'ok') }}{% else %}{{ ui.pill('Read-only settings', 'neutral') }}{% endif %}
+  </div>
+</div>
+
+<div class="split">
+  <div>
+    <div class="card">
+      <div class="card-head"><h2>Business rules</h2><span class="spacer"></span><span class="chip">System-wide defaults</span></div>
+      <div class="card-body">
+        {% if can_edit_settings %}
+          <form method="post" action="/admin/settings">
+            <div class="form-row">
+              <div class="field">
+                <label for="approval_min_approvals">Approvals required</label>
+                <input class="input" type="number" min="1" max="4" id="approval_min_approvals" name="approval_min_approvals" value="{{ values.approval_min_approvals }}">
+                <p class="help">{{ descriptions.approval_min_approvals }}</p>
+              </div>
+              <div class="field">
+                <label for="required_initial_reviews">Initial reviews required</label>
+                <input class="input" type="number" min="1" max="8" id="required_initial_reviews" name="required_initial_reviews" value="{{ values.required_initial_reviews }}">
+                <p class="help">{{ descriptions.required_initial_reviews }}</p>
+              </div>
+              <div class="field">
+                <label for="shortlist_min_nominations">Nominations before shortlisting</label>
+                <input class="input" type="number" min="1" id="shortlist_min_nominations" name="shortlist_min_nominations" value="{{ values.shortlist_min_nominations }}">
+                <p class="help">{{ descriptions.shortlist_min_nominations }}</p>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="field">
+                <label for="nomination_window_days">Nomination window (days)</label>
+                <input class="input" type="number" min="1" max="31" id="nomination_window_days" name="nomination_window_days" value="{{ values.nomination_window_days }}">
+                <p class="help">{{ descriptions.nomination_window_days }}</p>
+              </div>
+              <div class="field">
+                <label for="review_reminder_hours">Reminder lead time (hours)</label>
+                <input class="input" type="number" min="1" id="review_reminder_hours" name="review_reminder_hours" value="{{ values.review_reminder_hours }}">
+                <p class="help">{{ descriptions.review_reminder_hours }}</p>
+              </div>
+              <div class="field">
+                <label for="shortlist_schedule">Shortlisting schedule</label>
+                <input class="input" id="shortlist_schedule" name="shortlist_schedule" value="{{ values.shortlist_schedule }}">
+                <p class="help">{{ descriptions.shortlist_schedule }}</p>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="field">
+                <label for="nomination_duplicate_rule">Duplicate nomination rule</label>
+                <select class="select" id="nomination_duplicate_rule" name="nomination_duplicate_rule">
+                  {% for option in ['pair', 'nominator', 'none'] %}<option value="{{ option }}" {{ 'selected' if values.nomination_duplicate_rule == option else '' }}>{{ option }}</option>{% endfor %}
+                </select>
+                <p class="help">{{ descriptions.nomination_duplicate_rule }}</p>
+              </div>
+              <div class="field">
+                <label for="notification_transport">Notification transport</label>
+                <select class="select" id="notification_transport" name="notification_transport">
+                  {% for option in ['auto', 'smtp', 'outbox'] %}<option value="{{ option }}" {{ 'selected' if values.notification_transport == option else '' }}>{{ option }}</option>{% endfor %}
+                </select>
+                <p class="help">{{ descriptions.notification_transport }}</p>
+              </div>
+            </div>
+            <div class="form-actions"><button class="btn btn-primary" type="submit">Save business rules</button></div>
+          </form>
+        {% else %}
+          <div class="alert alert-info">{{ ui.icon('info') }}<div>Only a system administrator may change business rules. The current values are shown below.</div></div>
+          <div class="detail-grid">
+            {% for key in setting_keys %}<div><div class="dt">{{ key }}</div><div class="dd">{{ values.get(key) }}</div></div>{% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>Email templates</h2><span class="spacer"></span><span class="chip">{{ template_keys | length }} templates</span></div>
+      <div class="card-body">
+        {% for key in template_keys %}
+          <details class="tpl">
+            <summary>
+              {{ template_labels.get(key, key) }}
+              <span class="spacer" style="margin-left:auto"></span>
+              {{ ui.pill('Action required' if template_categories.get(key) == 'ACTION_REQUIRED' else 'Informational', 'warn' if template_categories.get(key) == 'ACTION_REQUIRED' else 'neutral') }}
+            </summary>
+            <div class="tpl-body">
+              <form method="post" action="/admin/templates/{{ key }}">
+                <div class="field">
+                  <label for="subject-{{ key }}">Subject</label>
+                  <input class="input mono" id="subject-{{ key }}" name="subject" value="{{ templates[key].subject }}" required>
+                </div>
+                <div class="field">
+                  <label for="body-{{ key }}">Body</label>
+                  <textarea class="textarea mono" id="body-{{ key }}" name="body" style="min-height:200px" required>{{ templates[key].body }}</textarea>
+                  <p class="help">Placeholders in braces are replaced when the message is rendered. Unknown placeholders are left visible rather than failing.</p>
+                </div>
+                <div class="form-actions">
+                  <button class="btn btn-primary btn-sm" type="submit">Save template</button>
+                  <button class="btn btn-sm" type="submit" formaction="/admin/templates/{{ key }}/reset">Reset to default</button>
+                </div>
+              </form>
+            </div>
+          </details>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="card">
+      <div class="card-head"><h2>Recognition cycles</h2><span class="spacer"></span><span class="chip">{{ cycle_list | length }}</span></div>
+      <div class="card-body">
+        <form method="post" action="/admin/cycles" class="actions mb-2">
+          <select class="select" name="cycle" style="width:auto">
+            {% for option in cycle_options %}<option value="{{ option.key }}">{{ option.label }}</option>{% endfor %}
+          </select>
+          <button class="btn btn-sm btn-primary" type="submit">Create cycle</button>
+        </form>
+        <div class="table-wrap">
+          <table class="table compact">
+            <thead><tr><th>Month</th><th>Status</th><th>Thresholds</th></tr></thead>
+            <tbody>
+              {% for cycle in cycle_list %}
+                <tr>
+                  <td class="nowrap"><a href="/admin?cycle={{ cycle.cycle_key }}">{{ cycle.label }}</a><div class="cell-sub mono">{{ cycle.cycle_key }}</div></td>
+                  <td>{{ ui.cycle_status(cycle.status, cycle.status_label) }}</td>
+                  <td>
+                    <form method="post" action="/admin/cycles/{{ cycle.id }}/thresholds" class="actions">
+                      <input class="input" style="width:64px" type="number" min="1" name="threshold_nominations" value="{{ cycle.threshold_nominations }}" aria-label="Nominations threshold">
+                      <input class="input" style="width:64px" type="number" min="1" name="required_initial_reviews" value="{{ cycle.required_initial_reviews }}" aria-label="Reviews required">
+                      <input class="input" style="width:64px" type="number" min="1" name="approval_min_approvals" value="{{ cycle.approval_min_approvals }}" aria-label="Approvals required">
+                      <button class="btn btn-sm" type="submit">Save</button>
+                    </form>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <p class="help mb-0">Per-month values override the system defaults: nominations threshold, reviews required, approvals required.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>User accounts</h2><span class="spacer"></span>
+        <button class="btn btn-sm btn-primary" type="button" data-dialog-open="new-user">{{ ui.icon('plus') }} New user</button>
+      </div>
+      <div class="card-body flush">
+        <div class="table-wrap">
+          <table class="table compact">
+            <thead><tr><th>User</th><th>Roles</th><th>Status</th><th class="right">Actions</th></tr></thead>
+            <tbody>
+              {% for user in users %}
+                <tr>
+                  <td>{{ ui.person(user.full_name, user.email, 'dark') }}</td>
+                  <td>{% for role in user.role_list %}<span class="pill pill-neutral">{{ role_labels.get(role, role) }}</span> {% endfor %}</td>
+                  <td>{{ ui.pill('Active', 'ok') if user.is_active else ui.pill('Inactive', 'neutral') }}</td>
+                  <td class="right">
+                    <div class="actions" style="justify-content:flex-end">
+                      <button class="btn btn-sm" type="button" data-dialog-open="reset-{{ user.id }}">Reset password</button>
+                      <form method="post" action="/admin/users/{{ user.id }}/toggle">
+                        <button class="btn btn-sm" type="submit" {{ 'disabled' if user.id == current_user.id else '' }}>{{ 'Deactivate' if user.is_active else 'Activate' }}</button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<dialog id="new-user">
+  <form method="post" action="/admin/users">
+    <div class="card-head"><h3>Create a user account</h3></div>
+    <div class="card-body">
+      <div class="field"><label for="u-name">Full name</label><input class="input" id="u-name" name="full_name" required></div>
+      <div class="field"><label for="u-email">Email address</label><input class="input" type="email" id="u-email" name="email" required></div>
+      <div class="field"><label for="u-password">Initial password</label><input class="input" type="password" id="u-password" name="password" minlength="8" required><p class="help">At least 8 characters.</p></div>
+      <div class="field">
+        <label for="u-employee">Linked employee (optional)</label>
+        <select class="select" id="u-employee" name="employee_id">
+          <option value="">Not linked</option>
+          {% for employee in employees %}<option value="{{ employee.id }}">{{ employee.full_name }} — {{ employee.employee_number }}</option>{% endfor %}
+        </select>
+        <p class="help">A linked employee is required to submit nominations or hold a panel seat.</p>
+      </div>
+      <fieldset>
+        <legend>Roles</legend>
+        {% for role in roles %}
+          <label class="radio-card" style="min-width:0;margin-bottom:6px">
+            <input type="checkbox" name="roles" value="{{ role }}" {{ 'checked' if role == 'EMPLOYEE' else '' }}>
+            <span><strong>{{ role_labels.get(role, role) }}</strong><br><span class="cell-sub mono">{{ role }}</span></span>
+          </label>
+        {% endfor %}
+      </fieldset>
+    </div>
+    <div class="card-foot">
+      <button class="btn" type="button" data-dialog-close>Cancel</button>
+      <button class="btn btn-primary" type="submit">Create user</button>
+    </div>
+  </form>
+</dialog>
+
+{% for user in users %}
+  <dialog id="reset-{{ user.id }}">
+    <form method="post" action="/admin/users/{{ user.id }}/reset-password">
+      <div class="card-head"><h3>Reset password — {{ user.full_name }}</h3></div>
+      <div class="card-body">
+        <div class="field">
+          <label for="pw-{{ user.id }}">New password</label>
+          <input class="input" type="password" id="pw-{{ user.id }}" name="password" minlength="8" required>
+          <p class="help">At least 8 characters. The change is written to the audit trail.</p>
+        </div>
+      </div>
+      <div class="card-foot">
+        <button class="btn" type="button" data-dialog-close>Cancel</button>
+        <button class="btn btn-primary" type="submit">Update password</button>
+      </div>
+    </form>
+  </dialog>
+{% endfor %}
+{% endblock %}

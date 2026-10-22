@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% import "_macros.html" as ui %}
+
+{% block content %}
+<div class="page-head">
+  <div class="grow">
+    <h2>Audit Trail</h2>
+    <p class="page-sub">Who did what, to which record, and when. Every workflow action is recorded and cannot be edited.</p>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h2>{{ 'All months' if scope_all else active_cycle.label }}</h2>
+    <span class="spacer"></span>
+    <span class="chip">{{ rows | length }} event(s)</span>
+  </div>
+
+  <form class="toolbar" method="get" action="/audit">
+    <div class="field grow">
+      <label for="q">Search summary</label>
+      <input class="input" id="q" name="q" value="{{ filters.q }}" placeholder="Nominee, reference, actor or event text">
+    </div>
+    <div class="field">
+      <label for="event">Event type</label>
+      <select class="select" id="event" name="event">
+        <option value="">All event types</option>
+        {% for type in event_types %}<option value="{{ type }}" {{ 'selected' if filters.event == type else '' }}>{{ type }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label for="cycle">Scope</label>
+      <select class="select" id="cycle" name="cycle">
+        <option value="all" {{ 'selected' if scope_all else '' }}>All months</option>
+        {% for option in cycle_options %}<option value="{{ option.key }}" {{ 'selected' if (not scope_all and option.key == filters.cycle) else '' }}>{{ option.label }}</option>{% endfor %}
+      </select>
+    </div>
+    <button class="btn btn-primary" type="submit">Apply</button>
+    <a class="btn" href="/audit">Reset</a>
+  </form>
+
+  {% if rows %}
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>Timestamp ({{ timezone_name }})</th><th>Event</th><th>Actor</th><th>Entity</th><th>Summary</th></tr></thead>
+        <tbody>
+          {% for event in rows %}
+            <tr>
+              <td class="nowrap cell-sub">{{ event.created_at | dt }}</td>
+              <td><span class="mono">{{ event.event_type }}</span></td>
+              <td>{{ event.actor_name }}</td>
+              <td class="cell-sub">{{ event.entity_type }}{% if event.entity_id %} #{{ event.entity_id }}{% endif %}</td>
+              <td>{{ event.summary }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    {{ ui.empty('No audit events match those filters', 'Try widening the scope to all months.') }}
+  {% endif %}
+</div>
+{% endblock %}

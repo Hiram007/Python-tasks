@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% import "_macros.html" as ui %}
+
+{% block content %}
+<div class="page-head">
+  <div class="grow">
+    <h2>Monthly Shortlisting</h2>
+    <p class="page-sub">Two conditions must both hold: at least {{ state.threshold }} nominations for the month, and every nomination fully reviewed. Only approved nominations are shortlisted.</p>
+  </div>
+  <div class="actions">{{ ui.cycle_picker(cycle_options, active_cycle.cycle_key, '/shortlisting') }}</div>
+</div>
+
+<div class="stat-grid mb-2">
+  {{ ui.stat('Nominations received', state.nomination_count, 'threshold ' ~ state.threshold, 'ok' if state.threshold_met else 'warn') }}
+  {{ ui.stat('Approved', state.approved_count, state.rejected_count ~ ' rejected', 'brand') }}
+  {{ ui.stat('Reviews complete', 'Yes' if state.reviews_complete else 'No', state.review_progress.reviews_completed ~ ' / ' ~ state.review_progress.reviews_required, 'ok' if state.reviews_complete else 'warn') }}
+  {{ ui.stat('Shortlisting', 'Ready' if state.can_shortlist else 'Blocked', schedule, 'ok' if state.can_shortlist else 'danger') }}
+</div>
+
+{% if state.already_run %}
+  <div class="alert alert-info">{{ ui.icon('info') }}<div><strong>Shortlisting already run</strong> for {{ active_cycle.label }} on {{ active_cycle.shortlist_run_at | dt }}. The shortlist and voting round are kept unchanged — running it again is a no-op.</div></div>
+{% endif %}
+
+{{ ui.reason_list(state.reasons) }}
+
+<div class="split">
+  <div>
+    <div class="card">
+      <div class="card-head">
+        <h2>Shortlist — {{ active_cycle.label }}</h2><span class="spacer"></span>
+        {% if round %}{{ ui.pill('Voting round ' ~ round.status | lower, 'brand') }}{% else %}{{ ui.pill('No voting round', 'neutral') }}{% endif %}
+      </div>
+      <div class="card-body flush">
+        {% if entries %}
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Reference</th><th>Candidate</th><th>Department</th><th class="right">Final votes</th></tr></thead>
+              <tbody>
+                {% for entry in entries %}
+                  <tr>
+                    <td class="mono nowrap">{{ entry.nomination.reference }}</td>
+                    <td>{{ ui.person(entry.nominee.full_name, entry.nominee.employee_number) }}</td>
+                    <td>{{ entry.nomination.department }}</td>
+                    <td class="right mono">{{ entry.votes }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          {{ ui.empty('No shortlist for ' ~ active_cycle.label, 'Approved nominations appear here once shortlisting runs.') }}
+        {% endif %}
+      </div>
+      {% if can_run %}
+        <div class="card-body" style="border-top:1px solid var(--line)">
+          <form method="post" action="/shortlisting/run?cycle={{ active_cycle.cycle_key }}" class="actions">
+            <button class="btn btn-primary" type="submit" {{ 'disabled' if not state.can_shortlist and not state.already_run else '' }}>Run shortlisting now</button>
+            <span class="help mb-0">The scheduled job runs automatically on {{ schedule }} ({{ timezone_name }}). Repeated execution never creates a second shortlist or voting round.</span>
+          </form>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>Review completeness</h2><span class="spacer"></span><span class="chip">{{ matrix | length }} nomination(s)</span></div>
+      <div class="card-body flush">
+        {% if matrix %}
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Reference</th><th>Nominee</th><th>Reviews</th><th>Approve / Reject</th><th>Status</th></tr></thead>
+              <tbody>
+                {% for row in matrix %}
+                  <tr>
+                    <td class="mono nowrap">{{ row.nomination.reference }}</td>
+                    <td>{{ row.nomination.nominee.full_name }}</td>
+                    <td class="mono">{{ row.completed }} / {{ row.required }}</td>
+                    <td class="mono">{{ row.approves }} / {{ row.rejects }}</td>
+                    <td>{{ ui.nom_status(row.nomination.status) }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          {{ ui.empty('No nominations for this month yet') }}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="card">
+      <div class="card-head"><h2>Blocking nominations</h2></div>
+      <div class="card-body">
+        {% if state.incomplete %}
+          <ul class="check-list">
+            {% for nomination in state.incomplete %}
+              <li><span class="check-mark no">!</span><span><a class="mono" href="/nominations/{{ nomination.id }}">{{ nomination.reference }}</a> — {{ nomination.nominee.full_name }}<br><span class="cell-sub">{{ nomination.review_count }} of {{ active_cycle.required_initial_reviews }} reviews recorded</span></span></li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="small muted mb-0">Every nomination for {{ active_cycle.label }} has completed all its reviews.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>Assignment</h2></div>
+      <div class="card-body">
+        {% if assignment.assigned %}
+          <div class="detail-grid">
+            <div><div class="dt">Initial reviewers</div><div class="dd">{{ assignment.initial | length }}</div></div>
+            <div><div class="dt">Final voters</div><div class="dd">{{ assignment.final | length }}</div></div>
+            <div><div class="dt">Shared member</div><div class="dd">{{ assignment.shared[0].name if assignment.shared else '—' }}</div></div>
+            <div><div class="dt">Locked</div><div class="dd">{{ assignment.assigned_at | dt }}</div></div>
+          </div>
+          <p class="help mb-0">The saved assignment is reused unchanged when the shortlist runs.</p>
+        {% else %}
+          <div class="alert alert-warn">{{ ui.icon('alert') }}<div>Panels are not assigned for {{ active_cycle.label }}. Assign them before shortlisting.</div></div>
+          {% if current_user.has_role('SYSTEM_ADMIN', 'HR_ADMIN') %}<a class="btn btn-sm btn-primary" href="/panel?cycle={{ active_cycle.cycle_key }}">Go to panel</a>{% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% import "_macros.html" as ui %}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page_title }} · {{ app_name }}</title>
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<div class="error-shell">
+  <div class="error-card">
+    <div class="error-code">{{ status_code }}</div>
+    <h1 style="font-size:1.2rem">{{ page_title }}</h1>
+    <p class="muted mt-1">{{ message or ('You do not have permission to view this page.' if status_code == 403 else 'That page could not be found.') }}</p>
+    {% if status_code == 403 %}
+      <p class="small muted">Access is enforced on the server. If you believe you need this screen, ask an administrator to review your role.</p>
+    {% endif %}
+    <div class="actions" style="justify-content:center">
+      <a class="btn btn-primary" href="/">Back to dashboard</a>
+      <a class="btn" href="/login">Sign in</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

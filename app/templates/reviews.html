@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% import "_macros.html" as ui %}
+
+{% block content %}
+<div class="page-head">
+  <div class="grow">
+    <h2>Initial Panel Reviews</h2>
+    <p class="page-sub">Every nomination needs {{ active_cycle.required_initial_reviews }} reviews. A reviewer submits exactly one decision per nomination.</p>
+  </div>
+  <div class="actions">{{ ui.cycle_picker(cycle_options, active_cycle.cycle_key, '/reviews') }}</div>
+</div>
+
+{% if not member %}
+  <div class="alert alert-info">{{ ui.icon('info') }}<div>You are not a member of the Recognition Panel, so you have no reviews to record. You can still follow progress below.</div></div>
+{% elif not assigned_initial %}
+  <div class="alert alert-info">{{ ui.icon('info') }}<div>You are not assigned to the Initial Review Panel for {{ active_cycle.label }}. {{ 'You are a final voter for this month.' if assigned_final else '' }}</div></div>
+{% endif %}
+
+<div class="split">
+  <div>
+    <div class="card">
+      <div class="card-head"><h2>Awaiting my review</h2><span class="spacer"></span><span class="chip">{{ pending | length }}</span></div>
+      <div class="card-body flush">
+        {% if pending %}
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Reference</th><th>Nominee</th><th>Department</th><th>Submitted</th><th class="right">Action</th></tr></thead>
+              <tbody>
+                {% for nomination, cycle in pending %}
+                  <tr>
+                    <td class="mono nowrap">{{ nomination.reference }}</td>
+                    <td>{{ nomination.nominee.full_name }}</td>
+                    <td>{{ nomination.department }}</td>
+                    <td class="nowrap cell-sub">{{ nomination.submitted_at | dt }}</td>
+                    <td class="right"><a class="btn btn-sm btn-primary" href="/reviews/{{ nomination.id }}">Review</a></td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          {{ ui.empty('Nothing awaiting your review', 'Nominations assigned to you appear here until you record a decision.') }}
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>Review completeness — {{ active_cycle.label }}</h2><span class="spacer"></span>{{ ui.pill(progress.reviews_completed ~ ' / ' ~ progress.reviews_required, 'brand') }}</div>
+      <div class="card-body flush">
+        {% if matrix %}
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Reference</th><th>Nominee</th><th>Reviews</th><th>Approve / Reject</th><th>Complete</th></tr></thead>
+              <tbody>
+                {% for row in matrix %}
+                  <tr>
+                    <td class="mono nowrap">{{ row.nomination.reference }}</td>
+                    <td>{{ row.nomination.nominee.full_name }}</td>
+                    <td class="mono">{{ row.completed }} / {{ row.required }}</td>
+                    <td class="mono">{{ row.approves }} / {{ row.rejects }}</td>
+                    <td>{{ ui.pill('Complete', 'ok') if row.complete else ui.pill('Outstanding', 'warn') }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          {{ ui.empty('No nominations for this month yet') }}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="card">
+      <div class="card-head"><h2>My completed reviews</h2><span class="spacer"></span><span class="chip">{{ completed | length }}</span></div>
+      <div class="card-body flush">
+        {% if completed %}
+          <div class="table-wrap">
+            <table class="table compact">
+              <thead><tr><th>Reference</th><th>Decision</th><th>Submitted</th></tr></thead>
+              <tbody>
+                {% for review in completed %}
+                  <tr>
+                    <td><a class="mono" href="/nominations/{{ review.nomination_id }}">{{ review.nomination.reference }}</a><div class="cell-sub">{{ review.nomination.nominee.full_name }}</div></td>
+                    <td>{{ ui.pill(review.decision_label, 'ok' if review.decision == 'APPROVE' else 'danger') }}</td>
+                    <td class="nowrap cell-sub">{{ review.submitted_at | dt }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          {{ ui.empty('You have not completed any reviews yet') }}
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>Progress</h2></div>
+      <div class="card-body">
+        <div class="progress-meta"><span>Reviews recorded</span><span>{{ progress.reviews_completed }} / {{ progress.reviews_required }}</span></div>
+        {{ ui.progress(progress.percent, 'ok' if progress.all_complete else 'warn') }}
+        <div class="kpi-row mt-3">
+          <div class="kpi"><div class="k">Nominations</div><div class="v">{{ progress.nominations }}</div></div>
+          <div class="kpi"><div class="k">Per nomination</div><div class="v">{{ progress.required_per_nomination }}</div></div>
+          <div class="kpi"><div class="k">Pending</div><div class="v">{{ progress.reviews_pending }}</div></div>
+        </div>
+        <p class="help mb-0">Shortlisting cannot open until every nomination has completed all reviews.</p>
+      </div>
+    </div>
+
+    {% if can_manage %}
+      <div class="card">
+        <div class="card-head"><h2>Administrator</h2></div>
+        <div class="card-body">
+          <p class="small muted">Review comments are visible to HR and administrators; the register hides nomination detail from read-only management.</p>
+          <div class="actions">
+            <a class="btn btn-sm" href="/panel?cycle={{ active_cycle.cycle_key }}">Panel assignment</a>
+            <a class="btn btn-sm" href="/shortlisting?cycle={{ active_cycle.cycle_key }}">Shortlisting</a>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

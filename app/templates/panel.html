@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% import "_macros.html" as ui %}
+
+{% block content %}
+<div class="page-head">
+  <div class="grow">
+    <h2>Recognition Panel</h2>
+    <p class="page-sub">One master panel of {{ members | length }} member(s). Each month four members are drawn at random to review, three more to vote, and exactly one member is shared.</p>
+  </div>
+  <div class="actions">{{ ui.cycle_picker(cycle_options, active_cycle.cycle_key, '/panel') }}</div>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h2>Assignment — {{ active_cycle.label }}</h2>
+    <span class="spacer"></span>
+    {% if summary.assigned %}{{ ui.pill('Locked', 'ok') }}{% else %}{{ ui.pill('Not assigned', 'warn') }}{% endif %}
+  </div>
+  <div class="card-body">
+    {% if summary.assigned %}
+      <div class="grid grid-2">
+        <div>
+          <h3 class="small muted">Initial Review Panel ({{ summary.initial | length }})</h3>
+          <ul class="check-list mt-1">
+            {% for member in summary.initial %}
+              <li>{{ ui.avatar(member.name, 'brand') }}<span><strong>{{ member.name }}</strong>{% if member.id in summary.shared | map(attribute='id') | list %} {{ ui.pill('shared', 'gold') }}{% endif %}<br><span class="cell-sub">{{ member.management_level }}</span></span></li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div>
+          <h3 class="small muted">Final Voting Panel ({{ summary.final | length }})</h3>
+          <ul class="check-list mt-1">
+            {% for member in summary.final %}
+              <li>{{ ui.avatar(member.name, 'dark') }}<span><strong>{{ member.name }}</strong>{% if member.id in summary.shared | map(attribute='id') | list %} {{ ui.pill('shared', 'gold') }}{% endif %}<br><span class="cell-sub">{{ member.management_level }}</span></span></li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      <p class="small muted mt-2">Assigned {{ summary.assigned_at | dt }} · signature <span class="mono">{{ summary.signature }}</span></p>
+    {% else %}
+      {{ ui.empty('No panels assigned for ' ~ active_cycle.label, 'Panels are drawn at random from the active members below and then locked.') }}
+    {% endif %}
+
+    {% if summary.checks %}
+      <h3 class="small muted mt-3">Mandatory rule checks</h3>
+      <ul class="check-list mt-1">
+        {% for check in summary.checks %}
+          <li><span class="check-mark {{ '' if check.passed else 'no' }}">{{ '✓' if check.passed else '×' }}</span><span>{{ check.name }}<br><span class="cell-sub">{{ check.detail }}</span></span></li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% if can_manage %}
+      <div class="actions mt-3">
+        <form method="post" action="/panel/assign?cycle={{ active_cycle.cycle_key }}">
+          <button class="btn btn-primary" type="submit">{{ 'Assign panels' if not summary.assigned else 'Re-run assignment (keeps saved panels)' }}</button>
+        </form>
+        <form method="post" action="/panel/send-requests?cycle={{ active_cycle.cycle_key }}">
+          <button class="btn" type="submit">Send review requests</button>
+        </form>
+        {% if can_reassign %}
+          <form method="post" action="/panel/reassign?cycle={{ active_cycle.cycle_key }}">
+            <button class="btn btn-danger" type="submit">Re-draw before any review</button>
+          </form>
+        {% endif %}
+      </div>
+      {% if summary.assigned %}
+        <p class="help">The saved assignment is never re-randomised once reviews or votes exist. {{ 'Reviews or votes already exist for this month.' if has_progress else 'No reviews or votes exist yet, so a corrective re-draw is still possible.' }}</p>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+
+<div class="split mt-3">
+  <div class="card">
+    <div class="card-head">
+      <h2>Master panel members</h2>
+      <span class="spacer"></span>
+      <span class="chip">{{ summary.active_member_count }} active</span>
+    </div>
+    <div class="card-body flush">
+      {% if members %}
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Member</th><th>Management level</th><th>Status</th>{% if can_manage %}<th class="right">Actions</th>{% endif %}</tr></thead>
+            <tbody>
+              {% for member in members %}
+                <tr>
+                  <td>{{ ui.person(member.name, member.email) }}</td>
+                  <td>
+                    {% if can_manage %}
+                      <form method="post" action="/panel/members/{{ member.id }}/level" class="actions">
+                        <select class="select" name="management_level" style="width:auto">
+                          {% for level in levels %}<option value="{{ level }}" {{ 'selected' if member.management_level == level else '' }}>{{ level }}</option>{% endfor %}
+                        </select>
+                        <button class="btn btn-sm" type="submit">Save</button>
+                      </form>
+                    {% else %}{{ member.management_level }}{% endif %}
+                  </td>
+                  <td>{{ ui.pill('Active', 'ok') if member.is_active else ui.pill('Inactive', 'neutral') }}</td>
+                  {% if can_manage %}
+                    <td class="right">
+                      <form method="post" action="/panel/members/{{ member.id }}/toggle">
+                        <button class="btn btn-sm" type="submit">{{ 'Deactivate' if member.is_active else 'Reactivate' }}</button>
+                      </form>
+                    </td>
+                  {% endif %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        {{ ui.empty('The panel is empty', 'Add at least seven active members so panels can be assigned.') }}
+      {% endif %}
+    </div>
+  </div>
+
+  <div>
+    {% if can_manage %}
+      <div class="card">
+        <div class="card-head"><h2>Add a panel member</h2></div>
+        <div class="card-body">
+          {% if candidates %}
+            <form method="post" action="/panel/members">
+              <div class="field">
+                <label for="employee_id">Employee</label>
+                <select class="select" id="employee_id" name="employee_id" required>
+                  <option value="">Select an employee…</option>
+                  {% for employee in candidates %}<option value="{{ employee.id }}">{{ employee.full_name }} — {{ employee.department }}</option>{% endfor %}
+                </select>
+              </div>
+              <div class="field">
+                <label for="management_level">Management level</label>
+                <select class="select" id="management_level" name="management_level">
+                  {% for level in levels %}<option value="{{ level }}" {{ 'selected' if level == 'Manager' else '' }}>{{ level }}</option>{% endfor %}
+                </select>
+              </div>
+              <button class="btn btn-primary btn-block" type="submit">Add to the Recognition Panel</button>
+            </form>
+          {% else %}
+            {{ ui.empty('Every active employee is already on the panel') }}
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="card">
+      <div class="card-head"><h2>Assignment rules</h2></div>
+      <div class="card-body">
+        <ul class="check-list">
+          <li><span class="check-mark">1</span><span>Four distinct active members are drawn at random for the Initial Review Panel.</span></li>
+          <li><span class="check-mark">2</span><span>The remaining members supply the Final Voting Panel.</span></li>
+          <li><span class="check-mark">3</span><span>Exactly one initial reviewer is drawn at random to also vote.</span></li>
+          <li><span class="check-mark">4</span><span>Both panels hold four members; exactly one is shared; seven unique members take part.</span></li>
+          <li><span class="check-mark">5</span><span>Assignments are validated, saved and locked before any request is sent.</span></li>
+        </ul>
+        <p class="help mb-0">Deactivating a member is blocked when it would leave fewer than seven active members.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

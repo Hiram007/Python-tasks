@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% import "_macros.html" as ui %}
+
+{% block topbar_actions %}
+  <a class="btn btn-sm" href="/nominations?cycle={{ nomination.cycle.cycle_key }}">Back to register</a>
+{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div class="grow">
+    <h2>{{ nomination.reference }}</h2>
+    <p class="page-sub">
+      {{ nomination.cycle.label }} · {{ ui.nom_status(nomination.status) }}
+      {% if not full_detail %}<span class="pill pill-lock">{{ ui.icon('lock') }} Limited view</span>{% endif %}
+    </p>
+  </div>
+</div>
+
+<div class="split">
+  <div>
+    <div class="card">
+      <div class="card-head"><h2>Nomination</h2></div>
+      <div class="card-body">
+        <div class="detail-grid mb-2">
+          <div><div class="dt">Nominee</div><div class="dd">{{ ui.person(nomination.nominee.full_name, nomination.nominee.employee_number) }}</div></div>
+          <div><div class="dt">Nominator</div><div class="dd">{{ nomination.nominator.full_name }}</div></div>
+          <div><div class="dt">Department</div><div class="dd">{{ nomination.department }}</div></div>
+          <div><div class="dt">Achievement date</div><div class="dd">{{ nomination.achievement_date | date }}</div></div>
+          <div><div class="dt">Submitted</div><div class="dd">{{ nomination.submitted_at | dt }}</div></div>
+          <div><div class="dt">Reviews</div><div class="dd">{{ nomination.review_count }} of {{ nomination.cycle.required_initial_reviews }} · {{ nomination.approve_count }} approve / {{ nomination.reject_count }} reject</div></div>
+        </div>
+
+        <h3 class="small muted">Achievement</h3>
+        <div class="quote mb-2">{{ nomination.achievement_description }}</div>
+        <h3 class="small muted">Motivation</h3>
+        <div class="quote">{{ nomination.motivation }}</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h2>Initial panel reviews</h2>
+        <span class="spacer"></span>
+        <span class="chip">{{ review_rows | length }} recorded</span>
+      </div>
+      <div class="card-body flush">
+        {% if review_rows %}
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Reviewer</th><th>Level</th><th>Decision</th><th>Comments</th><th>Submitted</th></tr></thead>
+              <tbody>
+                {% for review in review_rows %}
+                  <tr>
+                    <td>{{ review.reviewer.name }}</td>
+                    <td class="cell-sub">{{ review.reviewer.management_level }}</td>
+                    <td>{{ ui.pill(review.decision_label, 'ok' if review.decision == 'APPROVE' else 'danger') }}</td>
+                    <td>{% if show_review_detail %}{{ review.comments or '—' }}{% else %}<span class="muted small">{{ ui.icon('lock') }} hidden</span>{% endif %}</td>
+                    <td class="nowrap cell-sub">{{ review.submitted_at | dt }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          {{ ui.empty('No reviews recorded yet', 'Reviews appear here as the assigned panel members submit their decisions.') }}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="card">
+      <div class="card-head"><h2>Outcome</h2></div>
+      <div class="card-body">
+        <p>{{ ui.nom_status(nomination.status) }}</p>
+        {% if nomination.decided_at %}<p class="small muted">Decided {{ nomination.decided_at | dt }}</p>{% endif %}
+        {% if nomination.is_decided() %}
+          <p class="small muted mb-0">
+            {{ 'This nomination was approved and is eligible for shortlisting.' if nomination.status == 'APPROVED' else 'This nomination was rejected by the panel.' }}
+          </p>
+        {% else %}
+          <p class="small muted mb-0">The outcome is finalised once all {{ nomination.cycle.required_initial_reviews }} reviews are recorded ({{ nomination.cycle.approval_min_approvals }} approvals required).</p>
+        {% endif %}
+        {% if can_review %}
+          <div class="actions mt-2"><a class="btn btn-primary btn-sm" href="/reviews/{{ nomination.id }}">Record my review</a></div>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if member %}
+      <div class="card">
+        <div class="card-head"><h2>My panel status</h2></div>
+        <div class="card-body">
+          {{ ui.person(member.name, member.management_level, 'dark') }}
+          <p class="small muted mt-2 mb-0">Your assignment for {{ nomination.cycle.label }} decides which records you may review or vote on.</p>
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="card">
+      <div class="card-head"><h2>Confidentiality</h2></div>
+      <div class="card-body">
+        <ul class="check-list">
+          <li><span class="check-mark">✓</span><span>Nomination detail is limited to HR/administrators, the nominator and assigned reviewers.</span></li>
+          <li><span class="check-mark">✓</span><span>Individual final votes are never disclosed to other voters.</span></li>
+          <li><span class="check-mark">✓</span><span>Every action on this record is written to the audit trail.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

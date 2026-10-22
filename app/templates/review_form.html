@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% import "_macros.html" as ui %}
+
+{% block topbar_actions %}
+  <a class="btn btn-sm" href="/reviews">Back to my reviews</a>
+{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div class="grow">
+    <h2>Review {{ nomination.reference }}</h2>
+    <p class="page-sub">{{ cycle.label }} · {{ reviews_done }} of {{ cycle.required_initial_reviews }} reviews recorded · {{ progress.reviews_pending }} outstanding across the month</p>
+  </div>
+</div>
+
+{% if existing %}
+  <div class="alert alert-ok">{{ ui.icon('check') }}<div><strong>Already recorded.</strong> You submitted <strong>{{ existing.decision_label }}</strong> on {{ existing.submitted_at | dt }}. A reviewer may submit exactly one review per nomination, so this record is final.</div></div>
+{% endif %}
+
+<div class="split">
+  <div>
+    <div class="card">
+      <div class="card-head"><h2>Nomination under review</h2><span class="spacer"></span>{{ ui.nom_status(nomination.status) }}</div>
+      <div class="card-body">
+        <div class="detail-grid mb-2">
+          <div><div class="dt">Nominee</div><div class="dd">{{ ui.person(nomination.nominee.full_name, nomination.nominee.employee_number) }}</div></div>
+          <div><div class="dt">Nominator</div><div class="dd">{{ nomination.nominator.full_name }}</div></div>
+          <div><div class="dt">Department</div><div class="dd">{{ nomination.department }}</div></div>
+          <div><div class="dt">Achievement date</div><div class="dd">{{ nomination.achievement_date | date }}</div></div>
+        </div>
+        <h3 class="small muted">Achievement</h3>
+        <div class="quote mb-2">{{ nomination.achievement_description }}</div>
+        <h3 class="small muted">Motivation</h3>
+        <div class="quote">{{ nomination.motivation }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="card">
+      <div class="card-head"><h2>My decision</h2></div>
+      <div class="card-body">
+        {% if existing %}
+          <div class="detail-grid">
+            <div><div class="dt">Decision</div><div class="dd">{{ ui.pill(existing.decision_label, 'ok' if existing.decision == 'APPROVE' else 'danger') }}</div></div>
+            <div><div class="dt">Comments</div><div class="dd">{{ existing.comments or '—' }}</div></div>
+            <div><div class="dt">Submitted</div><div class="dd">{{ existing.submitted_at | dt }}</div></div>
+          </div>
+        {% else %}
+          <form method="post" action="/reviews/{{ nomination.id }}">
+            <fieldset>
+              <legend>Decision</legend>
+              <div class="radio-row">
+                <label class="radio-card">
+                  <input type="radio" name="decision" value="APPROVE" required>
+                  <span><strong>Approve</strong><br><span class="cell-sub">The evidence supports recognition.</span></span>
+                </label>
+                <label class="radio-card">
+                  <input type="radio" name="decision" value="REJECT" required>
+                  <span><strong>Reject</strong><br><span class="cell-sub">The claim is not supported.</span></span>
+                </label>
+              </div>
+            </fieldset>
+            <div class="field">
+              <label for="comments">Comments</label>
+              <textarea class="textarea" id="comments" name="comments" placeholder="What did you verify, and why does it support your decision?"></textarea>
+              <p class="help">Comments are stored with the review and shown to HR and administrators.</p>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary" type="submit">Submit review</button>
+              <a class="btn" href="/reviews">Cancel</a>
+            </div>
+          </form>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>Decision rule</h2></div>
+      <div class="card-body">
+        <ul class="check-list">
+          <li><span class="check-mark">1</span><span>All {{ cycle.required_initial_reviews }} assigned reviewers must record a decision.</span></li>
+          <li><span class="check-mark">2</span><span>At least {{ cycle.approval_min_approvals }} approvals are required to approve the nomination.</span></li>
+          <li><span class="check-mark">3</span><span>The outcome is finalised only when every review is in.</span></li>
+        </ul>
+        <p class="help mb-0">Reviewing as {{ member.name }} · {{ member.management_level }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

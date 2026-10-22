@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% import "_macros.html" as ui %}
+
+{% block topbar_actions %}
+  {% if can_manage %}
+    <button class="btn btn-sm btn-primary" type="button" data-dialog-open="new-employee">{{ ui.icon('plus') }} Add employee</button>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-head">
+    <h2>Employee Directory</h2>
+    <span class="spacer"></span>
+    <span class="chip">{{ employees | length }} shown</span>
+  </div>
+
+  <form class="toolbar" method="get" action="/employees">
+    <div class="field grow">
+      <label for="q">Search</label>
+      <input class="input" id="q" name="q" value="{{ filters.q }}" placeholder="Name, employee number, email or job title">
+    </div>
+    <div class="field">
+      <label for="department">Department</label>
+      <select class="select" id="department" name="department">
+        <option value="">All departments</option>
+        {% for department in departments %}<option value="{{ department }}" {{ 'selected' if filters.department == department else '' }}>{{ department }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label for="level">Management level</label>
+      <select class="select" id="level" name="level">
+        <option value="">All levels</option>
+        {% for level in levels %}<option value="{{ level }}" {{ 'selected' if filters.level == level else '' }}>{{ level }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label for="status">Status</label>
+      <select class="select" id="status" name="status">
+        <option value="">All</option>
+        <option value="active" {{ 'selected' if filters.status == 'active' else '' }}>Active</option>
+        <option value="inactive" {{ 'selected' if filters.status == 'inactive' else '' }}>Inactive</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" type="submit">Apply filters</button>
+    <a class="btn" href="/employees">Reset</a>
+  </form>
+
+  {% if employees %}
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Employee</th><th>Number</th><th>Department</th><th>Management level</th>
+            <th>Status</th><th>Panel</th>{% if can_manage %}<th class="right">Actions</th>{% endif %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for employee in employees %}
+            <tr>
+              <td>{{ ui.person(employee.full_name, employee.job_title or employee.email) }}</td>
+              <td class="mono nowrap">{{ employee.employee_number }}</td>
+              <td>{{ employee.department }}</td>
+              <td>{{ employee.management_level }}</td>
+              <td>{{ ui.pill('Active', 'ok') if employee.is_active else ui.pill('Inactive', 'neutral') }}</td>
+              <td>{% if employee.id in panel_ids %}{{ ui.pill('Recognition Panel', 'gold') }}{% else %}<span class="muted small">—</span>{% endif %}</td>
+              {% if can_manage %}
+                <td class="right">
+                  <div class="actions" style="justify-content:flex-end">
+                    <button class="btn btn-sm" type="button" data-dialog-open="edit-employee-{{ employee.id }}">Edit</button>
+                    <form method="post" action="/employees/{{ employee.id }}/toggle">
+                      <button class="btn btn-sm" type="submit">{{ 'Deactivate' if employee.is_active else 'Activate' }}</button>
+                    </form>
+                  </div>
+                </td>
+              {% endif %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    {{ ui.empty('No employees match those filters', 'Adjust the search or reset the filters.') }}
+  {% endif %}
+</div>
+
+{% if can_manage %}
+  {% for employee in employees %}
+    <dialog id="edit-employee-{{ employee.id }}">
+      <form method="post" action="/employees/{{ employee.id }}/update">
+        <div class="card-head"><h3>{{ employee.full_name }}</h3><span class="spacer"></span><span class="mono small">{{ employee.employee_number }}</span></div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="field">
+              <label for="department-{{ employee.id }}">Department</label>
+              <input class="input" id="department-{{ employee.id }}" name="department" value="{{ employee.department }}">
+            </div>
+            <div class="field">
+              <label for="job-{{ employee.id }}">Job title</label>
+              <input class="input" id="job-{{ employee.id }}" name="job_title" value="{{ employee.job_title }}">
+            </div>
+          </div>
+          <div class="field">
+            <label for="level-{{ employee.id }}">Management level</label>
+            <select class="select" id="level-{{ employee.id }}" name="management_level">
+              {% for level in levels %}<option value="{{ level }}" {{ 'selected' if employee.management_level == level else '' }}>{{ level }}</option>{% endfor %}
+            </select>
+            <p class="help">Changing the level also updates the panel member record for this employee.</p>
+          </div>
+        </div>
+        <div class="card-foot">
+          <button class="btn" type="button" data-dialog-close>Cancel</button>
+          <button class="btn btn-primary" type="submit">Save changes</button>
+        </div>
+      </form>
+    </dialog>
+  {% endfor %}
+
+  <dialog id="new-employee">
+    <form method="post" action="/employees">
+      <div class="card-head"><h3>Add an employee</h3></div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="field"><label for="n-first">First name</label><input class="input" id="n-first" name="first_name" required></div>
+          <div class="field"><label for="n-last">Last name</label><input class="input" id="n-last" name="last_name" required></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label for="n-number">Employee number</label><input class="input" id="n-number" name="employee_number" placeholder="CAS-1021" required></div>
+          <div class="field"><label for="n-email">Email address</label><input class="input" type="email" id="n-email" name="email" required></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label for="n-dept">Department</label><input class="input" id="n-dept" name="department" placeholder="Operations"></div>
+          <div class="field"><label for="n-job">Job title</label><input class="input" id="n-job" name="job_title"></div>
+        </div>
+        <div class="field">
+          <label for="n-level">Management level</label>
+          <select class="select" id="n-level" name="management_level">
+            {% for level in levels %}<option value="{{ level }}" {{ 'selected' if level == 'General' else '' }}>{{ level }}</option>{% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="card-foot">
+        <button class="btn" type="button" data-dialog-close>Cancel</button>
+        <button class="btn btn-primary" type="submit">Add to directory</button>
+      </div>
+    </form>
+  </dialog>
+{% endif %}
+{% endblock %}

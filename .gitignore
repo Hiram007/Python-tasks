@@ -1,0 +1,11 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Runtime data (SQLite fallback, notification outbox)
+data/
+
+# Local environment files (the Base44 sandbox defaults file is committed)
+.env
+!.env.base44-defaults

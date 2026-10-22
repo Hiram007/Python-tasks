@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+{% import "_macros.html" as ui %}
+
+{% block topbar_actions %}
+  <a class="btn btn-sm btn-primary" href="/nominations/new">{{ ui.icon('plus') }} New nomination</a>
+{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div class="grow">
+    <h2>{{ active_cycle.label }}</h2>
+    <p class="page-sub">
+      {{ ui.cycle_status(active_cycle.status, active_cycle.status_label) }}
+      {% if active_cycle.nomination_opens_on %}
+        <span class="muted small"> · nomination window {{ active_cycle.nomination_opens_on | date }} – {{ active_cycle.nomination_closes_on | date }}</span>
+      {% endif %}
+      <span class="muted small"> · automatic shortlisting {{ schedule }} ({{ timezone_name }})</span>
+    </p>
+  </div>
+  <div class="actions">{{ ui.cycle_picker(cycle_options, active_cycle.cycle_key, '/') }}</div>
+</div>
+
+{% for alert in stats.alerts %}
+  <div class="alert alert-{{ alert.level }}">{{ ui.icon('alert' if alert.level in ('danger', 'warn') else 'info') }}<div>{{ alert.text }}</div></div>
+{% endfor %}
+
+<div class="stat-grid mb-2">
+  {{ ui.stat('Nominations', stats.nominations, 'of ' ~ stats.threshold ~ ' required', 'ok' if stats.threshold_met else 'warn') }}
+  {{ ui.stat('Approved', stats.approved, stats.rejected ~ ' rejected', 'brand') }}
+  {{ ui.stat('Reviews pending', stats.pending_reviews, stats.review_progress.reviews_completed ~ ' of ' ~ stats.review_progress.reviews_required ~ ' complete', 'warn' if stats.pending_reviews else 'ok') }}
+  {{ ui.stat('Shortlisted', stats.shortlisted, 'approved and on the ballot', 'info') }}
+  {{ ui.stat('Final votes', stats.voting.votes_cast, 'of ' ~ stats.voting.votes_required ~ ' required', 'ok' if stats.voting.complete else 'warn') }}
+</div>
+
+{% if stats.winner %}
+  <div class="card">
+    <div class="card-body" style="display:flex;gap:18px;align-items:center;flex-wrap:wrap">
+      {{ ui.avatar(stats.winner.winner_nomination.nominee.full_name if stats.winner.winner_nomination else 'Tie', 'gold', 'lg') }}
+      <div style="flex:1 1 260px">
+        {% if stats.winner.winner_nomination %}
+          <div class="small muted">{{ active_cycle.label }} Employee of the Month</div>
+          <h2>{{ stats.winner.winner_nomination.nominee.full_name }}</h2>
+          <div class="cell-sub">{{ stats.winner.winner_nomination.nominee.job_title }} · {{ stats.winner.winner_nomination.department }} · {{ stats.winner.winning_votes }} valid vote(s)</div>
+        {% else %}
+          <h2>Tie — resolution required</h2>
+          <div class="cell-sub">{{ stats.winner.winning_votes }} vote(s) each. An administrator must resolve it on the Winner Calculation screen.</div>
+        {% endif %}
+      </div>
+      <div class="actions">
+        {{ ui.winner_status(stats.winner.status) }}
+        {% if current_user.has_role('SYSTEM_ADMIN', 'HR_ADMIN') %}<a class="btn btn-sm" href="/winners?cycle={{ active_cycle.cycle_key }}">Open result</a>{% endif %}
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+<div class="split mt-3">
+  <div>
+    <div class="card">
+      <div class="card-head"><h2>Workflow progress</h2><span class="spacer"></span>{{ ui.pill(active_cycle.status_label, 'brand') }}</div>
+      <div class="card-body">
+        <div class="mb-2">
+          <div class="progress-meta"><span>Initial panel reviews</span><span>{{ stats.review_progress.reviews_completed }} / {{ stats.review_progress.reviews_required }}</span></div>
+          {{ ui.progress(stats.review_progress.percent, 'ok' if stats.reviews_complete else 'warn') }}
+        </div>
+        <div class="mb-2">
+          <div class="progress-meta"><span>Final votes</span><span>{{ stats.voting.votes_cast }} / {{ stats.voting.votes_required }}</span></div>
+          {{ ui.progress(stats.voting.percent, 'ok' if stats.voting.complete else 'warn') }}
+        </div>
+        <div class="kpi-row mt-3">
+          <div class="kpi"><div class="k">Threshold</div><div class="v">{{ stats.threshold }}</div></div>
+          <div class="kpi"><div class="k">Received</div><div class="v">{{ stats.nominations }}</div></div>
+          <div class="kpi"><div class="k">Shortlist ready</div><div class="v">{{ 'Yes' if stats.can_shortlist else 'No' }}</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h2>Panel assignment — {{ active_cycle.label }}</h2>
+        <span class="spacer"></span>
+        {% if stats.assignment.assigned %}{{ ui.pill('Locked', 'ok') }}{% else %}{{ ui.pill('Not assigned', 'warn') }}{% endif %}
+      </div>
+      <div class="card-body">
+        {% if stats.assignment.assigned %}
+          <div class="grid grid-2">
+            <div>
+              <h3 class="small muted">Initial Review Panel</h3>
+              <ul class="check-list mt-1">
+                {% for member in stats.assignment.initial %}
+                  <li>{{ ui.avatar(member.name, 'brand') }}<span><strong>{{ member.name }}</strong>{% if member.id in stats.assignment.shared | map(attribute='id') | list %} {{ ui.pill('shared', 'gold') }}{% endif %}<br><span class="cell-sub">{{ member.management_level }}</span></span></li>
+                {% endfor %}
+              </ul>
+            </div>
+            <div>
+              <h3 class="small muted">Final Voting Panel</h3>
+              <ul class="check-list mt-1">
+                {% for member in stats.assignment.final %}
+                  <li>{{ ui.avatar(member.name, 'dark') }}<span><strong>{{ member.name }}</strong>{% if member.id in stats.assignment.shared | map(attribute='id') | list %} {{ ui.pill('shared', 'gold') }}{% endif %}<br><span class="cell-sub">{{ member.management_level }}</span></span></li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+          <p class="small muted mt-2 mb-0">Assigned {{ stats.assignment.assigned_at | dt }} · signature <span class="mono">{{ stats.assignment.signature }}</span></p>
+        {% else %}
+          {{ ui.empty('Panels have not been assigned for ' ~ active_cycle.label, 'No reviews or votes can be recorded until an administrator assigns the panels.') }}
+          {% if current_user.has_role('SYSTEM_ADMIN', 'HR_ADMIN') %}
+            <div class="actions" style="justify-content:center"><a class="btn btn-primary btn-sm" href="/panel?cycle={{ active_cycle.cycle_key }}">Assign panels</a></div>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>Recent activity</h2><span class="spacer"></span><a class="btn btn-sm btn-ghost" href="/audit?cycle={{ active_cycle.cycle_key }}">Full audit trail</a></div>
+      <div class="card-body">
+        {% if recent_activity %}
+          <ul class="timeline">
+            {% for event in recent_activity %}
+              <li>
+                <div class="t">{{ event.created_at | dt }} · {{ event.actor_name }}</div>
+                <div class="s">{{ event.summary }}</div>
+                <div class="t mono">{{ event.event_type }}</div>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          {{ ui.empty('No activity recorded for this month yet') }}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="card">
+      <div class="card-head"><h2>My reviews</h2><span class="spacer"></span><a class="btn btn-sm btn-ghost" href="/reviews">Open</a></div>
+      <div class="card-body tight">
+        {% if panel_member %}
+          {% if my_reviews %}
+            <table class="table compact">
+              <tbody>
+                {% for nomination, cycle in my_reviews %}
+                  <tr>
+                    <td><a class="mono" href="/reviews/{{ nomination.id }}">{{ nomination.reference }}</a><div class="cell-sub">{{ nomination.nominee.full_name }}</div></td>
+                    <td class="right">{{ ui.pill(cycle.label, 'neutral') }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% else %}
+            {{ ui.empty('Nothing awaiting your review', 'All nominations assigned to you have been decided.') }}
+          {% endif %}
+        {% else %}
+          {{ ui.empty('You are not on the panel', 'Panel members are drawn at random from the master Recognition Panel each month.') }}
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>My nominations</h2><span class="spacer"></span><a class="btn btn-sm btn-ghost" href="/nominations">Register</a></div>
+      <div class="card-body tight">
+        {% if my_nominations %}
+          <table class="table compact">
+            <tbody>
+              {% for nomination in my_nominations %}
+                <tr>
+                  <td><a class="mono" href="/nominations/{{ nomination.id }}">{{ nomination.reference }}</a><div class="cell-sub">{{ nomination.nominee.full_name }}</div></td>
+                  <td class="right">{{ ui.nom_status(nomination.status) }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          {{ ui.empty('You have not nominated anyone yet', 'Submitting a nomination is not a vote — it starts the panel review.') }}
+          <div class="actions" style="justify-content:center"><a class="btn btn-primary btn-sm" href="/nominations/new">Submit a nomination</a></div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>Months</h2></div>
+      <div class="card-body tight">
+        <table class="table compact">
+          <tbody>
+            {% for cycle in recent_cycles %}
+              <tr>
+                <td><a href="/?cycle={{ cycle.cycle_key }}">{{ cycle.label }}</a></td>
+                <td class="right">{{ ui.cycle_status(cycle.status, cycle.status_label) }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

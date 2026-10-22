@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% import "_macros.html" as ui %}
+
+{% block content %}
+<div class="page-head">
+  <div class="grow">
+    <h2>Validation & Acceptance Tests</h2>
+    <p class="page-sub">Every scenario drives the real service layer against an isolated database — the same code the web screens call. Nothing is simulated.</p>
+  </div>
+  {% if can_run %}
+    <div class="actions">
+      <form method="post" action="/validation/run">
+        <button class="btn btn-primary" type="submit">{{ ui.icon('beaker') }} Run acceptance suite</button>
+      </form>
+    </div>
+  {% endif %}
+</div>
+
+{% if results.ran_at %}
+  <div class="stat-grid mb-2">
+    {{ ui.stat('Scenarios', summary.total, 'in the suite', 'brand') }}
+    {{ ui.stat('Passed', summary.passed, 'rules holding', 'ok') }}
+    {{ ui.stat('Failed', summary.failed, 'rules broken', 'danger' if summary.failed else 'ok') }}
+    {{ ui.stat('Result', 'All passing' if summary.all_passed else 'Attention needed', 'last run ' ~ (results.ran_at | dt), 'ok' if summary.all_passed else 'danger') }}
+  </div>
+  <p class="small muted">Last run by {{ results.actor }} on {{ results.ran_at | dt }} ({{ timezone_name }}).</p>
+{% else %}
+  <div class="alert alert-info">{{ ui.icon('info') }}<div>No acceptance run has been recorded yet. {{ 'Run the suite to validate the business rules against an isolated database.' if can_run else 'An HR administrator or system administrator can run the suite.' }}</div></div>
+{% endif %}
+
+<div class="card">
+  <div class="card-head"><h2>Business-rule scenarios</h2><span class="spacer"></span><span class="chip">{{ results.results | length }} result(s)</span></div>
+  <div class="card-body flush">
+    {% if results.results %}
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>#</th><th>Scenario</th><th>Expected</th><th>Observed</th><th class="right">Result</th></tr></thead>
+          <tbody>
+            {% for result in results.results %}
+              <tr>
+                <td class="mono">{{ result.id }}</td>
+                <td class="cell-strong">{{ result.name }}</td>
+                <td class="cell-sub">{{ result.expected }}</td>
+                <td>
+                  {{ result.actual }}
+                  {% if result.detail %}<div class="cell-sub" style="color:var(--danger)">{{ result.detail }}</div>{% endif %}
+                </td>
+                <td class="right">{{ ui.pill('Pass', 'ok') if result.passed else ui.pill('Fail', 'danger') }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      {{ ui.empty('No results recorded yet', 'The suite covers threshold enforcement, review completeness, panel composition, duplicates, ties and authorisation.') }}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

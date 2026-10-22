@@ -27,11 +27,19 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.base44
-    working_dir: /app
+    # The repository root also holds a set of standalone practice scripts
+    # (numbers.py, shopping.py, …) that must stay frozen. Running from the root
+    # would put it on sys.path, and `numbers.py` would shadow the standard
+    # library's `numbers` module that SQLAlchemy imports. So we run from a small
+    # shim directory that exposes only the `app` package: the application source
+    # is still the bind-mounted checkout, so edits reload as usual.
+    working_dir: /opt/casidra
     command:
       - sh
       - -ec
       - >
+        mkdir -p /opt/casidra &&
+        ln -sfn /app/app /opt/casidra/app &&
         python -m app.bootstrap &&
         exec uvicorn app.main:app --host 0.0.0.0 --port 3000 --reload --reload-dir /app/app
     environment:

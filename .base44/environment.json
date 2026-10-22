@@ -1,0 +1,38 @@
+{
+  "previewPort": 3000,
+  "healthPath": "/login",
+  "startCommand": "docker compose -f docker-compose.base44.yml up -d",
+  "secrets": [
+    {
+      "name": "SESSION_SECRET",
+      "description": "Signs the session cookie. A development placeholder was generated so sessions survive the uvicorn --reload restarts in this sandbox; replace it with a stable value for any shared or deployed environment.",
+      "requiredAtBoot": true,
+      "generatedForDevelopment": true
+    },
+    {
+      "name": "SMTP_HOST",
+      "description": "Optional. Outbound mail server for recognition emails. Without it the app records every message in the outbox as Not sent and never claims delivery.",
+      "requiredAtBoot": false
+    },
+    {
+      "name": "SMTP_PORT",
+      "description": "Optional. SMTP port (default 587).",
+      "requiredAtBoot": false
+    },
+    {
+      "name": "SMTP_USERNAME",
+      "description": "Optional. SMTP username, if the mail server authenticates.",
+      "requiredAtBoot": false
+    },
+    {
+      "name": "SMTP_PASSWORD",
+      "description": "Optional. SMTP password, if the mail server authenticates.",
+      "requiredAtBoot": false
+    },
+    {
+      "name": "SMTP_FROM",
+      "description": "Optional. From address used on recognition emails.",
+      "requiredAtBoot": false
+    }
+  ]
+}

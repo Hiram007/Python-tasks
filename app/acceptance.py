@@ -451,6 +451,11 @@ def s12_tie_escalates(db, fx: Fixture):
 
     record = winners.get_winner(db, fx.cycle)
     db.refresh(fx.cycle)
+    # Snapshot the tie state now: resolve_tie mutates the same ORM row, so these
+    # values must be read before resolution to assert what the tie produced.
+    tie_status = record.status
+    tie_winner_id = record.winner_nomination_id
+    cycle_status_at_tie = fx.cycle.status
     tie_alerts = db.scalars(
         select(NotificationLog).where(NotificationLog.template_key == "tie_notification")
     ).all()
@@ -474,7 +479,7 @@ def s12_tie_escalates(db, fx: Fixture):
         "identity, preserving the original votes"
     )
     actual = (
-        f"status={record.status}, cycle={fx.cycle.status}, tie alerts={len(tie_alerts)}, "
+        f"status={tie_status}, cycle={cycle_status_at_tie}, tie alerts={len(tie_alerts)}, "
         f"winner emails before resolution={len(winner_mail_before)}, after={len(winner_mail_after)}, "
         f"resolved winner={resolved.winner_nomination.nominee.full_name}, "
         f"identity set={bool(resolved.resolution_identity)}, votes preserved="
@@ -483,9 +488,9 @@ def s12_tie_escalates(db, fx: Fixture):
     return (
         expected,
         actual,
-        record.status == "TIE_PENDING_RESOLUTION"
-        and record.winner_nomination_id is None
-        and fx.cycle.status == "TIE_PENDING"
+        tie_status == "TIE_PENDING_RESOLUTION"
+        and tie_winner_id is None
+        and cycle_status_at_tie == "TIE_PENDING"
         and len(tie_alerts) >= 1
         and not winner_mail_before
         and len(winner_mail_after) >= 1
@@ -508,7 +513,9 @@ def s13_other_months_isolated(db, fx: Fixture):
         else:
             other.complete(nomination, [DECISION_REJECT] * 4)
     shortlisting.run_shortlist(other.db, other.cycle, actor=None)
-    _votes_for(other, voting.current_round(other.db, other.cycle), [previous[0].id, previous[1].id])
+    # A unanimous previous month, so it records a decisive winner rather than a tie:
+    # the scenario is about month isolation, not tie handling (see scenario 12).
+    _votes_for(other, voting.current_round(other.db, other.cycle), [previous[0].id])
     other_record = winners.get_winner(other.db, other.cycle)
 
     approved = []
@@ -533,7 +540,9 @@ def s13_other_months_isolated(db, fx: Fixture):
     return (
         expected,
         actual,
-        other_record.cycle_id != record.cycle_id
+        # Compare the months, not the primary keys: each fixture has its own
+        # database, so cycle_id is 1 in both and would prove nothing.
+        other.cycle.cycle_key != fx.cycle.cycle_key
         and record.winner_nomination_id == approved[2].id
         and record.winning_votes == 4,
     )
@@ -574,12 +583,14 @@ def s14_winner_email_recipient(db, fx: Fixture):
 
 def s15_unauthorised_blocked(db, fx: Fixture):
     nomination = fx.nominate(0)
-    outsider = db.scalar(select(PanelMember).where(PanelMember.is_active.is_(True)))
-    # A member who is not on this cycle's initial panel cannot review.
-    not_assigned = next(
-        (m for m in db.scalars(select(PanelMember)) if not panels.is_initial_reviewer(db, fx.cycle, m.id)),
-        None,
+    # With exactly seven members the two panels cover everyone, so add an eighth
+    # member who is assigned to neither panel to act as the genuine outsider.
+    not_assigned = panels.add_member(
+        db, employee=fx.employee(1013), management_level="Officer", actor=None
     )
+    db.flush()
+
+    # A member who is not on this cycle's initial panel cannot review.
     review_blocked = False
     try:
         fx.review(nomination, not_assigned, DECISION_APPROVE)
@@ -774,6 +785,12 @@ def latest_results() -> dict:
             return {"ran_at": None, "results": [], "summary": summarise([])}
         payload = json.loads(row.value)
         payload["results"] = [ScenarioResult(**r) for r in payload.get("results", [])]
+        # Stored as an ISO string for JSON; hand the screen a real datetime so it
+        # renders in the recognition timezone.
+        try:
+            payload["ran_at"] = dt.datetime.fromisoformat(payload["ran_at"]) if payload.get("ran_at") else None
+        except (TypeError, ValueError):
+            payload["ran_at"] = None
         return payload
     finally:
         db.close()

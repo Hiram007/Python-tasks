@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% import "_macros.html" as ui %}
+
+{% block topbar_actions %}
+  <a class="btn btn-sm btn-primary" href="/nominations/new">{{ ui.icon('plus') }} New nomination</a>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-head">
+    <h2>Recognition Register — {{ active_cycle.label }}</h2>
+    <span class="spacer"></span>
+    {{ ui.cycle_status(active_cycle.status, active_cycle.status_label) }}
+    <span class="chip">{{ rows | length }} record(s)</span>
+  </div>
+
+  <form class="toolbar" method="get" action="/nominations">
+    <div class="field grow">
+      <label for="q">Search</label>
+      <input class="input" id="q" name="q" value="{{ filters.q }}" placeholder="Reference, nominee, department or text">
+    </div>
+    <div class="field">
+      <label for="status">Status</label>
+      <select class="select" id="status" name="status">
+        <option value="">All statuses</option>
+        {% for code, label in statuses.items() %}<option value="{{ code }}" {{ 'selected' if filters.status == code else '' }}>{{ label }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label for="department">Department</label>
+      <select class="select" id="department" name="department">
+        <option value="">All departments</option>
+        {% for department in departments %}<option value="{{ department }}" {{ 'selected' if filters.department == department else '' }}>{{ department }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label for="cycle">Month</label>
+      <select class="select" id="cycle" name="cycle">
+        {% for option in cycle_options %}<option value="{{ option.key }}" {{ 'selected' if option.key == filters.cycle else '' }}>{{ option.label }}</option>{% endfor %}
+      </select>
+    </div>
+    <button class="btn btn-primary" type="submit">Apply</button>
+    <a class="btn" href="/nominations">Reset</a>
+  </form>
+
+  {% if rows %}
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Reference</th><th>Nominee</th><th>Nominator</th><th>Department</th>
+            <th>Achievement</th><th>Reviews</th><th>Status</th><th class="right">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in rows %}
+            <tr>
+              <td class="mono nowrap">{{ row.nomination.reference }}</td>
+              <td>
+                {% if row.full_detail %}
+                  {{ ui.person(row.nomination.nominee.full_name, row.nomination.nominee.employee_number) }}
+                {% else %}
+                  <span class="muted">{{ ui.icon('lock') }} Confidential</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if row.full_detail %}{{ row.nomination.nominator.full_name }}{% else %}<span class="muted">—</span>{% endif %}
+              </td>
+              <td>{{ row.nomination.department }}</td>
+              <td class="nowrap">{{ row.nomination.achievement_date | date }}</td>
+              <td>
+                {% if row.full_detail %}
+                  <span class="mono">{{ row.reviews }}</span>
+                  <span class="cell-sub"> / {{ active_cycle.required_initial_reviews }}</span>
+                {% else %}<span class="muted">—</span>{% endif %}
+              </td>
+              <td>{{ ui.nom_status(row.nomination.status) }}</td>
+              <td class="right">
+                {% if row.full_detail or row.nomination.nominator_id == current_user.employee_id %}
+                  <a class="btn btn-sm" href="/nominations/{{ row.nomination.id }}">View</a>
+                {% elif row.reviewer %}
+                  <a class="btn btn-sm" href="/reviews/{{ row.nomination.id }}">Review</a>
+                {% else %}
+                  <span class="pill pill-lock">{{ ui.icon('lock') }} Restricted</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    {{ ui.empty('No nominations for ' ~ active_cycle.label, 'Nominations submitted for this month will appear here.') }}
+  {% endif %}
+</div>
+{% endblock %}

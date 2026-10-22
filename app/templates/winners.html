@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% import "_macros.html" as ui %}
+
+{% block content %}
+<div class="page-head">
+  <div class="grow">
+    <h2>Winner Calculation</h2>
+    <p class="page-sub">The candidate with the highest number of valid votes wins. A tie is never broken automatically.</p>
+  </div>
+  <div class="actions">{{ ui.cycle_picker(cycle_options, active_cycle.cycle_key, '/winners') }}</div>
+</div>
+
+<div class="stat-grid mb-2">
+  {{ ui.stat('Valid votes', progress.votes_cast, 'of ' ~ progress.votes_required ~ ' required', 'ok' if progress.complete else 'warn') }}
+  {{ ui.stat('Round', round.status if round else '—', 'opened ' ~ (round.opened_at | dt) if round else 'no round yet', 'brand' if round else 'neutral') }}
+  {{ ui.stat('Result', record.status_label if record else 'Not calculated', record.winning_votes ~ ' winning vote(s)' if record else 'awaiting all votes', 'gold' if record and record.winner_nomination else ('danger' if record else 'neutral')) }}
+</div>
+
+{% if record and record.status == 'TIE_PENDING_RESOLUTION' %}
+  <div class="alert alert-danger">{{ ui.icon('alert') }}<div><strong>Tie — resolution required.</strong> No winner has been declared. An authorised administrator must choose a tied candidate and record a reason; the original vote records are preserved unchanged.</div></div>
+{% endif %}
+
+<div class="split">
+  <div>
+    <div class="card">
+      <div class="card-head"><h2>Vote totals — {{ active_cycle.label }}</h2><span class="spacer"></span>{{ ui.pill('Confidential', 'neutral') }}</div>
+      <div class="card-body flush">
+        {% if tally %}
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Reference</th><th>Candidate</th><th>Department</th><th class="right">Valid votes</th></tr></thead>
+              <tbody>
+                {% for row in tally %}
+                  <tr>
+                    <td class="mono nowrap">{{ row.nomination.reference }}</td>
+                    <td>
+                      {{ ui.person(row.nominee.full_name, row.nominee.employee_number, 'gold' if record and record.winner_nomination_id == row.nomination.id else 'brand') }}
+                    </td>
+                    <td>{{ row.nomination.department }}</td>
+                    <td class="right mono">{{ row.votes }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          {{ ui.empty('No tally available', 'Vote totals appear once a voting round has opened.') }}
+        {% endif %}
+      </div>
+      {% if can_calculate %}
+        <div class="card-body" style="border-top:1px solid var(--line)">
+          <form method="post" action="/winners/calculate?cycle={{ active_cycle.cycle_key }}" class="actions">
+            <button class="btn btn-primary" type="submit" {{ 'disabled' if record and record.status != 'TIE_PENDING_RESOLUTION' else '' }}>Calculate winner</button>
+            <span class="help mb-0">Requires all {{ progress.votes_required }} valid votes. Recalculating an existing result returns it unchanged.</span>
+          </form>
+        </div>
+      {% endif %}
+    </div>
+
+    {% if record and record.status == 'TIE_PENDING_RESOLUTION' %}
+      <div class="card">
+        <div class="card-head"><h2>Resolve the tie</h2></div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Tied candidate</th><th>Reference</th><th class="right">Votes</th><th class="right">Action</th></tr></thead>
+              <tbody>
+                {% for candidate in tied %}
+                  <tr>
+                    <td>{{ ui.person(candidate.nominee, candidate.employee_number) }}</td>
+                    <td class="mono">{{ candidate.reference }}</td>
+                    <td class="right mono">{{ candidate.votes }}</td>
+                    <td class="right">
+                      {% if can_resolve %}
+                        <button class="btn btn-sm btn-primary" type="button" data-dialog-open="resolve-{{ candidate.nomination_id }}">Resolve</button>
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% if not can_resolve %}<p class="help mb-0">Only HR and administrators may resolve a tie.</p>{% endif %}
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="card">
+      <div class="card-head"><h2>Result history</h2></div>
+      <div class="card-body flush">
+        {% if history %}
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Month</th><th>Winner</th><th>Votes</th><th>Status</th><th>Declared</th></tr></thead>
+              <tbody>
+                {% for item in history %}
+                  <tr>
+                    <td class="nowrap">{{ item.cycle.label }}</td>
+                    <td>{{ item.winner_nomination.nominee.full_name if item.winner_nomination else '—' }}</td>
+                    <td class="mono">{{ item.winning_votes }}</td>
+                    <td>{{ ui.winner_status(item.status) }}</td>
+                    <td class="nowrap cell-sub">{{ item.declared_at | dt }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          {{ ui.empty('No winners declared yet') }}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div>
+    {% if record and record.winner_nomination %}
+      <div class="card">
+        <div class="card-head"><h2>Employee of the Month</h2><span class="spacer"></span>{{ ui.winner_status(record.status) }}</div>
+        <div class="card-body">
+          {{ ui.person(record.winner_nomination.nominee.full_name, record.winner_nomination.nominee.job_title, 'gold', 'lg') }}
+          <div class="detail-grid mt-2">
+            <div><div class="dt">Department</div><div class="dd">{{ record.winner_nomination.department }}</div></div>
+            <div><div class="dt">Winning votes</div><div class="dd">{{ record.winning_votes }}</div></div>
+            <div><div class="dt">Declared</div><div class="dd">{{ record.declared_at | dt }}</div></div>
+          </div>
+          {% if record.status == 'RESOLVED' %}
+            <div class="alert alert-warn mt-2">{{ ui.icon('info') }}<div><strong>Tie resolved.</strong> {{ record.resolution_reason }}<br><span class="small">Resolved by {{ record.resolution_identity }} on {{ record.resolved_at | dt }}</span></div></div>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="card">
+      <div class="card-head"><h2>Calculation rules</h2></div>
+      <div class="card-body">
+        <ul class="check-list">
+          <li><span class="check-mark">1</span><span>All {{ progress.votes_required }} valid votes must be received.</span></li>
+          <li><span class="check-mark">2</span><span>The highest valid vote count wins.</span></li>
+          <li><span class="check-mark">3</span><span>A tie sets the result to “resolution required” and notifies the administrator.</span></li>
+          <li><span class="check-mark">4</span><span>Resolution requires a reason (15+ characters), the resolver's identity and a timestamp.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if record and record.status == 'TIE_PENDING_RESOLUTION' and can_resolve %}
+  {% for candidate in tied %}
+    <dialog id="resolve-{{ candidate.nomination_id }}">
+      <form method="post" action="/winners/resolve?cycle={{ active_cycle.cycle_key }}">
+        <input type="hidden" name="nomination_id" value="{{ candidate.nomination_id }}">
+        <div class="card-head"><h3>Resolve tie — {{ candidate.nominee }}</h3></div>
+        <div class="card-body">
+          <p class="small muted">The tie is between the candidates listed on this screen. Choosing {{ candidate.nominee }} declares them the winner for {{ active_cycle.label }}. The original vote records are preserved.</p>
+          <div class="field">
+            <label for="reason-{{ candidate.nomination_id }}">Resolution reason (mandatory)</label>
+            <textarea class="textarea" id="reason-{{ candidate.nomination_id }}" name="reason" required placeholder="Explain the evidence and the basis for this decision."></textarea>
+            <p class="help">At least 15 characters. Stored with your identity and the current timestamp.</p>
+          </div>
+        </div>
+        <div class="card-foot">
+          <button class="btn" type="button" data-dialog-close>Cancel</button>
+          <button class="btn btn-primary" type="submit">Resolve and declare winner</button>
+        </div>
+      </form>
+    </dialog>
+  {% endfor %}
+{% endif %}
+{% endblock %}

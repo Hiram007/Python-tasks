@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% import "_macros.html" as ui %}
+
+{% block content %}
+<div class="page-head">
+  <div class="grow">
+    <h2>Winner Announcements</h2>
+    <p class="page-sub">Every workflow email is rendered, delivered and logged. Nothing is reported as sent unless the mail server accepted it.</p>
+  </div>
+</div>
+
+{% if transport == 'outbox' %}
+  <div class="alert alert-warn">{{ ui.icon('alert') }}<div><strong>No SMTP transport configured.</strong> Messages are written to the outbox directory and recorded as <strong>Not sent</strong> with the reason attached — they are never reported as delivered. Set <span class="mono">SMTP_HOST</span> (or provide SMTP credentials as app secrets) to send real email.</div></div>
+{% else %}
+  <div class="alert alert-ok">{{ ui.icon('check') }}<div>SMTP delivery is active{{ ' to ' ~ app_settings.smtp_host if app_settings.smtp_host else '' }}. Failures are logged and can be retried safely.</div></div>
+{% endif %}
+
+<div class="card">
+  <div class="card-head">
+    <h2>Notification log</h2>
+    <span class="spacer"></span>
+    <span class="chip">transport: {{ transport }}</span>
+    <span class="chip">{{ rows | length }} record(s)</span>
+  </div>
+
+  <form class="toolbar" method="get" action="/announcements">
+    <div class="field">
+      <label for="status">Status</label>
+      <select class="select" id="status" name="status">
+        <option value="">All statuses</option>
+        {% for code, label in statuses.items() %}<option value="{{ code }}" {{ 'selected' if filters.status == code else '' }}>{{ label }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label for="template">Template</label>
+      <select class="select" id="template" name="template">
+        <option value="">All templates</option>
+        {% for key in templates %}<option value="{{ key }}" {{ 'selected' if filters.template == key else '' }}>{{ template_labels.get(key, key) }}</option>{% endfor %}
+      </select>
+    </div>
+    <button class="btn btn-primary" type="submit">Apply</button>
+    <a class="btn" href="/announcements">Reset</a>
+  </form>
+
+  {% if rows %}
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>Created</th><th>Template</th><th>Category</th><th>Recipient</th><th>Status</th><th>Attempts</th><th class="right">Action</th></tr></thead>
+        <tbody>
+          {% for row in rows %}
+            <tr>
+              <td class="nowrap cell-sub">{{ row.created_at | dt }}</td>
+              <td>
+                <div class="cell-strong">{{ template_labels.get(row.template_key, row.template_key) }}</div>
+                <div class="cell-sub">{{ row.subject }}</div>
+              </td>
+              <td>{{ ui.pill('Action required' if categories.get(row.template_key) == 'ACTION_REQUIRED' else 'Informational', 'warn' if categories.get(row.template_key) == 'ACTION_REQUIRED' else 'neutral') }}</td>
+              <td>{{ ui.person(row.recipient_name or row.recipient_email, row.recipient_email) }}</td>
+              <td>
+                {{ ui.notify_status(row.status) }}
+                {% if row.error %}<div class="cell-sub" title="{{ row.error }}">{{ row.error | truncate(90) }}</div>{% endif %}
+              </td>
+              <td class="mono">{{ row.attempts }}</td>
+              <td class="right">
+                {% if can_retry and row.status != 'SENT' %}
+                  <form method="post" action="/announcements/{{ row.id }}/retry">
+                    <button class="btn btn-sm" type="submit">Retry</button>
+                  </form>
+                {% else %}<span class="muted small">—</span>{% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    {{ ui.empty('No notifications match those filters') }}
+  {% endif %}
+</div>
+
+<div class="card">
+  <div class="card-head"><h2>Winner announcements by month</h2></div>
+  <div class="card-body flush">
+    {% if winner_history %}
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>Month</th><th>Winner</th><th>Votes</th><th>Status</th><th>Declared</th></tr></thead>
+          <tbody>
+            {% for item in winner_history %}
+              <tr>
+                <td class="nowrap">{{ item.cycle.label }}</td>
+                <td>{{ item.winner_nomination.nominee.full_name if item.winner_nomination else '—' }}</td>
+                <td class="mono">{{ item.winning_votes }}</td>
+                <td>{{ ui.winner_status(item.status) }}</td>
+                <td class="nowrap cell-sub">{{ item.declared_at | dt }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      {{ ui.empty('No winner announcements yet') }}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
