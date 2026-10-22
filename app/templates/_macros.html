@@ -90,8 +90,12 @@
 <div class="progress {{ ('tone-' ~ tone) if tone != 'brand' else '' }}"><span style="width: {{ [percent, 100] | min }}%"></span></div>
 {%- endmacro %}
 
-{% macro empty(title, hint="") -%}
-<div class="empty"><strong>{{ title }}</strong>{% if hint %}<span>{{ hint }}</span>{% endif %}</div>
+{% macro empty(title, hint="", action_href="", action_label="") -%}
+<div class="empty">
+  <strong>{{ title }}</strong>
+  {% if hint %}<span>{{ hint }}</span>{% endif %}
+  {% if action_href and action_label %}<div class="actions" style="justify-content:center;margin-top:12px"><a class="btn btn-primary btn-sm" href="{{ action_href }}">{{ action_label }}</a></div>{% endif %}
+</div>
 {%- endmacro %}
 
 {% macro person(name, sub="", tone="brand", cls="") -%}
@@ -113,6 +117,28 @@
     {% endfor %}
   </select>
   <noscript><button class="btn btn-sm" type="submit">Show</button></noscript>
+</form>
+{%- endmacro %}
+
+{# Standard page body: the header + action toolbar every module screen shares. #}
+{% macro page_head(title, subtitle="", cycle_options=None, cycle_key=None, cycle_path="", rich_subtitle="") -%}
+{%- set actions -%}
+{%- if cycle_path %}{{ cycle_picker(cycle_options, cycle_key, cycle_path) }}{% endif -%}
+{%- if caller is defined %}{{ caller() }}{% endif -%}
+{%- endset -%}
+<div class="page-head">
+  <div class="grow">
+    <h2>{{ title }}</h2>
+    {% if rich_subtitle %}<p class="page-sub">{{ rich_subtitle | safe }}</p>
+    {% elif subtitle %}<p class="page-sub">{{ subtitle }}</p>{% endif %}
+  </div>
+  {% if actions | trim %}<div class="actions">{{ actions }}</div>{% endif %}
+</div>
+{%- endmacro %}
+
+{% macro toolbar(action="", method="get") -%}
+<form class="toolbar" method="{{ method }}" action="{{ action }}">
+  {{ caller() }}
 </form>
 {%- endmacro %}
 

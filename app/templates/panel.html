@@ -2,13 +2,7 @@
 {% import "_macros.html" as ui %}
 
 {% block content %}
-<div class="page-head">
-  <div class="grow">
-    <h2>Recognition Panel</h2>
-    <p class="page-sub">One master panel of {{ members | length }} member(s). Each month four members are drawn at random to review, three more to vote, and exactly one member is shared.</p>
-  </div>
-  <div class="actions">{{ ui.cycle_picker(cycle_options, active_cycle.cycle_key, '/panel') }}</div>
-</div>
+{{ ui.page_head('Recognition Panel', 'One master panel of ' ~ members | length ~ ' member(s). Each month four members are drawn at random to review, three more to vote, and exactly one member is shared.', cycle_options, active_cycle.cycle_key, '/panel') }}
 
 <div class="card">
   <div class="card-head">

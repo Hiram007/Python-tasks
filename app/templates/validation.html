@@ -2,19 +2,13 @@
 {% import "_macros.html" as ui %}
 
 {% block content %}
-<div class="page-head">
-  <div class="grow">
-    <h2>Validation & Acceptance Tests</h2>
-    <p class="page-sub">Every scenario drives the real service layer against an isolated database — the same code the web screens call. Nothing is simulated.</p>
-  </div>
+{% call ui.page_head('Validation & Acceptance Tests', 'Every scenario drives the real service layer against an isolated database — the same code the web screens call. Nothing is simulated.') %}
   {% if can_run %}
-    <div class="actions">
-      <form method="post" action="/validation/run">
-        <button class="btn btn-primary" type="submit">{{ ui.icon('beaker') }} Run acceptance suite</button>
-      </form>
-    </div>
+    <form method="post" action="/validation/run">
+      <button class="btn btn-primary" type="submit">{{ ui.icon('beaker') }} Run acceptance suite</button>
+    </form>
   {% endif %}
-</div>
+{% endcall %}
 
 {% if results.ran_at %}
   <div class="stat-grid mb-2">

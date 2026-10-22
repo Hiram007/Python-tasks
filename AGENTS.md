@@ -40,6 +40,17 @@ screen.
 account list on the sign-in screen. It is never an authentication bypass. Read
 it through `settings.preview_mode` (exact string comparison with `"1"`).
 
+**Every module screen composes the same page body.** `_macros.html` owns the
+shared pattern: `page_head(title, subtitle, cycle_options, cycle_key, cycle_path)`
+renders the header plus its right-hand actions (and the recognition-month picker
+when a `cycle_path` is given), and `toolbar(action)` renders the filter bar. Use
+`{% call %}` with either when the right side is bespoke (see `admin.html`,
+`validation.html`) and `rich_subtitle=` when the subtitle carries markup (see
+`dashboard.html`). `empty(title, hint, action_href, action_label)` takes an
+optional call to action. Add a screen by composing these rather than
+hand-writing `<div class="page-head">`, so headers, filter bars, card grids and
+empty states cannot drift apart.
+
 ## Verifying a change
 
 The acceptance suite is the single source of truth for the business rules and

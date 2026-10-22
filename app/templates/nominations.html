@@ -6,6 +6,8 @@
 {% endblock %}
 
 {% block content %}
+{{ ui.page_head('Recognition Register', 'Every nomination submitted for ' ~ active_cycle.label ~ ', with its review progress and current status.', cycle_options, active_cycle.cycle_key, '/nominations') }}
+
 <div class="card">
   <div class="card-head">
     <h2>Recognition Register — {{ active_cycle.label }}</h2>
@@ -14,7 +16,7 @@
     <span class="chip">{{ rows | length }} record(s)</span>
   </div>
 
-  <form class="toolbar" method="get" action="/nominations">
+  {% call ui.toolbar('/nominations') %}
     <div class="field grow">
       <label for="q">Search</label>
       <input class="input" id="q" name="q" value="{{ filters.q }}" placeholder="Reference, nominee, department or text">
@@ -41,7 +43,7 @@
     </div>
     <button class="btn btn-primary" type="submit">Apply</button>
     <a class="btn" href="/nominations">Reset</a>
-  </form>
+  {% endcall %}
 
   {% if rows %}
     <div class="table-wrap">
@@ -90,7 +92,7 @@
       </table>
     </div>
   {% else %}
-    {{ ui.empty('No nominations for ' ~ active_cycle.label, 'Nominations submitted for this month will appear here.') }}
+    {{ ui.empty('No nominations for ' ~ active_cycle.label, 'Nominations submitted for this month will appear here.', '/nominations/new', 'Submit a nomination') }}
   {% endif %}
 </div>
 {% endblock %}

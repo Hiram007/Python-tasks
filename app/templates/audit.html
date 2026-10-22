@@ -2,12 +2,7 @@
 {% import "_macros.html" as ui %}
 
 {% block content %}
-<div class="page-head">
-  <div class="grow">
-    <h2>Audit Trail</h2>
-    <p class="page-sub">Who did what, to which record, and when. Every workflow action is recorded and cannot be edited.</p>
-  </div>
-</div>
+{{ ui.page_head('Audit Trail', 'Who did what, to which record, and when. Every workflow action is recorded and cannot be edited.') }}
 
 <div class="card">
   <div class="card-head">
@@ -16,7 +11,7 @@
     <span class="chip">{{ rows | length }} event(s)</span>
   </div>
 
-  <form class="toolbar" method="get" action="/audit">
+  {% call ui.toolbar('/audit') %}
     <div class="field grow">
       <label for="q">Search summary</label>
       <input class="input" id="q" name="q" value="{{ filters.q }}" placeholder="Nominee, reference, actor or event text">
@@ -37,7 +32,7 @@
     </div>
     <button class="btn btn-primary" type="submit">Apply</button>
     <a class="btn" href="/audit">Reset</a>
-  </form>
+  {% endcall %}
 
   {% if rows %}
     <div class="table-wrap">

@@ -8,6 +8,8 @@
 {% endblock %}
 
 {% block content %}
+{{ ui.page_head('Employee Directory', 'Everyone who can be nominated or sit on the Recognition Panel.') }}
+
 <div class="card">
   <div class="card-head">
     <h2>Employee Directory</h2>
@@ -15,7 +17,7 @@
     <span class="chip">{{ employees | length }} shown</span>
   </div>
 
-  <form class="toolbar" method="get" action="/employees">
+  {% call ui.toolbar('/employees') %}
     <div class="field grow">
       <label for="q">Search</label>
       <input class="input" id="q" name="q" value="{{ filters.q }}" placeholder="Name, employee number, email or job title">
@@ -44,7 +46,7 @@
     </div>
     <button class="btn btn-primary" type="submit">Apply filters</button>
     <a class="btn" href="/employees">Reset</a>
-  </form>
+  {% endcall %}
 
   {% if employees %}
     <div class="table-wrap">

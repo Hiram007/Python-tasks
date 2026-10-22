@@ -2,13 +2,7 @@
 {% import "_macros.html" as ui %}
 
 {% block content %}
-<div class="page-head">
-  <div class="grow">
-    <h2>Winner Calculation</h2>
-    <p class="page-sub">The candidate with the highest number of valid votes wins. A tie is never broken automatically.</p>
-  </div>
-  <div class="actions">{{ ui.cycle_picker(cycle_options, active_cycle.cycle_key, '/winners') }}</div>
-</div>
+{{ ui.page_head('Winner Calculation', 'The candidate with the highest number of valid votes wins. A tie is never broken automatically.', cycle_options, active_cycle.cycle_key, '/winners') }}
 
 <div class="stat-grid mb-2">
   {{ ui.stat('Valid votes', progress.votes_cast, 'of ' ~ progress.votes_required ~ ' required', 'ok' if progress.complete else 'warn') }}

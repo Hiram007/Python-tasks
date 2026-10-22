@@ -2,13 +2,7 @@
 {% import "_macros.html" as ui %}
 
 {% block content %}
-<div class="page-head">
-  <div class="grow">
-    <h2>Initial Panel Reviews</h2>
-    <p class="page-sub">Every nomination needs {{ active_cycle.required_initial_reviews }} reviews. A reviewer submits exactly one decision per nomination.</p>
-  </div>
-  <div class="actions">{{ ui.cycle_picker(cycle_options, active_cycle.cycle_key, '/reviews') }}</div>
-</div>
+{{ ui.page_head('Initial Panel Reviews', 'Every nomination needs ' ~ active_cycle.required_initial_reviews ~ ' reviews. A reviewer submits exactly one decision per nomination.', cycle_options, active_cycle.cycle_key, '/reviews') }}
 
 {% if not member %}
   <div class="alert alert-info">{{ ui.icon('info') }}<div>You are not a member of the Recognition Panel, so you have no reviews to record. You can still follow progress below.</div></div>

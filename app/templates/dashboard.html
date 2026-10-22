@@ -6,19 +6,8 @@
 {% endblock %}
 
 {% block content %}
-<div class="page-head">
-  <div class="grow">
-    <h2>{{ active_cycle.label }}</h2>
-    <p class="page-sub">
-      {{ ui.cycle_status(active_cycle.status, active_cycle.status_label) }}
-      {% if active_cycle.nomination_opens_on %}
-        <span class="muted small"> · nomination window {{ active_cycle.nomination_opens_on | date }} – {{ active_cycle.nomination_closes_on | date }}</span>
-      {% endif %}
-      <span class="muted small"> · automatic shortlisting {{ schedule }} ({{ timezone_name }})</span>
-    </p>
-  </div>
-  <div class="actions">{{ ui.cycle_picker(cycle_options, active_cycle.cycle_key, '/') }}</div>
-</div>
+{% set dashboard_sub %}{{ ui.cycle_status(active_cycle.status, active_cycle.status_label) }}{% if active_cycle.nomination_opens_on %}<span class="muted small"> · nomination window {{ active_cycle.nomination_opens_on | date }} – {{ active_cycle.nomination_closes_on | date }}</span>{% endif %}<span class="muted small"> · automatic shortlisting {{ schedule }} ({{ timezone_name }})</span>{% endset %}
+{{ ui.page_head(active_cycle.label, rich_subtitle=dashboard_sub, cycle_options=cycle_options, cycle_key=active_cycle.cycle_key, cycle_path='/') }}
 
 {% for alert in stats.alerts %}
   <div class="alert alert-{{ alert.level }}">{{ ui.icon('alert' if alert.level in ('danger', 'warn') else 'info') }}<div>{{ alert.text }}</div></div>

@@ -2,13 +2,7 @@
 {% import "_macros.html" as ui %}
 
 {% block content %}
-<div class="page-head">
-  <div class="grow">
-    <h2>Reports & Audit Logs</h2>
-    <p class="page-sub">The complete monthly result for {{ active_cycle.label }}, plus the exports available to HR and administrators.</p>
-  </div>
-  <div class="actions">{{ ui.cycle_picker(cycle_options, active_cycle.cycle_key, '/reports') }}</div>
-</div>
+{{ ui.page_head('Reports & Audit Logs', 'The complete monthly result for ' ~ active_cycle.label ~ ', plus the exports available to HR and administrators.', cycle_options, active_cycle.cycle_key, '/reports') }}
 
 <div class="stat-grid mb-2">
   {{ ui.stat('Nominations', stats.nominations, 'threshold ' ~ stats.threshold, 'ok' if stats.threshold_met else 'warn') }}

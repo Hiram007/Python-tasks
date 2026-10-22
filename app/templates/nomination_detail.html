@@ -6,15 +6,8 @@
 {% endblock %}
 
 {% block content %}
-<div class="page-head">
-  <div class="grow">
-    <h2>{{ nomination.reference }}</h2>
-    <p class="page-sub">
-      {{ nomination.cycle.label }} · {{ ui.nom_status(nomination.status) }}
-      {% if not full_detail %}<span class="pill pill-lock">{{ ui.icon('lock') }} Limited view</span>{% endif %}
-    </p>
-  </div>
-</div>
+{% set detail_sub %}{{ nomination.cycle.label }} · {{ ui.nom_status(nomination.status) }}{% if not full_detail %}<span class="pill pill-lock">{{ ui.icon('lock') }} Limited view</span>{% endif %}{% endset %}
+{{ ui.page_head(nomination.reference, rich_subtitle=detail_sub) }}
 
 <div class="split">
   <div>

@@ -2,13 +2,8 @@
 {% import "_macros.html" as ui %}
 
 {% block content %}
-<div class="page-head">
-  <div class="grow">
-    <h2>Nomination Submission</h2>
-    <p class="page-sub">Nominating a colleague is <strong>not</strong> a vote. It starts the Initial Review Panel process for {{ active_cycle.label }}.</p>
-  </div>
-  <div class="actions">{{ ui.cycle_picker(cycle_options, active_cycle.cycle_key, '/nominations/new') }}</div>
-</div>
+{% set nomination_sub %}Nominating a colleague is <strong>not</strong> a vote. It starts the Initial Review Panel process for {{ active_cycle.label }}.{% endset %}
+{{ ui.page_head('Nomination Submission', rich_subtitle=nomination_sub, cycle_options=cycle_options, cycle_key=active_cycle.cycle_key, cycle_path='/nominations/new') }}
 
 {% if nominator is none %}
   <div class="alert alert-danger">{{ ui.icon('alert') }}<div>Your account is not linked to an employee record, so you cannot submit a nomination. Ask an administrator to link your account.</div></div>

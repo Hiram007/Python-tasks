@@ -2,17 +2,11 @@
 {% import "_macros.html" as ui %}
 
 {% block content %}
-<div class="page-head">
-  <div class="grow">
-    <h2>System Administration</h2>
-    <p class="page-sub">Business rules, email copy, user accounts and recognition cycles. Changes are audited.</p>
-  </div>
-  <div class="actions">
-    <span class="chip">{{ users | length }} user(s)</span>
-    <span class="chip">{{ panel_count }} panel member(s)</span>
-    {% if can_edit_settings %}{{ ui.pill('Settings editable', 'ok') }}{% else %}{{ ui.pill('Read-only settings', 'neutral') }}{% endif %}
-  </div>
-</div>
+{% call ui.page_head('System Administration', 'Business rules, email copy, user accounts and recognition cycles. Changes are audited.') %}
+  <span class="chip">{{ users | length }} user(s)</span>
+  <span class="chip">{{ panel_count }} panel member(s)</span>
+  {% if can_edit_settings %}{{ ui.pill('Settings editable', 'ok') }}{% else %}{{ ui.pill('Read-only settings', 'neutral') }}{% endif %}
+{% endcall %}
 
 <div class="split">
   <div>

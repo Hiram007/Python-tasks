@@ -2,13 +2,7 @@
 {% import "_macros.html" as ui %}
 
 {% block content %}
-<div class="page-head">
-  <div class="grow">
-    <h2>Monthly Shortlisting</h2>
-    <p class="page-sub">Two conditions must both hold: at least {{ state.threshold }} nominations for the month, and every nomination fully reviewed. Only approved nominations are shortlisted.</p>
-  </div>
-  <div class="actions">{{ ui.cycle_picker(cycle_options, active_cycle.cycle_key, '/shortlisting') }}</div>
-</div>
+{{ ui.page_head('Monthly Shortlisting', 'Two conditions must both hold: at least ' ~ state.threshold ~ ' nominations for the month, and every nomination fully reviewed. Only approved nominations are shortlisted.', cycle_options, active_cycle.cycle_key, '/shortlisting') }}
 
 <div class="stat-grid mb-2">
   {{ ui.stat('Nominations received', state.nomination_count, 'threshold ' ~ state.threshold, 'ok' if state.threshold_met else 'warn') }}

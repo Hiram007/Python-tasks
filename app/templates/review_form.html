@@ -6,12 +6,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="page-head">
-  <div class="grow">
-    <h2>Review {{ nomination.reference }}</h2>
-    <p class="page-sub">{{ cycle.label }} · {{ reviews_done }} of {{ cycle.required_initial_reviews }} reviews recorded · {{ progress.reviews_pending }} outstanding across the month</p>
-  </div>
-</div>
+{{ ui.page_head('Review ' ~ nomination.reference, cycle.label ~ ' · ' ~ reviews_done ~ ' of ' ~ cycle.required_initial_reviews ~ ' reviews recorded · ' ~ progress.reviews_pending ~ ' outstanding across the month') }}
 
 {% if existing %}
   <div class="alert alert-ok">{{ ui.icon('check') }}<div><strong>Already recorded.</strong> You submitted <strong>{{ existing.decision_label }}</strong> on {{ existing.submitted_at | dt }}. A reviewer may submit exactly one review per nomination, so this record is final.</div></div>

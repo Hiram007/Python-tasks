@@ -2,13 +2,7 @@
 {% import "_macros.html" as ui %}
 
 {% block content %}
-<div class="page-head">
-  <div class="grow">
-    <h2>Final Voting</h2>
-    <p class="page-sub">One ballot per month. Each of the four final voters selects exactly one candidate; individual votes are confidential.</p>
-  </div>
-  <div class="actions">{{ ui.cycle_picker(cycle_options, active_cycle.cycle_key, '/voting') }}</div>
-</div>
+{{ ui.page_head('Final Voting', 'One ballot per month. Each of the four final voters selects exactly one candidate; individual votes are confidential.', cycle_options, active_cycle.cycle_key, '/voting') }}
 
 {% if round is none %}
   <div class="card">{{ ui.empty('Final voting has not opened for ' ~ active_cycle.label, 'Voting opens when the approved nominations are shortlisted.') }}</div>
