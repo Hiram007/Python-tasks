@@ -68,6 +68,15 @@
   </main>
 </div>
 
+<dialog id="confirm-action" aria-label="Confirm action">
+  <div class="card-head"><h3>Please confirm</h3></div>
+  <div class="card-body"><p class="mb-0" id="confirm-action-message">Are you sure?</p></div>
+  <div class="card-foot">
+    <button class="btn" type="button" data-confirm-cancel>Cancel</button>
+    <button class="btn btn-danger" type="button" data-confirm-accept>Confirm</button>
+  </div>
+</dialog>
+
 <script>
   (function () {
     var toggle = document.getElementById('menu-toggle');
@@ -130,11 +139,40 @@
       });
     });
 
+    // Destructive actions ask first. A form marked data-confirm is held while the
+    // shared dialog explains the consequence; confirming submits it natively.
+    var confirmDialog = document.getElementById('confirm-action');
+    var confirmMessage = document.getElementById('confirm-action-message');
+    var pendingForm = null;
+    if (confirmDialog) {
+      document.addEventListener('submit', function (event) {
+        var form = event.target;
+        if (!(form instanceof HTMLFormElement)) { return; }
+        var message = form.getAttribute('data-confirm');
+        if (!message) { return; }
+        event.preventDefault();
+        pendingForm = form;
+        confirmMessage.textContent = message;
+        confirmDialog.showModal();
+      });
+      confirmDialog.querySelector('[data-confirm-accept]').addEventListener('click', function () {
+        var form = pendingForm;
+        pendingForm = null;
+        confirmDialog.close();
+        if (form) { form.submit(); }
+      });
+      confirmDialog.querySelector('[data-confirm-cancel]').addEventListener('click', function () {
+        pendingForm = null;
+        confirmDialog.close();
+      });
+    }
+
     // Server-rendered forms have no spinner: acknowledge a submit by putting the
     // button into a busy state once the browser has serialised the form.
     document.addEventListener('submit', function (event) {
       var form = event.target;
       if (!(form instanceof HTMLFormElement)) { return; }
+      if (form.hasAttribute('data-confirm')) { return; }
       var button = form.querySelector('button[type="submit"]');
       if (!button) { return; }
       window.setTimeout(function () {

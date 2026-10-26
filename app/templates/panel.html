@@ -94,7 +94,7 @@
                   <td>{{ ui.pill('Active', 'ok') if member.is_active else ui.pill('Inactive', 'neutral') }}</td>
                   {% if can_manage %}
                     <td class="right">
-                      <form method="post" action="/panel/members/{{ member.id }}/toggle">
+                      <form method="post" action="/panel/members/{{ member.id }}/toggle"{% if member.is_active %} data-confirm="Remove {{ member.full_name }} from the Recognition Panel? Existing assignments stay on record."{% endif %}>
                         <button class="btn btn-sm" type="submit">{{ 'Deactivate' if member.is_active else 'Reactivate' }}</button>
                       </form>
                     </td>

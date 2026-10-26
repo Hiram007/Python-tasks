@@ -65,6 +65,23 @@ app = FastAPI(
 
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "app" / "static")), name="static")
 
+
+@app.middleware("http")
+async def security_headers(request: Request, call_next):
+    """Baseline browser hardening. No frame-ancestors rule: the preview embeds
+    the app in an iframe, and framing is restricted by the host platform."""
+    response = await call_next(request)
+    response.headers.setdefault("X-Content-Type-Options", "nosniff")
+    response.headers.setdefault("Referrer-Policy", "same-origin")
+    response.headers.setdefault("X-Permitted-Cross-Domain-Policies", "none")
+    response.headers.setdefault(
+        "Content-Security-Policy",
+        "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; "
+        "script-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; "
+        "form-action 'self'",
+    )
+    return response
+
 # Order is not significant: every router declares its own distinct prefix.
 for module in (auth, dashboard, employees, nominations, panel, reviews, selection, comms, governance, admin):
     app.include_router(module.router)

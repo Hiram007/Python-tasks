@@ -70,7 +70,7 @@
                 <td class="right">
                   <div class="actions" style="justify-content:flex-end">
                     <button class="btn btn-sm" type="button" data-dialog-open="edit-employee-{{ employee.id }}">Edit</button>
-                    <form method="post" action="/employees/{{ employee.id }}/toggle">
+                    <form method="post" action="/employees/{{ employee.id }}/toggle"{% if employee.is_active %} data-confirm="Deactivate {{ employee.full_name }}? Their nomination and panel history is kept, but they can no longer be nominated."{% endif %}>
                       <button class="btn btn-sm" type="submit">{{ 'Deactivate' if employee.is_active else 'Activate' }}</button>
                     </form>
                   </div>

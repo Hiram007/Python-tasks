@@ -161,7 +161,7 @@
                   <td class="right">
                     <div class="actions" style="justify-content:flex-end">
                       <button class="btn btn-sm" type="button" data-dialog-open="reset-{{ user.id }}">Reset password</button>
-                      <form method="post" action="/admin/users/{{ user.id }}/toggle">
+                      <form method="post" action="/admin/users/{{ user.id }}/toggle"{% if user.is_active %} data-confirm="Deactivate {{ user.full_name }}? They will no longer be able to sign in until the account is reactivated."{% endif %}>
                         <button class="btn btn-sm" type="submit" {{ 'disabled' if user.id == current_user.id else '' }}>{{ 'Deactivate' if user.is_active else 'Activate' }}</button>
                       </form>
                     </div>
