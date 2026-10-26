@@ -146,6 +146,7 @@ p { margin: 0 0 0.75rem; }
 
 .page-head { display: flex; align-items: flex-start; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
 .page-head .grow { flex: 1 1 320px; min-width: 0; }
+.page-head .page-title { font-size: 1.15rem; font-weight: 650; letter-spacing: -0.01em; }
 .page-sub { color: var(--muted); font-size: 0.88rem; margin-top: 2px; }
 
 /* ------------------------------------------------------------------ cards */
