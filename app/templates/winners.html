@@ -140,7 +140,7 @@
 
 {% if record and record.status == 'TIE_PENDING_RESOLUTION' and can_resolve %}
   {% for candidate in tied %}
-    <dialog id="resolve-{{ candidate.nomination_id }}">
+    <dialog id="resolve-{{ candidate.nomination_id }}" aria-label="Resolve tie in favour of {{ candidate.nominee }}">
       <form method="post" action="/winners/resolve?cycle={{ active_cycle.cycle_key }}">
         <input type="hidden" name="nomination_id" value="{{ candidate.nomination_id }}">
         <div class="card-head"><h3>Resolve tie — {{ candidate.nominee }}</h3></div>

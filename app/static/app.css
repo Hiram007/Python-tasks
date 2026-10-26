@@ -144,6 +144,19 @@ p { margin: 0 0 0.75rem; }
 
 .content { padding: 22px 26px 64px; max-width: 1340px; width: 100%; margin: 0 auto; }
 
+.skip-link {
+  position: absolute; left: 12px; top: -64px; z-index: 100;
+  padding: 10px 16px; border-radius: var(--radius-sm);
+  background: var(--brand); color: #fff; font-size: 0.86rem; font-weight: 650;
+  box-shadow: var(--shadow); transition: top 0.15s ease;
+}
+.skip-link:focus { top: 12px; text-decoration: none; }
+
+/* Keyboard focus must be visible on every interactive element, including the
+   dark app bar where the brand focus ring needs a lighter tone. */
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.appbar :focus-visible { outline-color: #8ee0c6; }
+
 .page-head { display: flex; align-items: flex-start; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
 .page-head .grow { flex: 1 1 320px; min-width: 0; }
 .page-head .page-title { font-size: 1.15rem; font-weight: 650; letter-spacing: -0.01em; }
@@ -257,6 +270,7 @@ table.table.compact th, table.table.compact td { padding: 7px 12px; }
 .btn-ghost:hover { background: var(--brand-soft); }
 .btn-sm { padding: 5px 10px; font-size: 0.79rem; }
 .btn-block { width: 100%; }
+.btn.is-busy { opacity: 0.65; cursor: progress; }
 .btn[disabled], .btn.is-disabled { opacity: 0.55; cursor: not-allowed; }
 
 .actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }

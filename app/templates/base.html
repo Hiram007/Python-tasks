@@ -4,9 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{{ page_title }} · {{ app_name }}{% endblock %}</title>
+  <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
   <link rel="stylesheet" href="/static/app.css?v={{ asset_version }}">
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to main content</a>
 <div class="app">
   <header class="appbar">
     <div class="appbar-inner">
@@ -59,7 +61,7 @@
     </div>
   </header>
 
-  <main class="content">
+  <main class="content" id="main">
     {% if ok_message %}<div class="alert alert-ok">{{ ui.icon('check') }}<div>{{ ok_message }}</div></div>{% endif %}
     {% if error_message %}<div class="alert alert-danger">{{ ui.icon('alert') }}<div>{{ error_message }}</div></div>{% endif %}
     {% block content %}{% endblock %}
@@ -126,6 +128,20 @@
       dialog.addEventListener('click', function (event) {
         if (event.target === dialog) { dialog.close(); }
       });
+    });
+
+    // Server-rendered forms have no spinner: acknowledge a submit by putting the
+    // button into a busy state once the browser has serialised the form.
+    document.addEventListener('submit', function (event) {
+      var form = event.target;
+      if (!(form instanceof HTMLFormElement)) { return; }
+      var button = form.querySelector('button[type="submit"]');
+      if (!button) { return; }
+      window.setTimeout(function () {
+        button.disabled = true;
+        button.setAttribute('aria-busy', 'true');
+        button.classList.add('is-busy');
+      }, 0);
     });
   })();
 </script>

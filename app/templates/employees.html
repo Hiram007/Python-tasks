@@ -88,7 +88,7 @@
 
 {% if can_manage %}
   {% for employee in employees %}
-    <dialog id="edit-employee-{{ employee.id }}">
+    <dialog id="edit-employee-{{ employee.id }}" aria-label="Edit {{ employee.full_name }}">
       <form method="post" action="/employees/{{ employee.id }}/update">
         <div class="card-head"><h3>{{ employee.full_name }}</h3><span class="spacer"></span><span class="mono small">{{ employee.employee_number }}</span></div>
         <div class="card-body">
@@ -118,7 +118,7 @@
     </dialog>
   {% endfor %}
 
-  <dialog id="new-employee">
+  <dialog id="new-employee" aria-label="Add an employee">
     <form method="post" action="/employees">
       <div class="card-head"><h3>Add an employee</h3></div>
       <div class="card-body">

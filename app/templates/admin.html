@@ -176,7 +176,7 @@
   </div>
 </div>
 
-<dialog id="new-user">
+<dialog id="new-user" aria-label="Create a user account">
   <form method="post" action="/admin/users">
     <div class="card-head"><h3>Create a user account</h3></div>
     <div class="card-body">
@@ -209,7 +209,7 @@
 </dialog>
 
 {% for user in users %}
-  <dialog id="reset-{{ user.id }}">
+  <dialog id="reset-{{ user.id }}" aria-label="Reset password for {{ user.full_name }}">
     <form method="post" action="/admin/users/{{ user.id }}/reset-password">
       <div class="card-head"><h3>Reset password — {{ user.full_name }}</h3></div>
       <div class="card-body">

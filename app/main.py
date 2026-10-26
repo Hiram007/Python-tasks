@@ -86,3 +86,20 @@ async def handle_http_exception(request: Request, exc: StarletteHTTPException):
             status_code=exc.status_code,
         )
     return await http_exception_handler(request, exc)
+
+
+@app.exception_handler(Exception)
+async def handle_unexpected_error(request: Request, exc: Exception):
+    """Render the branded error page for unexpected failures instead of a bare 500."""
+    log.exception("Unhandled error on %s %s", request.method, request.url.path)
+    return render(
+        request,
+        "error.html",
+        {
+            "page_title": "Something went wrong",
+            "status_code": 500,
+            "message": "The request could not be completed. The error has been logged for an administrator.",
+        },
+        user=None,
+        status_code=500,
+    )
